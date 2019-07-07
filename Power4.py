@@ -18,6 +18,7 @@ def main():
     """
 
     game = Game()
+
     print(str(game))
 
 
