@@ -18,8 +18,7 @@ def main():
     """
 
     game = Game()
-
-    print(str(game))
+    game.start_in_console()
 
 
 if __name__ == '__main__':

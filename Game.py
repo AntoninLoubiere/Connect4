@@ -47,6 +47,40 @@ class Game(object):
         """
         self.current_turn = (TileState.Player_1, TileState.Player_2)[self.current_turn == TileState.Player_1]
 
+    def test_win(self, x, y):
+        """
+        Test the win of the tile in parameter
+        :param x: The x of the tile to check
+        :param y: The y of the tile to check
+        :return: Blank: Nobody win, Player_x: Player_x win
+        """
+
+    def start_in_console(self):
+        """
+        Start a game in console
+        :return: None
+        """
+
+        while True:
+            print(str(self))
+            while True:
+                message = input("Choice a column (1 - 7): ")
+                try:
+                    message = int(message)
+                except ValueError:
+                    print("You must write a number between 1 and 7")
+                    continue
+
+                if message < 1 or 7 < message:
+                    print("You must write a number between 1 and 7")
+                    continue
+
+                if self.add_tile(message - 1):
+                    print("Done.")
+                    print(str(self))
+                else:
+                    print("You can't choose this column")
+
     def __str__(self):
         """
         Return grid status
@@ -57,7 +91,7 @@ class Game(object):
         for y in range(GRID_HEIGHT):
             for x in range(GRID_WIDTH):
                 string += "{:^8}".format(self.grid[x][y].name)
-                string += (" | ", "\n")[x == GRID_WIDTH - 1] # if is the last element
+                string += (" | ", "\n")[x == GRID_WIDTH - 1]  # if is the last element
 
         string += "\nLe tour est à: " + self.current_turn.name
 
