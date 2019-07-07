@@ -9,6 +9,7 @@ License: GNU Public License v3.0 (In file "LICENSE.md")
 Created: Sunday, July 7, 2019
 """
 from Game import Game
+from UI.UI import UI
 
 
 def main():
@@ -18,6 +19,10 @@ def main():
     """
 
     game = Game()
+
+    ui = UI()
+    ui.mainloop()
+
     game.start_in_console()
 
 
