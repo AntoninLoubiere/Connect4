@@ -24,18 +24,23 @@ class Game(object):
 
         self.current_turn = (TileState.Player_1, TileState.Player_2)[random.randint(0, 1) == 0]
 
+        self.winner = TileState.Blank
+
     def add_tile(self, column):
         """
         Add the tile of the current player in a column
         :param column: the column which you would add the tile
         :return: if this action was do
         """
+        if self.is_win():
+            return False
 
         for y in range(len(self.grid[column]) - 1, 0 - 1, -1):
             if self.grid[column][y] == TileState.Blank:
                 #  add tile
                 self.grid[column][y] = self.current_turn
                 self.swap_turn()
+                self.update_win(column, y)
                 return True
 
         return False
@@ -47,13 +52,139 @@ class Game(object):
         """
         self.current_turn = (TileState.Player_1, TileState.Player_2)[self.current_turn == TileState.Player_1]
 
-    def test_win(self, x, y):
+    def update_win(self, x, y):
         """
-        Test the win of the tile in parameter
+        Update the win of the tile in parameter
         :param x: The x of the tile to check
         :param y: The y of the tile to check
-        :return: Blank: Nobody win, Player_x: Player_x win
+        :return: If anybody win
         """
+
+        number_align = 1  # current number
+
+        # #Test column#
+
+        # count bottom
+        for current_y in range(y + 1, GRID_HEIGHT):
+            if self.grid[x][current_y] != self.grid[x][y]:
+                break
+
+            number_align += 1
+
+        # count top
+        for current_y in range(y - 1, -1, -1):
+            if self.grid[x][current_y] != self.grid[x][y]:
+                break
+
+            number_align += 1
+
+        if number_align >= 4:
+            self.winner = self.grid[x][y]
+            return True
+
+        number_align = 1
+
+        # #Test row#
+
+        # count right
+        for current_x in range(x + 1, GRID_WIDTH):
+            if self.grid[current_x][y] != self.grid[x][y]:
+                break
+
+            number_align += 1
+
+        # count left
+        for current_x in range(x - 1, -1, -1):
+            if self.grid[current_x][y] != self.grid[x][y]:
+                break
+
+            number_align += 1
+
+        if number_align >= 4:
+            self.winner = self.grid[x][y]
+            return True
+
+        number_align = 1
+
+        # #Test diagonal top left - bottom right#
+
+        # count bottom right
+        current_x = x + 1
+        current_y = y + 1
+
+        while current_x < GRID_WIDTH and current_y < GRID_HEIGHT:
+            if self.grid[current_x][current_y] != self.grid[x][y]:
+                break
+
+            current_x += 1
+            current_y += 1
+            number_align += 1
+
+        # count top left
+        current_x = x - 1
+        current_y = y - 1
+
+        number_align = 0
+
+        while current_x >= 0 and current_y >= 0:
+            if self.grid[current_x][current_y] != self.grid[x][y]:
+                break
+
+            current_x -= 1
+            current_y -= 1
+            number_align += 1
+
+        if number_align >= 4:
+            self.winner = self.grid[x][y]
+            return True
+
+        # #Test diagonal top right - bottom left#
+
+        # count top right
+        current_x = x + 1
+        current_y = y - 1
+
+        while current_x < GRID_WIDTH and current_y >= 0:
+            if self.grid[current_x][current_y] != self.grid[x][y]:
+                break
+
+            current_x += 1
+            current_y -= 1
+            number_align += 1
+
+        # count bottom left
+        current_x = x - 1
+        current_y = y + 1
+
+        while current_x >= 0 and current_y < GRID_HEIGHT:
+            if self.grid[current_x][current_y] != self.grid[x][y]:
+                break
+
+            current_x -= 1
+            current_y += 1
+            number_align += 1
+
+        if number_align >= 4:
+            self.winner = self.grid[x][y]
+            return True
+        else:
+            return False
+
+    def test_win(self):
+        """
+        Test if there is a winner
+        :return: Blank if nobody has won, Player_x: the player x has won
+        """
+
+        if self.winner != TileState.Blank:
+            return self.winner
+
+        for x in range(0, GRID_WIDTH):
+            for y in range(0, GRID_HEIGHT):
+                if self.grid[x][y] != TileState.Blank and self.update_win(x, y):
+                    break
+
+        return self.winner
 
     def start_in_console(self):
         """
@@ -76,6 +207,11 @@ class Game(object):
                     continue
 
                 if self.add_tile(message - 1):
+                    if self.is_win():
+                        print("Done.")
+                        print("\n" * 2)
+                        print(str(self))
+                        return
                     print("Done.")
                     print(str(self))
                 else:
@@ -88,11 +224,24 @@ class Game(object):
         """
         string = "Grid: \n"
 
+        string += " | ".join((["{:^8}"] * GRID_WIDTH)).format(*(range(1, GRID_WIDTH + 1)))
+        string += '\n'
         for y in range(GRID_HEIGHT):
             for x in range(GRID_WIDTH):
                 string += "{:^8}".format(self.grid[x][y].name)
                 string += (" | ", "\n")[x == GRID_WIDTH - 1]  # if is the last element
 
-        string += "\nLe tour est à: " + self.current_turn.name
+        if self.is_win():
+            string += "\033[92mThe winner is: {}\033[0m".format(self.winner.name)
+        else:
+            string += "\nIt's the turn of: " + self.current_turn.name
 
         return string
+
+    def is_win(self):
+        """
+        If the power 4 is terminate / if anybody won
+        :return: if anybody won (boolean)
+        """
+
+        return self.winner != TileState.Blank
