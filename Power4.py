@@ -8,6 +8,7 @@ Language: Python 3.7
 License: GNU Public License v3.0 (In file "LICENSE.md")
 Created: Sunday, July 7, 2019
 """
+from Game import Game
 
 
 def main():
@@ -16,6 +17,8 @@ def main():
     :return: None
     """
 
+    game = Game()
+    print(str(game))
 
 
 if __name__ == '__main__':
