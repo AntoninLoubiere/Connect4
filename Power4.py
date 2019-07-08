@@ -10,6 +10,7 @@ Created: Sunday, July 7, 2019
 """
 from Game import Game
 from UI.UI import UI
+from UI.GamePanel import GamePanel
 
 
 def main():
@@ -17,13 +18,10 @@ def main():
     Main method
     :return: None
     """
-
-    game = Game()
-
     ui = UI()
+    ui.change_panel(GamePanel)
+    ui.resizable(0, 0)
     ui.mainloop()
-
-    game.start_in_console()
 
 
 if __name__ == '__main__':

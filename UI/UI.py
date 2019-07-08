@@ -16,6 +16,7 @@ class UI(tkinter.tix.Tk):
 
         # Configure
         self.title("Power 4")
+        self.geometry("600x400")
 
     def change_panel(self, new_panel, **kwargs):
         """
@@ -26,8 +27,8 @@ class UI(tkinter.tix.Tk):
         if self.current_panel is not None:
             self.current_panel.destroy()
 
-        new_panel = new_panel(master=self, gui=self, **kwargs)
+        new_panel = new_panel(master=self, ui=self, **kwargs)
 
         self.current_panel = new_panel
-        self.current_panel.pack(side=tkinter.tix.TOP)
+        self.current_panel.pack()
 

@@ -10,9 +10,8 @@ class Panel(tkinter.tix.Frame):
         """
         Constructor
         :param master: The master to frame
-        :param gui: link to UI
+        :param ui: link to UI
         """
         super().__init__(master)
 
         self.ui = ui
-

@@ -2,24 +2,24 @@ from TileState import TileState
 import random
 
 
-GRID_WIDTH = 7
-GRID_HEIGHT = 6
-
-
 class Game(object):
     """
     A class to save some variables (the grid...). It represent a game
     """
 
-    def __init__(self):
+    def __init__(self, grid_width=7, grid_height=6):
         """
         Constructor
         """
 
         self.grid = []
-        for x in range(GRID_WIDTH):
+
+        self.grid_width = grid_width
+        self.grid_height = grid_height
+
+        for x in range(self.grid_width):
             self.grid.append([])
-            for y in range(GRID_HEIGHT):
+            for y in range(self.grid_height):
                 self.grid[x].append(TileState.Blank)
 
         self.current_turn = (TileState.Player_1, TileState.Player_2)[random.randint(0, 1) == 0]
@@ -35,7 +35,7 @@ class Game(object):
         if self.is_win():
             return False
 
-        for y in range(len(self.grid[column]) - 1, 0 - 1, -1):
+        for y in range(self.grid_height - 1, 0 - 1, -1):
             if self.grid[column][y] == TileState.Blank:
                 #  add tile
                 self.grid[column][y] = self.current_turn
@@ -65,7 +65,7 @@ class Game(object):
         # #Test column#
 
         # count bottom
-        for current_y in range(y + 1, GRID_HEIGHT):
+        for current_y in range(y + 1, self.grid_height):
             if self.grid[x][current_y] != self.grid[x][y]:
                 break
 
@@ -87,7 +87,7 @@ class Game(object):
         # #Test row#
 
         # count right
-        for current_x in range(x + 1, GRID_WIDTH):
+        for current_x in range(x + 1, self.grid_width):
             if self.grid[current_x][y] != self.grid[x][y]:
                 break
 
@@ -112,7 +112,7 @@ class Game(object):
         current_x = x + 1
         current_y = y + 1
 
-        while current_x < GRID_WIDTH and current_y < GRID_HEIGHT:
+        while current_x < self.grid_width and current_y < self.grid_height:
             if self.grid[current_x][current_y] != self.grid[x][y]:
                 break
 
@@ -144,7 +144,7 @@ class Game(object):
         current_x = x + 1
         current_y = y - 1
 
-        while current_x < GRID_WIDTH and current_y >= 0:
+        while current_x < self.grid_width and current_y >= 0:
             if self.grid[current_x][current_y] != self.grid[x][y]:
                 break
 
@@ -156,7 +156,7 @@ class Game(object):
         current_x = x - 1
         current_y = y + 1
 
-        while current_x >= 0 and current_y < GRID_HEIGHT:
+        while current_x >= 0 and current_y < self.grid_height:
             if self.grid[current_x][current_y] != self.grid[x][y]:
                 break
 
@@ -179,8 +179,8 @@ class Game(object):
         if self.winner != TileState.Blank:
             return self.winner
 
-        for x in range(0, GRID_WIDTH):
-            for y in range(0, GRID_HEIGHT):
+        for x in range(0, self.grid_width):
+            for y in range(0, self.grid_height):
                 if self.grid[x][y] != TileState.Blank and self.update_win(x, y):
                     break
 
@@ -224,12 +224,12 @@ class Game(object):
         """
         string = "Grid: \n"
 
-        string += " | ".join((["{:^8}"] * GRID_WIDTH)).format(*(range(1, GRID_WIDTH + 1)))
+        string += " | ".join((["{:^8}"] * self.grid_width)).format(*(range(1, self.grid_width + 1)))
         string += '\n'
-        for y in range(GRID_HEIGHT):
-            for x in range(GRID_WIDTH):
+        for y in range(self.grid_height):
+            for x in range(self.grid_width):
                 string += "{:^8}".format(self.grid[x][y].name)
-                string += (" | ", "\n")[x == GRID_WIDTH - 1]  # if is the last element
+                string += (" | ", "\n")[x == self.grid_width - 1]  # if is the last element
 
         if self.is_win():
             string += "\033[92mThe winner is: {}\033[0m".format(self.winner.name)
