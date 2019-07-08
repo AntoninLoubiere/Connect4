@@ -1,4 +1,4 @@
-from TileState import TileState
+from TokenState import TokenState
 import random
 
 
@@ -20,43 +20,43 @@ class Game(object):
         for x in range(self.grid_width):
             self.grid.append([])
             for y in range(self.grid_height):
-                self.grid[x].append(TileState.Blank)
+                self.grid[x].append(TokenState.Blank)
 
-        self.current_turn = (TileState.Player_1, TileState.Player_2)[random.randint(0, 1) == 0]
+        self.current_turn = (TokenState.Player_1, TokenState.Player_2)[random.randint(0, 1) == 0]
 
-        self.winner = TileState.Blank
+        self.winner = TokenState.Blank
 
-    def add_tile(self, column):
+    def add_token(self, column):
         """
-        Add the tile of the current player in a column
-        :param column: the column which you would add the tile
-        :return: if this action was do
+        Add the token of the current player in a column
+        :param column: the column which you would add the token
+        :return: 0: if this action was do 1: a list with coord of the token
         """
         if self.is_win():
-            return False
+            return [False, [-1, -1]]
 
         for y in range(self.grid_height - 1, 0 - 1, -1):
-            if self.grid[column][y] == TileState.Blank:
-                #  add tile
+            if self.grid[column][y] == TokenState.Blank:
+                #  add token
                 self.grid[column][y] = self.current_turn
                 self.swap_turn()
                 self.update_win(column, y)
-                return True
+                return [True, [column, y]]
 
-        return False
+        return [False, [-1, -1]]
 
     def swap_turn(self):
         """
         Swap the turn (Player 1 to 2 and 2 to 1)
         :return: None
         """
-        self.current_turn = (TileState.Player_1, TileState.Player_2)[self.current_turn == TileState.Player_1]
+        self.current_turn = (TokenState.Player_1, TokenState.Player_2)[self.current_turn == TokenState.Player_1]
 
     def update_win(self, x, y):
         """
-        Update the win of the tile in parameter
-        :param x: The x of the tile to check
-        :param y: The y of the tile to check
+        Update the win of the token in parameter
+        :param x: The x of the token to check
+        :param y: The y of the token to check
         :return: If anybody win
         """
 
@@ -176,12 +176,12 @@ class Game(object):
         :return: Blank if nobody has won, Player_x: the player x has won
         """
 
-        if self.winner != TileState.Blank:
+        if self.winner != TokenState.Blank:
             return self.winner
 
         for x in range(0, self.grid_width):
             for y in range(0, self.grid_height):
-                if self.grid[x][y] != TileState.Blank and self.update_win(x, y):
+                if self.grid[x][y] != TokenState.Blank and self.update_win(x, y):
                     break
 
         return self.winner
@@ -206,7 +206,7 @@ class Game(object):
                     print("You must write a number between 1 and 7")
                     continue
 
-                if self.add_tile(message - 1):
+                if self.add_token(message - 1)[0]:
                     if self.is_win():
                         print("Done.")
                         print("\n" * 2)
@@ -244,4 +244,4 @@ class Game(object):
         :return: if anybody won (boolean)
         """
 
-        return self.winner != TileState.Blank
+        return self.winner != TokenState.Blank

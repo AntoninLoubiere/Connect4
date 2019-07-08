@@ -1,7 +1,7 @@
 import enum
 
 
-class TileState(enum.Enum):
+class TokenState(enum.Enum):
     """
     An enum, the state of tiles
     """
