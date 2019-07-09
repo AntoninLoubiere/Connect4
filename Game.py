@@ -124,8 +124,6 @@ class Game(object):
         current_x = x - 1
         current_y = y - 1
 
-        number_align = 0
-
         while current_x >= 0 and current_y >= 0:
             if self.grid[current_x][current_y] != self.grid[x][y]:
                 break
@@ -139,6 +137,8 @@ class Game(object):
             return True
 
         # #Test diagonal top right - bottom left#
+
+        number_align = 1
 
         # count top right
         current_x = x + 1

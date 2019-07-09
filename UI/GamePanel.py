@@ -104,8 +104,6 @@ class GamePanel(Panel.Panel):
 
         add_token_result = self.game.add_token(column)
 
-        print(add_token_result)
-
         if add_token_result[0]:
             self.create_image(add_token_result[1][0], add_token_result[1][1], current_player)
 

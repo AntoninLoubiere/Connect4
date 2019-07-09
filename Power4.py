@@ -10,7 +10,6 @@ Created: Sunday, July 7, 2019
 """
 from UI.GamePanel import GamePanel
 from UI.UI import UI
-import TokenState
 
 
 def main():
