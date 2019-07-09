@@ -18,17 +18,20 @@ class GamePanel(Panel.Panel):
         """
         super().__init__(master, ui)
 
+        self.turn_text_format = "It's the turn of: {}"
+        self.win_text_format = "The winner is: {}"
+
         self.grid_canvas = ResizingCanvas(self, self.ui, self.draw_grid)
         self.grid_canvas.pack(expand=True, fill=tkinter.tix.BOTH)
         self.grid_canvas.bind("<Button>", self.grid_canvas_on_click)
 
         self.game = Game.Game(**kwargs)
-        self.update_turn_label()
 
         self.token_square_size = 0
 
         self.height_center = 0
         self.width_center = 0
+        self.turn_text_height = 10
 
         self.image_getter = ImageGetter.ImageGetter(token_size=self.token_square_size)
 
@@ -38,6 +41,7 @@ class GamePanel(Panel.Panel):
         }
 
         self.grid_image_create = []
+        self.turn_text_id = -1
 
         for x in range(0, self.game.grid_width):
             self.grid_image_create.append([])
@@ -52,24 +56,38 @@ class GamePanel(Panel.Panel):
         :return: None
         """
 
-        space_between_column_line = (self.grid_canvas.winfo_reqwidth() - 5) / float(self.game.grid_width)
-        space_between_row_line = (self.grid_canvas.winfo_reqheight() - 5) / float(self.game.grid_height)
+        space_between_column_line = (self.grid_canvas.width - 10) / float(self.game.grid_width)
+        space_between_row_line = (self.grid_canvas.height - 20 - self.turn_text_height) / float(self.game.grid_height)
         self.token_square_size = min(space_between_column_line, space_between_row_line)
 
-        self.height_center = (self.grid_canvas.winfo_reqheight() - self.token_square_size * self.game.grid_height) / 2
-        self.width_center = (self.grid_canvas.winfo_reqwidth() - self.token_square_size * self.game.grid_width) / 2
+        #  print(space_between_column_line, space_between_column_line, self.token_square_size)
+
+        self.height_center = (self.grid_canvas.height - self.token_square_size * self.game.grid_height) / 2.
+        self.width_center = (self.grid_canvas.width - self.token_square_size * self.game.grid_width) / 2.
 
         self.grid_canvas.delete("grid")
 
-        for i in range(0, self.game.grid_width + 1):
-            self.grid_canvas.create_line(self.token_square_size * i + self.width_center, self.height_center,
-                                         self.token_square_size * i + self.width_center,
-                                         self.grid_canvas.height - self.height_center, tag="grid")
+        self.turn_text_id = self.grid_canvas.create_text(self.grid_canvas.width / 2, self.turn_text_height, tag="grid")
+        self.update_turn_label()
 
-        for i in range(0, self.game.grid_height + 1):
-            self.grid_canvas.create_line(self.width_center, self.token_square_size * i + self.height_center,
+        self.grid_canvas.create_rectangle(self.width_center, self.height_center + self.turn_text_height,
+                                          self.grid_canvas.width - self.width_center,
+                                          self.grid_canvas.height - self.height_center + self.turn_text_height,
+                                          tag="grid", fill="#DDD")
+
+        for i in range(1, self.game.grid_width):
+            self.grid_canvas.create_line(self.token_square_size * i + self.width_center,
+                                         self.height_center + self.turn_text_height,
+                                         self.token_square_size * i + self.width_center,
+                                         self.grid_canvas.height - self.height_center + self.turn_text_height,
+                                         tag="grid")
+
+        for i in range(1, self.game.grid_height):
+            self.grid_canvas.create_line(self.width_center,
+                                         self.token_square_size * i + self.height_center + self.turn_text_height,
                                          self.grid_canvas.width - self.width_center,
-                                         self.token_square_size * i + self.height_center, tag="grid")
+                                         self.token_square_size * i + self.height_center + self.turn_text_height,
+                                         tag="grid")
 
         self.recreate_images()
 
@@ -145,11 +163,11 @@ class GamePanel(Panel.Panel):
         return [
             [
                 x * self.token_square_size + self.width_center,
-                y * self.token_square_size + self.height_center
+                y * self.token_square_size + self.height_center + self.turn_text_height
             ],
             [
                 (x + 1) * self.token_square_size + self.width_center,
-                (y + 1) * self.token_square_size + self.height_center
+                (y + 1) * self.token_square_size + self.height_center + self.turn_text_height
             ]
         ]
 
@@ -158,3 +176,9 @@ class GamePanel(Panel.Panel):
         Update the turn label
         :return: None
         """
+        if self.game.is_win():
+            self.grid_canvas.itemconfigure(self.turn_text_id, text=self.win_text_format.format(
+                ("Player 2", "Player 1")[self.game.winner == TokenState.TokenState.Player_1]), fill="green")
+        else:
+            self.grid_canvas.itemconfigure(self.turn_text_id, text=self.turn_text_format.format(
+                ("Player 2", "Player 1")[self.game.current_turn == TokenState.TokenState.Player_1]))

@@ -2,14 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="bd1cde12-7a76-43ca-890e-fa01120f398b" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Game.py" beforeDir="false" afterPath="$PROJECT_DIR$/Game.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Power4.py" beforeDir="false" afterPath="$PROJECT_DIR$/Power4.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/UI/GamePanel.py" beforeDir="false" afterPath="$PROJECT_DIR$/UI/GamePanel.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UI/ImageGetter.py" beforeDir="false" afterPath="$PROJECT_DIR$/UI/ImageGetter.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UI/Panel.py" beforeDir="false" afterPath="$PROJECT_DIR$/UI/Panel.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UI/ResizingCanvas.py" beforeDir="false" afterPath="$PROJECT_DIR$/UI/ResizingCanvas.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UI/UI.py" beforeDir="false" afterPath="$PROJECT_DIR$/UI/UI.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -43,8 +36,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/UI/GamePanel.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="224">
-              <caret line="73" column="30" selection-start-line="73" selection-start-column="30" selection-end-line="73" selection-end-column="30" />
+            <state relative-caret-position="120">
+              <caret line="38" column="71" selection-start-line="38" selection-start-column="71" selection-end-line="38" selection-end-column="71" />
               <folding>
                 <element signature="e#0#45#0" expanded="true" />
               </folding>
@@ -116,6 +109,9 @@
       <find>height_center</find>
       <find>pri</find>
       <find>pr</find>
+      <find>coord</find>
+      <find>text</find>
+      <find>text=</find>
     </findStrings>
     <replaceStrings>
       <replace>token</replace>
@@ -263,7 +259,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="-1" width="1366" height="768" extended-state="7" />
+    <frame x="0" y="-1" width="1366" height="768" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Favorites" side_tool="true" />
@@ -275,7 +271,7 @@
       <window_info anchor="bottom" id="Event Log" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32838038" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.5289747" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.5230312" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.398773" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -377,8 +373,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/UI/GamePanel.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="224">
-          <caret line="73" column="30" selection-start-line="73" selection-start-column="30" selection-end-line="73" selection-end-column="30" />
+        <state relative-caret-position="120">
+          <caret line="38" column="71" selection-start-line="38" selection-start-column="71" selection-end-line="38" selection-end-column="71" />
           <folding>
             <element signature="e#0#45#0" expanded="true" />
           </folding>
