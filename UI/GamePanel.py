@@ -2,6 +2,7 @@ from UI import Panel, ImageGetter, TokenColor
 import TokenState
 import tkinter.tix
 import Game
+from UI.ResizingCanvas import ResizingCanvas
 
 
 class GamePanel(Panel.Panel):
@@ -17,24 +18,23 @@ class GamePanel(Panel.Panel):
         """
         super().__init__(master, ui)
 
-        self.grid_canvas = tkinter.tix.Canvas(self, width=600, height=400)
-        self.grid_canvas.grid(row=1, column=0)
+        self.grid_canvas = ResizingCanvas(self, self.ui, self.draw_grid)
+        self.grid_canvas.pack(expand=True, fill=tkinter.tix.BOTH)
         self.grid_canvas.bind("<Button>", self.grid_canvas_on_click)
 
         self.game = Game.Game(**kwargs)
+        self.update_turn_label()
 
-        space_between_column_line = self.grid_canvas.winfo_reqwidth() / float(self.game.grid_width)
-        space_between_row_line = self.grid_canvas.winfo_reqheight() / float(self.game.grid_height)
-        self.token_square_size = min(space_between_column_line, space_between_row_line)
+        self.token_square_size = 0
 
-        self.height_center = (self.grid_canvas.winfo_reqheight() - self.token_square_size * self.game.grid_height) / 2
-        self.width_center = (self.grid_canvas.winfo_reqwidth() - self.token_square_size * self.game.grid_width) / 2
+        self.height_center = 0
+        self.width_center = 0
 
         self.image_getter = ImageGetter.ImageGetter(token_size=self.token_square_size)
 
         self.player_token_color = {
             TokenState.TokenState.Player_1: TokenColor.TokenColor.Blue,
-            TokenState.TokenState.Player_2: TokenColor.TokenColor.Green
+            TokenState.TokenState.Player_2: TokenColor.TokenColor.Red
         }
 
         self.grid_image_create = []
@@ -52,16 +52,43 @@ class GamePanel(Panel.Panel):
         :return: None
         """
 
+        space_between_column_line = (self.grid_canvas.winfo_reqwidth() - 5) / float(self.game.grid_width)
+        space_between_row_line = (self.grid_canvas.winfo_reqheight() - 5) / float(self.game.grid_height)
+        self.token_square_size = min(space_between_column_line, space_between_row_line)
+
+        self.height_center = (self.grid_canvas.winfo_reqheight() - self.token_square_size * self.game.grid_height) / 2
+        self.width_center = (self.grid_canvas.winfo_reqwidth() - self.token_square_size * self.game.grid_width) / 2
+
+        self.grid_canvas.delete("grid")
+
         for i in range(0, self.game.grid_width + 1):
             self.grid_canvas.create_line(self.token_square_size * i + self.width_center, self.height_center,
                                          self.token_square_size * i + self.width_center,
-                                         self.grid_canvas.winfo_reqheight() - self.height_center, tag="grid")
+                                         self.grid_canvas.height - self.height_center, tag="grid")
 
         for i in range(0, self.game.grid_height + 1):
             self.grid_canvas.create_line(self.width_center, self.token_square_size * i + self.height_center,
-                                         self.grid_canvas.winfo_reqwidth() - self.width_center,
-                                         self.token_square_size * i + self.height_center)
-            
+                                         self.grid_canvas.width - self.width_center,
+                                         self.token_square_size * i + self.height_center, tag="grid")
+
+        self.recreate_images()
+
+    def recreate_images(self):
+        """
+        Recreate images when the canvas is resize
+        :return: None
+        """
+
+        self.image_getter.resize_tokens_images(self.token_square_size)
+
+        for x in range(0, self.game.grid_width):
+            for y in range(0, self.game.grid_height):
+                if self.grid_image_create[x][y] != 0:
+                    self.grid_canvas.delete(self.grid_image_create[x][y])
+
+                if self.game.grid[x][y] != TokenState.TokenState.Blank:
+                    self.create_image(x, y, self.game.grid[x][y])
+
     def create_image(self, x, y, player):
         """
         Create a image at the 
@@ -75,6 +102,7 @@ class GamePanel(Panel.Panel):
 
         if self.grid_image_create[x][y] != 0:
             self.grid_canvas.delete(self.grid_image_create[x][y])
+            # noinspection PyTypeChecker
             self.grid_image_create[x][y] = 0
 
         self.grid_image_create[x][y] = self.grid_canvas.create_image(
@@ -106,6 +134,7 @@ class GamePanel(Panel.Panel):
 
         if add_token_result[0]:
             self.create_image(add_token_result[1][0], add_token_result[1][1], current_player)
+            self.update_turn_label()
 
     def get_square_coord(self, x, y):
         """
@@ -123,3 +152,9 @@ class GamePanel(Panel.Panel):
                 (y + 1) * self.token_square_size + self.height_center
             ]
         ]
+
+    def update_turn_label(self):
+        """
+        Update the turn label
+        :return: None
+        """

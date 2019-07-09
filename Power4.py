@@ -20,7 +20,6 @@ def main():
 
     ui = UI()
     ui.change_panel(GamePanel)
-    ui.resizable(0, 0)
     ui.mainloop()
 
 

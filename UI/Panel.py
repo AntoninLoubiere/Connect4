@@ -15,3 +15,10 @@ class Panel(tkinter.tix.Frame):
         super().__init__(master)
 
         self.ui = ui
+
+    def on_create_finish(self):
+        """
+        Call when the window is create and the size is OK
+        :return: None
+        """
+        pass
