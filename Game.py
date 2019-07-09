@@ -25,6 +25,7 @@ class Game(object):
         self.current_turn = (TokenState.Player_1, TokenState.Player_2)[random.randint(0, 1) == 0]
 
         self.winner = TokenState.Blank
+        self.win_tokens_coord = [[-1, -1], [-1, -1]]
 
     def add_token(self, column):
         """
@@ -61,6 +62,7 @@ class Game(object):
         """
 
         number_align = 1  # current number
+        temp_coord = [[x, y], [x, y]]  
 
         # #Test column#
 
@@ -70,6 +72,7 @@ class Game(object):
                 break
 
             number_align += 1
+            temp_coord[0] = [x, current_y]
 
         # count top
         for current_y in range(y - 1, -1, -1):
@@ -77,12 +80,15 @@ class Game(object):
                 break
 
             number_align += 1
+            temp_coord[1] = [x, current_y]
 
         if number_align >= 4:
             self.winner = self.grid[x][y]
+            self.win_tokens_coord = temp_coord
             return True
 
-        number_align = 1
+        number_align = 1 
+        temp_coord = [[x, y], [x, y]]
 
         # #Test row#
 
@@ -92,6 +98,7 @@ class Game(object):
                 break
 
             number_align += 1
+            temp_coord[0] = [current_x, y]
 
         # count left
         for current_x in range(x - 1, -1, -1):
@@ -99,12 +106,15 @@ class Game(object):
                 break
 
             number_align += 1
+            temp_coord[1] = [current_x, y]
 
         if number_align >= 4:
             self.winner = self.grid[x][y]
+            self.win_tokens_coord = temp_coord
             return True
 
-        number_align = 1
+        number_align = 1 
+        temp_coord = [[x, y], [x, y]]
 
         # #Test diagonal top left - bottom right#
 
@@ -116,6 +126,7 @@ class Game(object):
             if self.grid[current_x][current_y] != self.grid[x][y]:
                 break
 
+            temp_coord[0] = [current_x, current_y]
             current_x += 1
             current_y += 1
             number_align += 1
@@ -128,17 +139,20 @@ class Game(object):
             if self.grid[current_x][current_y] != self.grid[x][y]:
                 break
 
+            temp_coord[1] = [current_x, current_y]
             current_x -= 1
             current_y -= 1
             number_align += 1
 
         if number_align >= 4:
             self.winner = self.grid[x][y]
+            self.win_tokens_coord = temp_coord
             return True
 
         # #Test diagonal top right - bottom left#
 
-        number_align = 1
+        number_align = 1 
+        temp_coord = [[x, y], [x, y]]
 
         # count top right
         current_x = x + 1
@@ -148,6 +162,7 @@ class Game(object):
             if self.grid[current_x][current_y] != self.grid[x][y]:
                 break
 
+            temp_coord[0] = [current_x, current_y]
             current_x += 1
             current_y -= 1
             number_align += 1
@@ -160,12 +175,14 @@ class Game(object):
             if self.grid[current_x][current_y] != self.grid[x][y]:
                 break
 
+            temp_coord[1] = [current_x, current_y]
             current_x -= 1
             current_y += 1
             number_align += 1
 
         if number_align >= 4:
             self.winner = self.grid[x][y]
+            self.win_tokens_coord = temp_coord
             return True
         else:
             return False

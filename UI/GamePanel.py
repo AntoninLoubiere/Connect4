@@ -21,7 +21,7 @@ class GamePanel(Panel.Panel):
         self.turn_text_format = "It's the turn of: {}"
         self.win_text_format = "The winner is: {}"
 
-        self.grid_canvas = ResizingCanvas(self, self.ui, self.draw_grid)
+        self.grid_canvas = ResizingCanvas(self, self.ui, self.on_resize)
         self.grid_canvas.pack(expand=True, fill=tkinter.tix.BOTH)
         self.grid_canvas.bind("<Button>", self.grid_canvas_on_click)
 
@@ -37,16 +37,17 @@ class GamePanel(Panel.Panel):
 
         self.player_token_color = {
             TokenState.TokenState.Player_1: TokenColor.TokenColor.Blue,
-            TokenState.TokenState.Player_2: TokenColor.TokenColor.Red
+            TokenState.TokenState.Player_2: TokenColor.TokenColor.Orange
         }
 
         self.grid_image_create = []
         self.turn_text_id = -1
+        self.win_line_id = -1
 
         for x in range(0, self.game.grid_width):
             self.grid_image_create.append([])
             for y in range(0, self.game.grid_height):
-                self.grid_image_create[x].append(0)
+                self.grid_image_create[x].append(-1)
 
         self.draw_grid()
 
@@ -101,11 +102,20 @@ class GamePanel(Panel.Panel):
 
         for x in range(0, self.game.grid_width):
             for y in range(0, self.game.grid_height):
-                if self.grid_image_create[x][y] != 0:
+                if self.grid_image_create[x][y] != -1:
                     self.grid_canvas.delete(self.grid_image_create[x][y])
 
                 if self.game.grid[x][y] != TokenState.TokenState.Blank:
                     self.create_image(x, y, self.game.grid[x][y])
+
+    def on_resize(self):
+        """
+        When the grid is resize
+        :return: None
+        """
+        self.draw_grid()
+        if self.game.is_win():
+            self.draw_win_line()
 
     def create_image(self, x, y, player):
         """
@@ -118,7 +128,7 @@ class GamePanel(Panel.Panel):
 
         coord = self.get_square_coord(x, y)
 
-        if self.grid_image_create[x][y] != 0:
+        if self.grid_image_create[x][y] != -1:
             self.grid_canvas.delete(self.grid_image_create[x][y])
             # noinspection PyTypeChecker
             self.grid_image_create[x][y] = 0
@@ -153,6 +163,8 @@ class GamePanel(Panel.Panel):
         if add_token_result[0]:
             self.create_image(add_token_result[1][0], add_token_result[1][1], current_player)
             self.update_turn_label()
+            if self.game.is_win():
+                self.on_win()
 
     def get_square_coord(self, x, y):
         """
@@ -182,3 +194,30 @@ class GamePanel(Panel.Panel):
         else:
             self.grid_canvas.itemconfigure(self.turn_text_id, text=self.turn_text_format.format(
                 ("Player 2", "Player 1")[self.game.current_turn == TokenState.TokenState.Player_1]))
+
+    def on_win(self):
+        """
+        When a player win
+        :return: None
+        """
+        self.grid_canvas.unbind("<Button>")
+        self.draw_win_line()
+
+    def draw_win_line(self):
+        """
+        Draw the win line
+        :return: None
+        """
+
+        coord_1 = self.get_square_coord(self.game.win_tokens_coord[0][0], self.game.win_tokens_coord[0][1])
+        coord_1 = [coord_1[0][0] + (coord_1[1][0] - coord_1[0][0]) / 2.,
+                   coord_1[0][1] + (coord_1[1][1] - coord_1[0][1]) / 2.]  # get coord in the center
+
+        coord_2 = self.get_square_coord(self.game.win_tokens_coord[1][0], self.game.win_tokens_coord[1][1])
+        coord_2 = [coord_2[0][0] + (coord_2[1][0] - coord_2[0][0]) / 2.,
+                   coord_2[0][1] + (coord_2[1][1] - coord_2[0][1]) / 2.]  # get coord in the center
+
+        if self.win_line_id != -1:
+            self.grid_canvas.delete(self.win_line_id)
+        self.win_line_id = self.grid_canvas.create_line(
+            coord_1[0], coord_1[1], coord_2[0], coord_2[1], width=5, fill="green")
