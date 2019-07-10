@@ -1,3 +1,5 @@
+import random
+
 from UI import Panel, ImageGetter, TokenColor, TokenFallAnimation
 import TokenState
 import tkinter.tix
@@ -36,12 +38,13 @@ class GamePanel(Panel.Panel):
         self.image_getter = ImageGetter.ImageGetter(token_size=self.token_square_size)
 
         self.player_token_color = {
-            TokenState.TokenState.Player_1: TokenColor.TokenColor.Blue,
-            TokenState.TokenState.Player_2: TokenColor.TokenColor.Orange
+            TokenState.TokenState.Player_1: TokenColor.TokenColor(random.randint(0, 3)),
+            TokenState.TokenState.Player_2: TokenColor.TokenColor(random.randint(0, 3))
         }
 
         self.grid_image_create = []
         self.turn_text_id = -1
+        self.turn_image_id = - 1
         self.win_line_id = -1
 
         for x in range(0, self.game.grid_width):
@@ -142,7 +145,7 @@ class GamePanel(Panel.Panel):
                 print(animation_to_add)
 
                 self.remove_token_animation(token_animation_to_remove[i])
-                
+
                 i += 1
 
     def create_image(self, x, y, player):
@@ -162,7 +165,8 @@ class GamePanel(Panel.Panel):
             self.grid_image_create[x][y] = 0
 
         self.grid_image_create[x][y] = self.grid_canvas.create_image(
-            coord[0][0], coord[0][1], image=self.image_getter.save_photos[player][self.player_token_color[player]],
+            coord[0][0], coord[0][1],
+            image=self.image_getter.save_token_photos[player][self.player_token_color[player]],
             anchor=tkinter.tix.NW
         )
 
@@ -220,12 +224,30 @@ class GamePanel(Panel.Panel):
         Update the turn label
         :return: None
         """
+        if self.turn_image_id != -1:
+            self.grid_canvas.delete(self.turn_image_id)
+
         if self.game.is_win():
             self.grid_canvas.itemconfigure(self.turn_text_id, text=self.win_text_format.format(
                 ("Player 2", "Player 1")[self.game.winner == TokenState.TokenState.Player_1]), fill="green")
+
+            self.turn_image_id = self.grid_canvas.create_image(
+                self.grid_canvas.bbox(self.turn_text_id)[2] + 5, 0,
+                image=self.image_getter.save_token_icons
+                [self.game.winner][self.player_token_color[self.game.winner]],
+                anchor=tkinter.tix.NW
+            )
+
         else:
             self.grid_canvas.itemconfigure(self.turn_text_id, text=self.turn_text_format.format(
                 ("Player 2", "Player 1")[self.game.current_turn == TokenState.TokenState.Player_1]))
+
+            self.turn_image_id = self.grid_canvas.create_image(
+                self.grid_canvas.bbox(self.turn_text_id)[2] + 5, 0,
+                image=self.image_getter.save_token_icons
+                [self.game.current_turn][self.player_token_color[self.game.current_turn]],
+                anchor=tkinter.tix.NW
+            )
 
     def on_win(self):
         """

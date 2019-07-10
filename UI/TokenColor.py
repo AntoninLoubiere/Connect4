@@ -10,3 +10,4 @@ class TokenColor(enum.Enum):
     Green = 1
     Blue = 2
     Orange = 3
+

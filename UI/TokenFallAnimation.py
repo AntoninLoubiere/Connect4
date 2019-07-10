@@ -1,7 +1,5 @@
 import tkinter.tix
-
-
-Y_SPEED = 5
+import TickUpdater
 
 
 class TokenFallAnimation(object):
@@ -28,7 +26,7 @@ class TokenFallAnimation(object):
         self.final_coord = self.game_panel.get_square_coord(final_x, final_y)
 
         self.id = self.game_panel.grid_canvas.create_image(
-            self.final_coord[0][0], self.current_height, image=self.game_panel.image_getter.save_photos[player][
+            self.final_coord[0][0], self.current_height, image=self.game_panel.image_getter.save_token_photos[player][
                 self.game_panel.player_token_color[player]], anchor=tkinter.tix.NW
         )
 
@@ -38,8 +36,11 @@ class TokenFallAnimation(object):
         :return: None
         """
 
-        if self.final_coord[0][1] > self.current_height + Y_SPEED:
-            self.game_panel.grid_canvas.move(self.id, 0, Y_SPEED)
+        y_speed = self.game_panel.get_square_coord(
+            0, self.game_panel.game.grid_height)[0][1] / (TickUpdater.NUMBER_UPDATE_PER_SECOND * 0.75)  # second
+
+        if self.final_coord[0][1] > self.current_height + y_speed:
+            self.game_panel.grid_canvas.move(self.id, 0, y_speed)
             self.current_height = self.game_panel.grid_canvas.coords(self.id)[1]
 
         else:

@@ -40,6 +40,7 @@ class TickUpdater(threading.Thread):
 
             else:
                 time.sleep((time_last_second + 1 - time.time()) / (NUMBER_UPDATE_PER_SECOND - number_update))
-                self.ui.tick_update()
+                if self.ui.is_alive:
+                    self.ui.tick_update()
                 number_update += 1
 
