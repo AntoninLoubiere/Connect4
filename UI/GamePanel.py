@@ -1,4 +1,4 @@
-from UI import Panel, ImageGetter, TokenColor
+from UI import Panel, ImageGetter, TokenColor, TokenFallAnimation
 import TokenState
 import tkinter.tix
 import Game
@@ -48,6 +48,8 @@ class GamePanel(Panel.Panel):
             self.grid_image_create.append([])
             for y in range(0, self.game.grid_height):
                 self.grid_image_create[x].append(-1)
+
+        self.token_animation_list = []
 
         self.draw_grid()
 
@@ -104,8 +106,6 @@ class GamePanel(Panel.Panel):
             for y in range(0, self.game.grid_height):
                 if self.grid_image_create[x][y] != -1:
                     self.grid_canvas.delete(self.grid_image_create[x][y])
-
-                if self.game.grid[x][y] != TokenState.TokenState.Blank:
                     self.create_image(x, y, self.game.grid[x][y])
 
     def on_resize(self):
@@ -114,8 +114,36 @@ class GamePanel(Panel.Panel):
         :return: None
         """
         self.draw_grid()
+
         if self.game.is_win():
             self.draw_win_line()
+
+    def redraw_animation(self):
+        """
+        Redraw animation
+        :return: None
+        """
+        if len(self.token_animation_list) > 0:
+            token_animation_to_remove = list(self.token_animation_list)
+
+            print(token_animation_to_remove)
+
+            i = 0
+
+            while i > len(token_animation_to_remove):
+                print(token_animation_to_remove[i])
+                animation_to_add = TokenFallAnimation.TokenFallAnimation(
+                    token_animation_to_remove[i].final_x, token_animation_to_remove[i].final_y,
+                    token_animation_to_remove[i].player, self)
+
+                animation_to_add.set_current_height(token_animation_to_remove[i].current_height)
+
+                self.add_token_animation(animation_to_add)
+                print(animation_to_add)
+
+                self.remove_token_animation(token_animation_to_remove[i])
+                
+                i += 1
 
     def create_image(self, x, y, player):
         """
@@ -137,6 +165,9 @@ class GamePanel(Panel.Panel):
             coord[0][0], coord[0][1], image=self.image_getter.save_photos[player][self.player_token_color[player]],
             anchor=tkinter.tix.NW
         )
+
+        if self.game.is_win():
+            self.draw_win_line()
 
     def grid_canvas_on_click(self, event):
         """
@@ -161,7 +192,8 @@ class GamePanel(Panel.Panel):
         add_token_result = self.game.add_token(column)
 
         if add_token_result[0]:
-            self.create_image(add_token_result[1][0], add_token_result[1][1], current_player)
+            self.add_token_animation(TokenFallAnimation.TokenFallAnimation(
+                add_token_result[1][0], add_token_result[1][1], current_player, self))
             self.update_turn_label()
             if self.game.is_win():
                 self.on_win()
@@ -203,21 +235,88 @@ class GamePanel(Panel.Panel):
         self.grid_canvas.unbind("<Button>")
         self.draw_win_line()
 
+    def all_win_tokens_are_fall(self):
+        """
+        Test if all tokens are fall
+        :return: If there are fall
+        """
+        x_speed = 0
+        y_speed = 0
+
+        if self.game.win_tokens_coord[0][0] < self.game.win_tokens_coord[1][0]:
+            x_speed = 1
+        elif self.game.win_tokens_coord[0][0] > self.game.win_tokens_coord[1][0]:
+            x_speed = -1
+
+        if self.game.win_tokens_coord[0][1] < self.game.win_tokens_coord[1][1]:
+            y_speed = 1
+        elif self.game.win_tokens_coord[0][1] > self.game.win_tokens_coord[1][1]:
+            y_speed = -1
+
+        current_x = self.game.win_tokens_coord[0][0]
+        current_y = self.game.win_tokens_coord[0][1]
+
+        while current_x != self.game.win_tokens_coord[1][0] + x_speed or \
+                current_y != self.game.win_tokens_coord[1][1] + y_speed:
+            if self.grid_image_create[current_x][current_y] == -1:  # They aren't images
+                return False
+
+            current_x += x_speed
+            current_y += y_speed
+
+        return True
+
     def draw_win_line(self):
         """
         Draw the win line
         :return: None
         """
 
-        coord_1 = self.get_square_coord(self.game.win_tokens_coord[0][0], self.game.win_tokens_coord[0][1])
-        coord_1 = [coord_1[0][0] + (coord_1[1][0] - coord_1[0][0]) / 2.,
-                   coord_1[0][1] + (coord_1[1][1] - coord_1[0][1]) / 2.]  # get coord in the center
+        if self.all_win_tokens_are_fall():
+            coord_1 = self.get_square_coord(self.game.win_tokens_coord[0][0], self.game.win_tokens_coord[0][1])
+            coord_1 = [coord_1[0][0] + (coord_1[1][0] - coord_1[0][0]) / 2.,
+                       coord_1[0][1] + (coord_1[1][1] - coord_1[0][1]) / 2.]  # get coord in the center
 
-        coord_2 = self.get_square_coord(self.game.win_tokens_coord[1][0], self.game.win_tokens_coord[1][1])
-        coord_2 = [coord_2[0][0] + (coord_2[1][0] - coord_2[0][0]) / 2.,
-                   coord_2[0][1] + (coord_2[1][1] - coord_2[0][1]) / 2.]  # get coord in the center
+            coord_2 = self.get_square_coord(self.game.win_tokens_coord[1][0], self.game.win_tokens_coord[1][1])
+            coord_2 = [coord_2[0][0] + (coord_2[1][0] - coord_2[0][0]) / 2.,
+                       coord_2[0][1] + (coord_2[1][1] - coord_2[0][1]) / 2.]  # get coord in the center
 
-        if self.win_line_id != -1:
-            self.grid_canvas.delete(self.win_line_id)
-        self.win_line_id = self.grid_canvas.create_line(
-            coord_1[0], coord_1[1], coord_2[0], coord_2[1], width=5, fill="green")
+            if self.win_line_id != -1:
+                self.grid_canvas.delete(self.win_line_id)
+            self.win_line_id = self.grid_canvas.create_line(
+                coord_1[0], coord_1[1], coord_2[0], coord_2[1], width=5, fill="green")
+
+    def tick_update(self):
+        """
+        See panel class
+        :return: See panel class
+        """
+
+        i = 0
+        while i < len(self.token_animation_list):
+            self.token_animation_list[i].tick_update()
+            i += 1
+
+    def add_token_animation(self, token_animation):
+        """
+        Add a token animation
+        :param token_animation: The animation to add
+        :return: None
+        """
+        self.token_animation_list.append(token_animation)
+
+    def remove_token_animation(self, token_animation):
+        """
+        Remove a token animation
+        :param token_animation: the token animation to remove
+        :return: None
+        """
+        if self.token_animation_list.count(token_animation) >= 1:
+            self.token_animation_list.remove(token_animation)
+            token_animation.on_remove()
+        else:
+            i = 0
+            while i < len(self.token_animation_list):
+                if token_animation.id == self.token_animation_list[i].id:
+                    self.token_animation_list.pop(i)
+                    return None

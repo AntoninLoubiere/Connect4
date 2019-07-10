@@ -22,3 +22,9 @@ class Panel(tkinter.tix.Frame):
         :return: None
         """
         pass
+
+    def tick_update(self):
+        """
+        When the program is update (especially for animation)
+        :return: None
+        """
