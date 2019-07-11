@@ -18,7 +18,7 @@ class UI(tkinter.tix.Tk):
         # Configure
         self.title("Power 4")
         self.geometry("600x520")
-        self.minsize(210, 110)
+        self.minsize(300, 200)
         self.protocol("WM_DELETE_WINDOW", self.destroy)
 
     def change_panel(self, new_panel, **kwargs):
@@ -34,6 +34,7 @@ class UI(tkinter.tix.Tk):
 
         self.current_panel = new_panel
         self.current_panel.pack(expand=True, fill=tkinter.tix.BOTH)
+        self.update()
         self.current_panel.on_create_finish()
 
     def tick_update(self):

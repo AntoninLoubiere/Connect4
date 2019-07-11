@@ -6,19 +6,21 @@ class ResizingCanvas(tkinter.tix.Canvas):
     A auto resizing canvas
     """
 
-    def __init__(self, parent, window, on_resize_var=None, **kwargs):
+    def __init__(self, parent, window, on_resize_var=None, disable=False, **kwargs):
         """
         Constructor
         :param parent: the parent of the canvas
         :param window: the window
+        :param disable: if the resize event is disable
         :param kwargs: Other params
         """
         tkinter.tix.Canvas.__init__(self, parent, **kwargs)
         window.bind("<Configure>", self.on_resize)
+        self.window = window
         self.height = self.winfo_reqheight()
         self.width = self.winfo_reqwidth()
-
         self.on_resize_var = on_resize_var
+        self.disable = disable
 
     def on_resize(self, event):
         """
@@ -26,6 +28,8 @@ class ResizingCanvas(tkinter.tix.Canvas):
         :param event: the event
         :return: None
         """
+        if self.disable:
+            return None
         # determine the ratio of old width/height to new width/height
         w_scale = float(event.width) / self.width
         h_scale = float(event.height) / self.height
@@ -38,3 +42,10 @@ class ResizingCanvas(tkinter.tix.Canvas):
 
         if self.on_resize_var is not None:
             self.on_resize_var()
+
+    def remove_resizing(self):
+        """
+        Remove the auto resizing
+        :return: None
+        """
+        self.window.unbind("<Configure>")

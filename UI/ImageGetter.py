@@ -46,7 +46,7 @@ class ImageGetter:
                                                                            (player, color, token_size, token_size))
 
                 self.save_token_icons[player][color] = ImageTk.PhotoImage(create_player_token_image
-                                                                          (player, color, 20, 20))
+                                                                          (player, color, 30, 30))
 
     def resize_tokens_images(self, token_size):
         """

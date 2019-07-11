@@ -9,7 +9,7 @@ License: GNU Public License v3.0 (In file "LICENSE.md")
 Created: Sunday, July 7, 2019
 """
 from TickUpdater import TickUpdater
-from UI.GamePanel import GamePanel
+from UI.MainMenuPanel import MainMenuPanel
 from UI.UI import UI
 
 
@@ -20,7 +20,7 @@ def main():
     """
 
     ui = UI()
-    ui.change_panel(GamePanel)
+    ui.change_panel(MainMenuPanel)
 
     tick_updater = TickUpdater(ui)
     tick_updater.start()

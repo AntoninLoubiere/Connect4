@@ -1,9 +1,8 @@
-import random
-
-from UI import Panel, ImageGetter, TokenColor, TokenFallAnimation
-import TokenState
 import tkinter.tix
+
 import Game
+import TokenState
+from UI import Panel, ImageGetter, TokenColor, TokenFallAnimation
 from UI.ResizingCanvas import ResizingCanvas
 
 
@@ -23,7 +22,7 @@ class GamePanel(Panel.Panel):
         self.turn_text_format = "It's the turn of: {}"
         self.win_text_format = "The winner is: {}"
 
-        self.grid_canvas = ResizingCanvas(self, self.ui, self.on_resize)
+        self.grid_canvas = ResizingCanvas(self, self.ui, self.on_resize, disable=False)
         self.grid_canvas.pack(expand=True, fill=tkinter.tix.BOTH)
         self.grid_canvas.bind("<Button>", self.grid_canvas_on_click)
 
@@ -33,13 +32,16 @@ class GamePanel(Panel.Panel):
 
         self.height_center = 0
         self.width_center = 0
-        self.turn_text_height = 10
+        self.turn_text_height = 15
+
+        self.button_main_menu = tkinter.tix.Button(self, text="<- Main menu", command=self.button_main_menu_command)
+        self.button_main_menu.place(x=0, y=0, )
 
         self.image_getter = ImageGetter.ImageGetter(token_size=self.token_square_size)
 
         self.player_token_color = {
-            TokenState.TokenState.Player_1: TokenColor.TokenColor(random.randint(0, 3)),
-            TokenState.TokenState.Player_2: TokenColor.TokenColor(random.randint(0, 3))
+            TokenState.TokenState.Player_1: TokenColor.TokenColor.Blue,
+            TokenState.TokenState.Player_2: TokenColor.TokenColor.Green
         }
 
         self.grid_image_create = []
@@ -54,7 +56,12 @@ class GamePanel(Panel.Panel):
 
         self.token_animation_list = []
 
-        self.draw_grid()
+    def on_create_finish(self):
+        """
+        See panel class
+        :return: See panel class
+        """
+        self.on_resize()
 
     def draw_grid(self):
         """
@@ -316,7 +323,11 @@ class GamePanel(Panel.Panel):
 
         i = 0
         while i < len(self.token_animation_list):
-            self.token_animation_list[i].tick_update()
+            try:
+                self.token_animation_list[i].tick_update()
+            except tkinter.tix.TclError:
+                pass
+
             i += 1
 
     def add_token_animation(self, token_animation):
@@ -342,3 +353,17 @@ class GamePanel(Panel.Panel):
                 if token_animation.id == self.token_animation_list[i].id:
                     self.token_animation_list.pop(i)
                     return None
+
+    def remove_all_token_animation(self):
+        while len(self.token_animation_list):
+            self.remove_token_animation(self.token_animation_list[0])
+
+    def button_main_menu_command(self):
+        """
+        The command of the button main menu
+        :return: None
+        """
+        from UI.MainMenuPanel import MainMenuPanel
+        self.remove_all_token_animation()
+        self.grid_canvas.remove_resizing()
+        self.ui.change_panel(MainMenuPanel)

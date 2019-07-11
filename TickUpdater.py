@@ -43,4 +43,3 @@ class TickUpdater(threading.Thread):
                 if self.ui.is_alive:
                     self.ui.tick_update()
                 number_update += 1
-
