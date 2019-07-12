@@ -1,4 +1,5 @@
 import copy
+import random
 
 import math
 
@@ -82,9 +83,14 @@ class AIPlayer(object):
                 current_score += self.get_turn_min_max(current_grid, self.min_max_deep, TokenState.Player_1)
                 # print(current_score)
 
-                if current_score >= score:
+                if current_score > score:
                     score = max(current_score, score)
                     column_max_score = column
+
+                elif current_score == score:
+                    if random.randint(0, 1) == 0:
+                        score = max(current_score, score)
+                        column_max_score = column
 
         self.thinking = False
         return column_max_score

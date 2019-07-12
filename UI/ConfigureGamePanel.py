@@ -20,7 +20,7 @@ class ConfigureGamePanel(Panel.Panel):
         for i in range(0, 2):
             self.grid_columnconfigure(i, weight=1)
 
-        for i in range(1, 2):
+        for i in range(1, 3):
             self.grid_rowconfigure(i, weight=1)
 
         self.players_label = [tkinter.tix.Label(self, text="Player 1:"),
@@ -63,21 +63,57 @@ class ConfigureGamePanel(Panel.Panel):
         self.players_tokens_buttons[0].grid(row=1, column=0, sticky=tkinter.tix.NSEW)
         self.players_tokens_buttons[1].grid(row=1, column=0, sticky=tkinter.tix.NSEW)
 
+        if self.solo_mode:
+            self.difficultly_choose_frame = tkinter.tix.Frame(self)
+            self.difficultly_choose_frame.grid(row=2, column=0, columnspan=2, sticky=tkinter.tix.SE + tkinter.W,
+                                               pady=10)
+
+            self.difficulty_selected_button = 0
+
+            self.difficulty_buttons = [
+                tkinter.tix.Button(self.difficultly_choose_frame, text="Very easy",
+                                   command=lambda: self.button_difficulty_command(0)),
+                tkinter.tix.Button(self.difficultly_choose_frame, text="Easy",
+                                   command=lambda: self.button_difficulty_command(1)),
+                tkinter.tix.Button(self.difficultly_choose_frame, text="Normal",
+                                   command=lambda: self.button_difficulty_command(2)),
+                tkinter.tix.Button(self.difficultly_choose_frame, text="Little hard",
+                                   command=lambda: self.button_difficulty_command(3)),
+                tkinter.tix.Button(self.difficultly_choose_frame, text="Hard",
+                                   command=lambda: self.button_difficulty_command(4)),
+                tkinter.tix.Button(self.difficultly_choose_frame, text="Very hard",
+                                   command=lambda: self.button_difficulty_command(5))
+            ]
+
+            for i in range(0, len(self.difficulty_buttons)):
+                self.difficulty_buttons[i].grid(row=0, column=i, sticky=tkinter.tix.NSEW)
+                self.difficultly_choose_frame.columnconfigure(i, weight=1)
+
+            self.button_difficulty_command(2)
+
         self.button_main_menu = tkinter.tix.Button(self, text="Back", command=self.button_main_menu_command)
-        self.button_main_menu.grid(row=2, column=0, sticky=tkinter.tix.NSEW)
+        self.button_main_menu.grid(row=3, column=0, sticky=tkinter.tix.NSEW)
 
         self.button_play = tkinter.tix.Button(self, text="Play", command=self.button_play_command)
-        self.button_play.grid(row=2, column=1, sticky=tkinter.tix.NSEW)
+        self.button_play.grid(row=3, column=1, sticky=tkinter.tix.NSEW)
 
     def button_play_command(self):
         """
         The command of the play button
         :return: None
         """
-        self.ui.change_panel(GamePanel.GamePanel, solo_mode=self.solo_mode,
-                             token_player_1=self.players_tokens[0],
-                             token_player_2=self.players_tokens[1])
 
+        if self.solo_mode:
+            self.ui.change_panel(GamePanel.GamePanel, solo_mode=self.solo_mode,
+                                 token_player_1=self.players_tokens[0],
+                                 token_player_2=self.players_tokens[1],
+                                 game_difficulty=self.difficulty_selected_button + 1)
+
+        else:
+            self.ui.change_panel(GamePanel.GamePanel, solo_mode=self.solo_mode,
+                                 token_player_1=self.players_tokens[0],
+                                 token_player_2=self.players_tokens[1])
+            
     def button_main_menu_command(self):
         """
         The command of the main menu
@@ -105,3 +141,32 @@ class ConfigureGamePanel(Panel.Panel):
             self.ui.image_getter.save_token_photos[player][self.players_tokens[player_index]]
 
         self.players_tokens_buttons[player_index].config(image=self.players_tokens_images[player_index])
+
+    def button_difficulty_command(self, index):
+        """
+        When a button of difficulty is clicked
+        :param index: the index of the button
+        :return: None
+        """
+        self.difficulty_buttons[self.difficulty_selected_button].config(
+            fg="black", relief=tkinter.tix.GROOVE, activeforeground="black", borderwidth=1)
+
+        self.difficulty_selected_button = index
+
+        font_color = "#2ca02c"
+
+        if index == 0:
+            font_color = "#37c837"
+        elif index == 1:
+            font_color = "#2ca02c"
+        elif index == 2:
+            font_color = "#a0a02c"
+        elif index == 3:
+            font_color = "#a0662c"
+        elif index == 4:
+            font_color = "#a0492c"
+        elif index == 5:
+            font_color = "#a02c2c"
+
+        self.difficulty_buttons[self.difficulty_selected_button].config(
+            fg=font_color, relief=tkinter.tix.SUNKEN, activeforeground=font_color, borderwidth=5)

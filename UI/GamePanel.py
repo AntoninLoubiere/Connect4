@@ -15,7 +15,8 @@ class GamePanel(Panel.Panel):
 
     def __init__(self, master, ui, solo_mode=False,
                  token_player_1=TokenColor.TokenColor.Blue,
-                 token_player_2=TokenColor.TokenColor.Green, **kwargs):
+                 token_player_2=TokenColor.TokenColor.Green,
+                 game_difficulty=3, **kwargs):
         """
         Constructor
         :param master: see Panel class
@@ -34,7 +35,7 @@ class GamePanel(Panel.Panel):
 
         self.solo_mode = solo_mode
         if solo_mode:
-            self.ai_player = AIPlayer.AIPlayer(5, self.game)
+            self.ai_player = AIPlayer.AIPlayer(game_difficulty, self.game)
 
         self.token_square_size = 0
 
