@@ -1,5 +1,7 @@
+import threading
 import tkinter.tix
 
+import AIPlayer
 import Game
 import TokenState
 from UI import Panel, ImageGetter, TokenColor, TokenFallAnimation
@@ -11,7 +13,7 @@ class GamePanel(Panel.Panel):
     GamePanel is a panel for UI, is the UI for the game
     """
 
-    def __init__(self, master, ui, **kwargs):
+    def __init__(self, master, ui, solo_mode=False, **kwargs):
         """
         Constructor
         :param master: see Panel class
@@ -24,9 +26,13 @@ class GamePanel(Panel.Panel):
 
         self.grid_canvas = ResizingCanvas(self, self.ui, self.on_resize, disable=False)
         self.grid_canvas.pack(expand=True, fill=tkinter.tix.BOTH)
-        self.grid_canvas.bind("<Button>", self.grid_canvas_on_click)
+        self.after(500, lambda: self.grid_canvas.bind("<Button>", self.grid_canvas_on_click))
 
         self.game = Game.Game(**kwargs)
+
+        self.solo_mode = solo_mode
+        if solo_mode:
+            self.ai_player = AIPlayer.AIPlayer(5, self.game)
 
         self.token_square_size = 0
 
@@ -35,12 +41,12 @@ class GamePanel(Panel.Panel):
         self.turn_text_height = 15
 
         self.button_main_menu = tkinter.tix.Button(self, text="<- Main menu", command=self.button_main_menu_command)
-        self.button_main_menu.place(x=0, y=0, )
+        self.button_main_menu.place(x=0, y=0)
 
         self.image_getter = ImageGetter.ImageGetter(token_size=self.token_square_size)
 
         self.player_token_color = {
-            TokenState.TokenState.Player_1: TokenColor.TokenColor.Blue,
+            TokenState.TokenState.Player_1: TokenColor.TokenColor.Orange,
             TokenState.TokenState.Player_2: TokenColor.TokenColor.Green
         }
 
@@ -62,6 +68,10 @@ class GamePanel(Panel.Panel):
         :return: See panel class
         """
         self.on_resize()
+
+        if self.solo_mode and self.game.current_turn == TokenState.TokenState.Player_2:
+            thread = threading.Thread(target=self.run_ai_turn)
+            thread.start()
 
     def draw_grid(self):
         """
@@ -189,7 +199,8 @@ class GamePanel(Panel.Panel):
         if event.num == 1:
             column = (event.x - self.width_center) / self.token_square_size
             if 0 <= column <= self.game.grid_width:
-                self.add_token_column(int(column))
+                if not self.solo_mode or self.game.current_turn != TokenState.TokenState.Player_2:
+                    self.add_token_column(int(column))
 
     def add_token_column(self, column):
         """
@@ -355,8 +366,23 @@ class GamePanel(Panel.Panel):
                     return None
 
     def remove_all_token_animation(self):
+        """
+        Remove all tokens animations
+        :return: None
+        """
         while len(self.token_animation_list):
             self.remove_token_animation(self.token_animation_list[0])
+
+    def run_ai_turn(self):
+        """
+        Run the ai turn
+        :return: None
+        """
+
+        if not self.ai_player.thinking:
+            self.config(cursor="watch")
+            self.add_token_column(self.ai_player.run_turn())
+            self.config(cursor="")
 
     def button_main_menu_command(self):
         """
@@ -367,3 +393,13 @@ class GamePanel(Panel.Panel):
         self.remove_all_token_animation()
         self.grid_canvas.remove_resizing()
         self.ui.change_panel(MainMenuPanel)
+
+    def on_end_animation(self, player):
+        """
+        When a token finish his animation
+        :param player: the owner of the token of the animation
+        :return: None
+        """
+        if player == TokenState.TokenState.Player_1 and self.game.current_turn == TokenState.TokenState.Player_2:
+            thread = threading.Thread(target=self.run_ai_turn)
+            thread.start()

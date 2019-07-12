@@ -2,7 +2,7 @@ import threading
 import time
 
 
-NUMBER_UPDATE_PER_SECOND = 100
+NUMBER_UPDATE_PER_SECOND = 60
 
 
 class TickUpdater(threading.Thread):
@@ -29,7 +29,8 @@ class TickUpdater(threading.Thread):
         while self.ui.is_alive:
             if time_last_second + 1 < time.time():
                 time_last_second = time.time()
-                if number_update < NUMBER_UPDATE_PER_SECOND:
+                if number_update < NUMBER_UPDATE_PER_SECOND and \
+                        NUMBER_UPDATE_PER_SECOND - number_update > NUMBER_UPDATE_PER_SECOND * 0.1:
                     print("WARNING: {} tick(s) skip !".format(str(NUMBER_UPDATE_PER_SECOND - number_update)))
                 number_update = 0
 

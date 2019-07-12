@@ -36,7 +36,7 @@ class Game(object):
         if self.is_win():
             return [False, [-1, -1]]
 
-        for y in range(self.grid_height - 1, 0 - 1, -1):
+        for y in range(self.grid_height - 1, -1, -1):
             if self.grid[column][y] == TokenState.Blank:
                 #  add token
                 self.grid[column][y] = self.current_turn

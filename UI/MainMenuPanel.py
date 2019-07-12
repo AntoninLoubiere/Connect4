@@ -26,8 +26,7 @@ class MainMenuPanel(Panel.Panel):
         self.text_title.grid(row=0, column=0, sticky=tkinter.tix.NSEW)
 
         self.button_play_local_solo_player = tkinter.tix.Button(
-            self, text="Play 1 player", command=self.button_play_local_solo_player_command, height=2,
-            state=tkinter.tix.DISABLED)
+            self, text="Play 1 player", command=self.button_play_local_solo_player_command, height=2,)
         self.button_play_local_solo_player.grid(row=1, column=0, sticky=tkinter.tix.NSEW)
 
         self.button_play_local_multi_players = tkinter.tix.Button(
@@ -42,7 +41,7 @@ class MainMenuPanel(Panel.Panel):
         The command of the solo player button
         :return: None
         """
-        pass
+        self.ui.change_panel(GamePanel.GamePanel, solo_mode=True)
 
     def button_play_local_multi_players_command(self):
         """

@@ -2,6 +2,9 @@ import tkinter.tix
 import TickUpdater
 
 
+TIME_ANIMATION = 0.75
+
+
 class TokenFallAnimation(object):
     """
     The class of animation of the fall of tokens
@@ -37,7 +40,8 @@ class TokenFallAnimation(object):
         """
 
         y_speed = self.game_panel.get_square_coord(
-            0, self.game_panel.game.grid_height)[0][1] / (TickUpdater.NUMBER_UPDATE_PER_SECOND * 0.75)  # second
+            0, self.game_panel.game.grid_height)[0][1] / (TickUpdater.NUMBER_UPDATE_PER_SECOND * TIME_ANIMATION)
+        # second
 
         if self.final_coord[0][1] > self.current_height + y_speed:
             self.game_panel.grid_canvas.move(self.id, 0, y_speed)
@@ -45,6 +49,7 @@ class TokenFallAnimation(object):
 
         else:
             self.game_panel.create_image(self.final_x, self.final_y, self.player)
+            self.game_panel.on_end_animation(self.player)
             self.game_panel.remove_token_animation(self)
 
     def on_remove(self):
