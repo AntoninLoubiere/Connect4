@@ -16,7 +16,7 @@ class UI(tkinter.tix.Tk):
         self.is_alive = True
 
         # Configure
-        self.title("Power 4")
+        self.title("Connect 4")
         self.geometry("600x520")
         self.minsize(300, 200)
         self.protocol("WM_DELETE_WINDOW", self.destroy)

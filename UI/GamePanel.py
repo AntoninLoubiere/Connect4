@@ -379,7 +379,7 @@ class GamePanel(Panel.Panel):
         :return: None
         """
 
-        if not self.ai_player.thinking:
+        if self.solo_mode and not self.ai_player.thinking:
             self.config(cursor="watch")
             self.add_token_column(self.ai_player.run_turn())
             self.config(cursor="")

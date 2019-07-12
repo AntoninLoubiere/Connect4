@@ -22,7 +22,7 @@ class MainMenuPanel(Panel.Panel):
         for i in range(0, 1):
             self.grid_rowconfigure(i, weight=1)
 
-        self.text_title = tkinter.tix.Label(self, text="Power 4", font=("Arial Bold", 50))
+        self.text_title = tkinter.tix.Label(self, text="Connect 4", font=("Arial Bold", 50))
         self.text_title.grid(row=0, column=0, sticky=tkinter.tix.NSEW)
 
         self.button_play_local_solo_player = tkinter.tix.Button(
