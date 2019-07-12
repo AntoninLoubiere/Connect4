@@ -1,6 +1,6 @@
 import tkinter.tix
 
-from UI import Panel, GamePanel
+from UI import Panel, ConfigureGamePanel
 
 
 class MainMenuPanel(Panel.Panel):
@@ -41,14 +41,14 @@ class MainMenuPanel(Panel.Panel):
         The command of the solo player button
         :return: None
         """
-        self.ui.change_panel(GamePanel.GamePanel, solo_mode=True)
+        self.ui.change_panel(ConfigureGamePanel.ConfigureGamePanel, solo_mode=True)
 
     def button_play_local_multi_players_command(self):
         """
         The command of the multi players button
         :return: None
         """
-        self.ui.change_panel(GamePanel.GamePanel)
+        self.ui.change_panel(ConfigureGamePanel.ConfigureGamePanel)
 
     def button_quit_command(self):
         """

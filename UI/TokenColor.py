@@ -1,6 +1,9 @@
 import enum
 
 
+NUMBER_COLOR = 4
+
+
 class TokenColor(enum.Enum):
     """
     The color of a Token

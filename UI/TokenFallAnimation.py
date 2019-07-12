@@ -29,8 +29,8 @@ class TokenFallAnimation(object):
         self.final_coord = self.game_panel.get_square_coord(final_x, final_y)
 
         self.id = self.game_panel.grid_canvas.create_image(
-            self.final_coord[0][0], self.current_height, image=self.game_panel.image_getter.save_token_photos[player][
-                self.game_panel.player_token_color[player]], anchor=tkinter.tix.NW
+            self.final_coord[0][0], self.current_height, image=self.game_panel.ui.image_getter.save_token_photos[player]
+            [self.game_panel.player_token_color[player]], anchor=tkinter.tix.NW
         )
 
     def tick_update(self):

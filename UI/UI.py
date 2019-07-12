@@ -1,5 +1,7 @@
 import tkinter.tix
 
+from UI import ImageGetter
+
 
 class UI(tkinter.tix.Tk):
     """
@@ -14,6 +16,8 @@ class UI(tkinter.tix.Tk):
         super().__init__()
         self.current_panel = None
         self.is_alive = True
+
+        self.image_getter = ImageGetter.ImageGetter()
 
         # Configure
         self.title("Connect 4")
