@@ -1,5 +1,6 @@
 import random
 import tkinter.tix
+import tkinter.messagebox
 
 from TokenState import TokenState
 from UI import Panel, GamePanel, MainMenuPanel
@@ -24,7 +25,7 @@ class ConfigureGamePanel(Panel.Panel):
             self.grid_rowconfigure(i, weight=1)
 
         self.players_label = [tkinter.tix.Label(self, text="Player 1:"),
-                              tkinter.tix.Label(self, text="Player 2:")]
+                              tkinter.tix.Label(self, text=("Player 2:", "AI 1")[self.solo_mode])]
         self.players_label[0].grid(row=0, column=0)
         self.players_label[1].grid(row=0, column=1)
 
@@ -102,6 +103,20 @@ class ConfigureGamePanel(Panel.Panel):
         The command of the play button
         :return: None
         """
+        if self.players_tokens[0] == self.players_tokens[1]:
+            if not tkinter.messagebox.askokcancel("Same color", "You choose the same color for the player 1 and the "
+                                                                "player 2, it is more difficult to discern which "
+                                                                "player is own a token.\n\nWould you like continue ?"):
+                return None
+
+        if self.difficulty_selected_button == 5:
+            if not tkinter.messagebox.askokcancel("Long wait",
+                                                  "You choose the very hard difficulty, the artificial "
+                                                  "intelligence will take a long time to do his turn (~45 seconds per "
+                                                  "turn). You have to be very patient to do this difficulty\n\nWould "
+                                                  ""
+                                                  "you like continue ?"):
+                return None
 
         if self.solo_mode:
             self.ui.change_panel(GamePanel.GamePanel, solo_mode=self.solo_mode,
@@ -113,7 +128,7 @@ class ConfigureGamePanel(Panel.Panel):
             self.ui.change_panel(GamePanel.GamePanel, solo_mode=self.solo_mode,
                                  token_player_1=self.players_tokens[0],
                                  token_player_2=self.players_tokens[1])
-            
+
     def button_main_menu_command(self):
         """
         The command of the main menu
