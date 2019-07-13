@@ -48,7 +48,7 @@ class AIPlayer(Player.Player):
         self.thinking = True
 
         score = -math.inf
-        column_max_score = 0
+        column_max_score_possibility = []
 
         for column in range(0, self.game.grid_width):
             if can_place_token(self.game.grid, column):
@@ -69,7 +69,7 @@ class AIPlayer(Player.Player):
                 # print(align)
 
                 if align[0][0] >= 4 or align[1][0] >= 4 or align[2][0] >= 4 or align[3][0] >= 4:
-                    column_max_score = column
+                    column_max_score_possibility = [column]
                     break
 
                 current_score = 0
@@ -95,15 +95,17 @@ class AIPlayer(Player.Player):
 
                 if current_score > score:
                     score = max(current_score, score)
-                    column_max_score = column
+                    column_max_score_possibility = [column]
 
                 elif current_score == score:
-                    if random.randint(0, 1) == 0:
-                        score = max(current_score, score)
-                        column_max_score = column
+                    score = max(current_score, score)
+                    column_max_score_possibility.append(column)
 
         self.thinking = False
-        return column_max_score
+        if len(column_max_score_possibility) == 0:
+            return 0
+        else:
+            return random.choice(column_max_score_possibility)
 
     def get_turn_min_max(self, grid, deep, player_turn):
         """

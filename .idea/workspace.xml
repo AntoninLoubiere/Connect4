@@ -2,10 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="bd1cde12-7a76-43ca-890e-fa01120f398b" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/../Connect4/.idea/dictionaries/antonin.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Connect4/.idea/dictionaries/antonin.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Connect4/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Connect4/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Connect4/AIPlayer.py" beforeDir="false" afterPath="$PROJECT_DIR$/../Connect4/AIPlayer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Connect4/UI/ConfigureGamePanel.py" beforeDir="false" afterPath="$PROJECT_DIR$/../Connect4/UI/ConfigureGamePanel.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Connect4/UI/GamePanel.py" beforeDir="false" afterPath="$PROJECT_DIR$/../Connect4/UI/GamePanel.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Connect4/UI/TokenFallAnimation.py" beforeDir="false" afterPath="$PROJECT_DIR$/../Connect4/UI/TokenFallAnimation.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Connect4/UI/MainMenuPanel.py" beforeDir="false" afterPath="$PROJECT_DIR$/../Connect4/UI/MainMenuPanel.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Connect4/UI/UI.py" beforeDir="false" afterPath="$PROJECT_DIR$/../Connect4/UI/UI.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -18,8 +21,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/../Connect4/UI/GamePanel.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="60">
-              <caret line="49" column="112" selection-start-line="49" selection-start-column="112" selection-end-line="49" selection-end-column="112" />
+            <state relative-caret-position="275">
+              <caret line="418" selection-start-line="418" selection-end-line="418" />
               <folding>
                 <element signature="e#0#16#0" expanded="true" />
               </folding>
@@ -48,11 +51,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/../Connect4/UI/ConfigureGamePanel.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="89">
-              <caret line="44" column="79" selection-start-line="44" selection-start-column="79" selection-end-line="44" selection-end-column="79" />
+            <state relative-caret-position="81">
+              <caret line="233" column="116" selection-start-line="233" selection-start-column="116" selection-end-line="233" selection-end-column="116" />
               <folding>
                 <element signature="e#0#13#0" expanded="true" />
               </folding>
@@ -79,19 +82,22 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../Connect4/Game.py">
+        <entry file="file://$PROJECT_DIR$/../Connect4/UI/MainMenuPanel.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="315">
-              <caret line="25" selection-start-line="25" selection-end-line="25" />
+            <state relative-caret-position="210">
+              <caret line="28" column="84" selection-start-line="28" selection-start-column="84" selection-end-line="28" selection-end-column="84" />
+              <folding>
+                <element signature="e#0#18#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/../Connect4/AIPlayer.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="186">
-              <caret line="139" column="72" selection-start-line="139" selection-start-column="72" selection-end-line="139" selection-end-column="72" />
+            <state relative-caret-position="165">
+              <caret line="107" selection-start-line="107" selection-end-line="107" />
               <folding>
                 <element signature="e#0#11#0" expanded="true" />
               </folding>
@@ -102,8 +108,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/../Connect4/UI/UI.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="96">
-              <caret line="19" column="41" selection-start-line="19" selection-start-column="41" selection-end-line="19" selection-end-column="41" />
+            <state relative-caret-position="-55">
+              <caret line="24" column="24" selection-start-line="24" selection-start-column="24" selection-end-line="24" selection-end-column="24" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
               </folding>
@@ -134,7 +140,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>animation</find>
       <find>remove</find>
       <find>update</find>
       <find>resi</find>
@@ -146,7 +151,6 @@
       <find>set</find>
       <find>on_c</find>
       <find>(0, 0)</find>
-      <find>on_cli</find>
       <find>-math.inf</find>
       <find>print</find>
       <find>pr</find>
@@ -164,6 +168,8 @@
       <find>oppo</find>
       <find>random</find>
       <find>Player_2</find>
+      <find>on_cli</find>
+      <find>solor</find>
     </findStrings>
     <replaceStrings>
       <replace>token</replace>
@@ -204,14 +210,14 @@
         <option value="$PROJECT_DIR$/AIPlayer.py" />
         <option value="$PROJECT_DIR$/UI/GamePanel.py" />
         <option value="$PROJECT_DIR$/../Connect4/UI/Panel.py" />
-        <option value="$PROJECT_DIR$/../Connect4/UI/UI.py" />
-        <option value="$PROJECT_DIR$/../Connect4/UI/MainMenuPanel.py" />
         <option value="$PROJECT_DIR$/../Connect4/UI/TokenColor.py" />
         <option value="$PROJECT_DIR$/../Connect4/Player.py" />
         <option value="$PROJECT_DIR$/../Connect4/UI/TokenFallAnimation.py" />
-        <option value="$PROJECT_DIR$/../Connect4/UI/ConfigureGamePanel.py" />
-        <option value="$PROJECT_DIR$/../Connect4/UI/GamePanel.py" />
         <option value="$PROJECT_DIR$/../Connect4/AIPlayer.py" />
+        <option value="$PROJECT_DIR$/../Connect4/UI/UI.py" />
+        <option value="$PROJECT_DIR$/../Connect4/UI/MainMenuPanel.py" />
+        <option value="$PROJECT_DIR$/../Connect4/UI/GamePanel.py" />
+        <option value="$PROJECT_DIR$/../Connect4/UI/ConfigureGamePanel.py" />
       </list>
     </option>
   </component>
@@ -433,30 +439,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../Connect4/UI/MainMenuPanel.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="185">
-          <caret line="36" column="45" selection-start-line="36" selection-start-column="45" selection-end-line="36" selection-end-column="70" />
-          <folding>
-            <element signature="e#0#18#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../Connect4/Game.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="315">
           <caret line="25" selection-start-line="25" selection-end-line="25" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../Connect4/UI/UI.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="96">
-          <caret line="19" column="41" selection-start-line="19" selection-start-column="41" selection-end-line="19" selection-end-column="41" />
-          <folding>
-            <element signature="e#0#18#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -483,13 +469,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../Connect4/TokenState.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="10" column="4" selection-start-line="10" selection-start-column="4" selection-end-line="10" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../Connect4/Player.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="201">
@@ -504,6 +483,33 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/../Connect4/AIPlayer.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="165">
+          <caret line="107" selection-start-line="107" selection-end-line="107" />
+          <folding>
+            <element signature="e#0#11#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../Connect4/UI/UI.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-55">
+          <caret line="24" column="24" selection-start-line="24" selection-start-column="24" selection-end-line="24" selection-end-column="24" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../Connect4/TokenState.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="150">
+          <caret line="10" column="4" selection-start-line="10" selection-start-column="4" selection-end-line="10" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/../Connect4/UI/TokenFallAnimation.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="149">
@@ -514,32 +520,32 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../Connect4/UI/ConfigureGamePanel.py">
+    <entry file="file://$PROJECT_DIR$/../Connect4/UI/MainMenuPanel.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="89">
-          <caret line="44" column="79" selection-start-line="44" selection-start-column="79" selection-end-line="44" selection-end-column="79" />
+        <state relative-caret-position="210">
+          <caret line="28" column="84" selection-start-line="28" selection-start-column="84" selection-end-line="28" selection-end-column="84" />
           <folding>
-            <element signature="e#0#13#0" expanded="true" />
+            <element signature="e#0#18#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/../Connect4/UI/GamePanel.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="49" column="112" selection-start-line="49" selection-start-column="112" selection-end-line="49" selection-end-column="112" />
+        <state relative-caret-position="275">
+          <caret line="418" selection-start-line="418" selection-end-line="418" />
           <folding>
             <element signature="e#0#16#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../Connect4/AIPlayer.py">
+    <entry file="file://$PROJECT_DIR$/../Connect4/UI/ConfigureGamePanel.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="186">
-          <caret line="139" column="72" selection-start-line="139" selection-start-column="72" selection-end-line="139" selection-end-column="72" />
+        <state relative-caret-position="81">
+          <caret line="233" column="116" selection-start-line="233" selection-start-column="116" selection-end-line="233" selection-end-column="116" />
           <folding>
-            <element signature="e#0#11#0" expanded="true" />
+            <element signature="e#0#13#0" expanded="true" />
           </folding>
         </state>
       </provider>

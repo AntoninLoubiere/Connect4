@@ -22,7 +22,7 @@ class UI(tkinter.tix.Tk):
         # Configure
         self.title("Connect 4")
         self.geometry("600x520")
-        self.minsize(300, 200)
+        self.minsize(560, 300)
         self.protocol("WM_DELETE_WINDOW", self.destroy)
 
     def change_panel(self, new_panel, **kwargs):

@@ -1,10 +1,12 @@
 import random
-import tkinter.tix
 import tkinter.messagebox
+import tkinter.tix
 
+import AIPlayer
+import Game
+import Player
 from TokenState import TokenState
-from UI import Panel, GamePanel, MainMenuPanel
-from UI import TokenColor
+from UI import Panel, GamePanel, MainMenuPanel, TokenColor
 
 
 class ConfigureGamePanel(Panel.Panel):
@@ -12,37 +14,66 @@ class ConfigureGamePanel(Panel.Panel):
     The panel which configure the game, chose skin...
     """
 
-    def __init__(self, master, ui, solo_mode=False):
+    def __init__(self, master, ui):
         super().__init__(master, ui)
-        self.solo_mode = solo_mode
-
         self.ui.image_getter.resize_tokens_images(150)
 
         for i in range(0, 2):
             self.grid_columnconfigure(i, weight=1)
 
-        for i in range(1, 3):
+        for i in range(1, 2):
             self.grid_rowconfigure(i, weight=1)
 
-        self.players_label = [tkinter.tix.Label(self, text="Player 1:"),
-                              tkinter.tix.Label(self, text=("Player 2:", "AI 1")[self.solo_mode])]
-        self.players_label[0].grid(row=0, column=0)
-        self.players_label[1].grid(row=0, column=1)
+        self.players_name_frame = [tkinter.tix.Frame(self),
+                                   tkinter.tix.Frame(self)]
+        self.players_name_frame[0].grid(row=0, column=0)
+        self.players_name_frame[1].grid(row=0, column=1)
 
-        self.players_settings_frame = [tkinter.tix.Frame(self),
-                                       tkinter.tix.Frame(self)]
+        tkinter.tix.Label(self.players_name_frame[0], text="Name: ").grid(row=0, column=0)
+        tkinter.tix.Label(self.players_name_frame[1], text="Name: ").grid(row=0, column=0)
 
-        self.players_settings_frame[0].grid(row=1, column=0, sticky=tkinter.tix.N, pady=10)
-        self.players_settings_frame[1].grid(row=1, column=1, sticky=tkinter.tix.N, pady=10)
+        self.players_entry_string_variable = [
+            tkinter.tix.StringVar(),
+            tkinter.tix.StringVar()
+        ]
+
+        self.players_entry_string_variable[0].set("Player 1")
+        self.players_entry_string_variable[1].set("Player 2")
+
+        self.players_entry = [tkinter.tix.Entry(self.players_name_frame[0],
+                                                textvariable=self.players_entry_string_variable[0]),
+                              tkinter.tix.Entry(self.players_name_frame[1],
+                                                textvariable=self.players_entry_string_variable[1])]
+        self.players_entry[0].grid(row=0, column=1)
+        self.players_entry[1].grid(row=0, column=1)
+
+        self.players_settings_frame = [tkinter.tix.Frame(self, relief=tkinter.tix.SUNKEN, borderwidth=3),
+                                       tkinter.tix.Frame(self, relief=tkinter.tix.SUNKEN, borderwidth=3)]
+
+        self.players_settings_frame[0].grid(row=1, column=0, sticky=tkinter.tix.NSEW, pady=10, padx=5)
+        self.players_settings_frame[1].grid(row=1, column=1, sticky=tkinter.tix.NSEW, pady=10, padx=5)
 
         for i in range(0, 2):
-            self.players_settings_frame[i].grid_columnconfigure(0)
+            self.players_settings_frame[i].grid_columnconfigure(1, weight=1)
+
+        self.player_ai_choose_var = [tkinter.tix.IntVar(),
+                                     tkinter.tix.IntVar()]
+
+        self.player_ai_choose = [tkinter.tix.Checkbutton(self.players_settings_frame[0], text="Artificial Intelligence",
+                                                         variable=self.player_ai_choose_var[0],
+                                                         command=self.check_button_ai_command),
+                                 tkinter.tix.Checkbutton(self.players_settings_frame[1], text="Artificial Intelligence",
+                                                         variable=self.player_ai_choose_var[1],
+                                                         command=self.check_button_ai_command)
+                                 ]
+        self.player_ai_choose[0].grid(row=0, column=0, columnspan=2, sticky=tkinter.tix.W)
+        self.player_ai_choose[1].grid(row=0, column=0, columnspan=2, sticky=tkinter.tix.W)
 
         self.players_text_choose = [tkinter.tix.Label(self.players_settings_frame[0], text="Choose you token:"),
                                     tkinter.tix.Label(self.players_settings_frame[1], text="Choose you token:")]
 
-        self.players_text_choose[0].grid(row=0, column=0, sticky=tkinter.tix.W)
-        self.players_text_choose[1].grid(row=0, column=0, sticky=tkinter.tix.W)
+        self.players_text_choose[0].grid(row=1, column=0, sticky=tkinter.tix.W)
+        self.players_text_choose[1].grid(row=1, column=0, sticky=tkinter.tix.W)
 
         self.players_tokens = [
             TokenColor.TokenColor(random.randint(0, TokenColor.NUMBER_COLOR - 1)),
@@ -61,42 +92,46 @@ class ConfigureGamePanel(Panel.Panel):
                                command=lambda: self.button_change_token_command(TokenState.Player_2))
         ]
 
-        self.players_tokens_buttons[0].grid(row=1, column=0, sticky=tkinter.tix.NSEW)
-        self.players_tokens_buttons[1].grid(row=1, column=0, sticky=tkinter.tix.NSEW)
+        self.players_tokens_buttons[0].grid(row=1, column=1, sticky=tkinter.tix.NSEW)
+        self.players_tokens_buttons[1].grid(row=1, column=1, sticky=tkinter.tix.NSEW)
 
-        if self.solo_mode:
-            self.difficultly_choose_frame = tkinter.tix.Frame(self)
-            self.difficultly_choose_frame.grid(row=2, column=0, columnspan=2, sticky=tkinter.tix.SE + tkinter.W,
-                                               pady=10)
+        self.difficultly_choose_frame = tkinter.tix.Frame(self)
+        self.difficultly_choose_frame.grid(row=2, column=0, columnspan=2, sticky=tkinter.tix.SE + tkinter.W,
+                                           pady=10)
 
-            self.difficulty_selected_button = 0
+        self.difficulty_selected_button = 0
 
-            self.difficulty_buttons = [
-                tkinter.tix.Button(self.difficultly_choose_frame, text="Very easy",
-                                   command=lambda: self.button_difficulty_command(0)),
-                tkinter.tix.Button(self.difficultly_choose_frame, text="Easy",
-                                   command=lambda: self.button_difficulty_command(1)),
-                tkinter.tix.Button(self.difficultly_choose_frame, text="Normal",
-                                   command=lambda: self.button_difficulty_command(2)),
-                tkinter.tix.Button(self.difficultly_choose_frame, text="Little hard",
-                                   command=lambda: self.button_difficulty_command(3)),
-                tkinter.tix.Button(self.difficultly_choose_frame, text="Hard",
-                                   command=lambda: self.button_difficulty_command(4)),
-                tkinter.tix.Button(self.difficultly_choose_frame, text="Very hard",
-                                   command=lambda: self.button_difficulty_command(5))
-            ]
+        self.difficulty_buttons = [
+            tkinter.tix.Button(self.difficultly_choose_frame, text="Very easy",
+                               command=lambda: self.button_difficulty_command(0)),
+            tkinter.tix.Button(self.difficultly_choose_frame, text="Easy",
+                               command=lambda: self.button_difficulty_command(1)),
+            tkinter.tix.Button(self.difficultly_choose_frame, text="Normal",
+                               command=lambda: self.button_difficulty_command(2)),
+            tkinter.tix.Button(self.difficultly_choose_frame, text="Little hard",
+                               command=lambda: self.button_difficulty_command(3)),
+            tkinter.tix.Button(self.difficultly_choose_frame, text="Hard",
+                               command=lambda: self.button_difficulty_command(4)),
+            tkinter.tix.Button(self.difficultly_choose_frame, text="Very hard",
+                               command=lambda: self.button_difficulty_command(5))
+        ]
 
-            for i in range(0, len(self.difficulty_buttons)):
-                self.difficulty_buttons[i].grid(row=0, column=i, sticky=tkinter.tix.NSEW)
-                self.difficultly_choose_frame.columnconfigure(i, weight=1)
+        tkinter.tix.Label(self.difficultly_choose_frame, text="The artificial intelligence difficulty:").grid(
+            row=0, column=0, columnspan=len(self.difficulty_buttons))
 
-            self.button_difficulty_command(2)
+        for i in range(0, len(self.difficulty_buttons)):
+            self.difficulty_buttons[i].grid(row=1, column=i, sticky=tkinter.tix.NSEW)
+            self.difficultly_choose_frame.columnconfigure(i, weight=1)
+
+        self.button_difficulty_command(2)
 
         self.button_main_menu = tkinter.tix.Button(self, text="Back", command=self.button_main_menu_command)
         self.button_main_menu.grid(row=3, column=0, sticky=tkinter.tix.NSEW)
 
         self.button_play = tkinter.tix.Button(self, text="Play", command=self.button_play_command)
         self.button_play.grid(row=3, column=1, sticky=tkinter.tix.NSEW)
+
+        self.check_button_ai_command()
 
     def button_play_command(self):
         """
@@ -118,16 +153,26 @@ class ConfigureGamePanel(Panel.Panel):
                                                   "you like continue ?"):
                 return None
 
-        if self.solo_mode:
-            self.ui.change_panel(GamePanel.GamePanel, solo_mode=self.solo_mode,
-                                 token_player_1=self.players_tokens[0],
-                                 token_player_2=self.players_tokens[1],
-                                 game_difficulty=self.difficulty_selected_button + 1)
+        game = Game.Game()
 
+        if self.player_ai_choose_var[0].get():
+            player_1 = AIPlayer.AIPlayer(self.difficulty_selected_button + 1, game, TokenState.Player_1,
+                                         self.players_tokens[0], self.players_entry_string_variable[0].get())
         else:
-            self.ui.change_panel(GamePanel.GamePanel, solo_mode=self.solo_mode,
-                                 token_player_1=self.players_tokens[0],
-                                 token_player_2=self.players_tokens[1])
+            player_1 = Player.Player(TokenState.Player_1, self.players_tokens[0],
+                                     self.players_entry_string_variable[0].get())
+
+        if self.player_ai_choose_var[1].get():
+            player_2 = AIPlayer.AIPlayer(self.difficulty_selected_button + 1, game, TokenState.Player_2,
+                                         self.players_tokens[1], self.players_entry_string_variable[1].get())
+        else:
+            player_2 = Player.Player(TokenState.Player_2, self.players_tokens[1],
+                                     self.players_entry_string_variable[1].get())
+
+        self.ui.change_panel(GamePanel.GamePanel,
+                             player_1=player_1,
+                             player_2=player_2,
+                             game=game)
 
     def button_main_menu_command(self):
         """
@@ -164,7 +209,8 @@ class ConfigureGamePanel(Panel.Panel):
         :return: None
         """
         self.difficulty_buttons[self.difficulty_selected_button].config(
-            fg="black", relief=tkinter.tix.GROOVE, activeforeground="black", borderwidth=1)
+            relief=tkinter.tix.GROOVE, activebackground="#ebebeb", borderwidth=1,
+            background=self.cget("background"), pady=4)
 
         self.difficulty_selected_button = index
 
@@ -183,5 +229,23 @@ class ConfigureGamePanel(Panel.Panel):
         elif index == 5:
             font_color = "#a02c2c"
 
-        self.difficulty_buttons[self.difficulty_selected_button].config(
-            fg=font_color, relief=tkinter.tix.SUNKEN, activeforeground=font_color, borderwidth=5)
+        if self.player_ai_choose_var[0].get() or self.player_ai_choose_var[1].get():
+            self.difficulty_buttons[self.difficulty_selected_button].config(
+                relief=tkinter.tix.SUNKEN, activebackground=font_color, background=font_color, borderwidth=5, pady=0,
+                padx=0)
+
+    def check_button_ai_command(self):
+        """
+        When a button which is use for choose ai is click
+        :return: None
+        """
+
+        if self.player_ai_choose_var[0].get() or self.player_ai_choose_var[1].get():
+            for i in range(0, len(self.difficulty_buttons)):
+                self.difficulty_buttons[i].config(state=tkinter.tix.NORMAL)
+
+        else:
+            for i in range(0, len(self.difficulty_buttons)):
+                self.difficulty_buttons[i].config(state=tkinter.tix.DISABLED)
+
+        self.button_difficulty_command(self.difficulty_selected_button)

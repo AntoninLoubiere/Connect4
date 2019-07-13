@@ -23,10 +23,10 @@ class GamePanel(Panel.Panel):
     GamePanel is a panel for UI, is the UI for the game
     """
 
-    def __init__(self, master, ui, solo_mode=False,
-                 token_player_1=TokenColor.TokenColor.Blue,
-                 token_player_2=TokenColor.TokenColor.Green,
-                 game_difficulty=3, **kwargs):
+    def __init__(self, master, ui,
+                 player_1=Player.Player(TokenState.TokenState.Player_1, TokenColor.TokenColor.Blue),
+                 player_2=Player.Player(TokenState.TokenState.Player_1, TokenColor.TokenColor.Green),
+                 game=Game.Game()):
         """
         Constructor
         :param master: see Panel class
@@ -41,21 +41,12 @@ class GamePanel(Panel.Panel):
         self.grid_canvas.pack(expand=True, fill=tkinter.tix.BOTH)
         self.after(500, lambda: self.grid_canvas.bind("<Button>", self.grid_canvas_on_click))
 
-        self.game = Game.Game(**kwargs)
+        self.game = game
 
-        self.solo_mode = solo_mode
-        if solo_mode:
-            self.players = {
-                TokenState.TokenState.Player_1: AIPlayer.AIPlayer(game_difficulty, self.game,
-                                                                  TokenState.TokenState.Player_1, token_player_1),
-                TokenState.TokenState.Player_2: AIPlayer.AIPlayer(game_difficulty, self.game,
-                                                                  TokenState.TokenState.Player_2, token_player_2)
-            }
-        else:
-            self.players = {
-                TokenState.TokenState.Player_1: Player.Player(TokenState.TokenState.Player_1, token_player_1),
-                TokenState.TokenState.Player_2: Player.Player(TokenState.TokenState.Player_2, token_player_2)
-            }
+        self.players = {
+            TokenState.TokenState.Player_1: player_1,
+            TokenState.TokenState.Player_2: player_2
+        }
 
         self.token_square_size = 0
 
@@ -217,7 +208,7 @@ class GamePanel(Panel.Panel):
         if event.num == 1:
             column = (event.x - self.width_center) / self.token_square_size
             if 0 <= column <= self.game.grid_width:
-                if not self.solo_mode or self.game.current_turn != TokenState.TokenState.Player_2:
+                if not isinstance(self.players[self.game.current_turn], AIPlayer.AIPlayer):
                     self.add_token_column(int(column))
 
     def add_token_column(self, column):
