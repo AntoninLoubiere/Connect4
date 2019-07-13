@@ -8,6 +8,11 @@ import Player
 from TokenState import TokenState
 from UI import Panel, GamePanel, MainMenuPanel, TokenColor
 
+PLAYERS_NAMES_PREFERENCES = "last_game_player_names_game"
+PLAYERS_TOKENS_PREFERENCES = "last_game_player_tokens_game"
+PLAYERS_AI_PREFERENCES = "last_game_ai_game"
+DIFFICULTY_PREFERENCES = "last_game_difficulty"
+
 
 class ConfigureGamePanel(Panel.Panel):
     """
@@ -69,8 +74,8 @@ class ConfigureGamePanel(Panel.Panel):
         self.player_ai_choose[0].grid(row=0, column=0, columnspan=2, sticky=tkinter.tix.W)
         self.player_ai_choose[1].grid(row=0, column=0, columnspan=2, sticky=tkinter.tix.W)
 
-        self.players_text_choose = [tkinter.tix.Label(self.players_settings_frame[0], text="Choose you token:"),
-                                    tkinter.tix.Label(self.players_settings_frame[1], text="Choose you token:")]
+        self.players_text_choose = [tkinter.tix.Label(self.players_settings_frame[0], text="Choose your token:"),
+                                    tkinter.tix.Label(self.players_settings_frame[1], text="Choose your token:")]
 
         self.players_text_choose[0].grid(row=1, column=0, sticky=tkinter.tix.W)
         self.players_text_choose[1].grid(row=1, column=0, sticky=tkinter.tix.W)
@@ -131,13 +136,68 @@ class ConfigureGamePanel(Panel.Panel):
         self.button_play = tkinter.tix.Button(self, text="Play", command=self.button_play_command)
         self.button_play.grid(row=3, column=1, sticky=tkinter.tix.NSEW)
 
+        self.import_last_game_setting()
         self.check_button_ai_command()
+
+    def import_last_game_setting(self):
+        """
+        Import the preferences set in the last game
+        :return: None
+        """
+        if self.ui.preference.temporary_preference_exist(PLAYERS_NAMES_PREFERENCES):
+            self.players_entry_string_variable[0].set(
+                self.ui.preference.get_temporary_preference(PLAYERS_NAMES_PREFERENCES)[0])
+
+            self.players_entry_string_variable[1].set(
+                self.ui.preference.get_temporary_preference(PLAYERS_NAMES_PREFERENCES)[1])
+
+        if self.ui.preference.temporary_preference_exist(PLAYERS_AI_PREFERENCES):
+            self.player_ai_choose_var[0].set(
+                self.ui.preference.get_temporary_preference(PLAYERS_AI_PREFERENCES)[0])
+
+            self.player_ai_choose_var[1].set(
+                self.ui.preference.get_temporary_preference(PLAYERS_AI_PREFERENCES)[1])
+
+        if self.ui.preference.temporary_preference_exist(PLAYERS_TOKENS_PREFERENCES):
+            tokens = self.ui.preference.get_temporary_preference(PLAYERS_TOKENS_PREFERENCES)
+
+            for i in range(0, 2):
+                self.players_tokens[i] = tokens[i]
+
+                self.players_tokens_images[i] = \
+                    self.ui.image_getter.save_token_photos[TokenState(i + 1)][self.players_tokens[i]]
+
+                self.players_tokens_buttons[i].config(image=self.players_tokens_images[i])
+
+        if self.ui.preference.temporary_preference_exist(DIFFICULTY_PREFERENCES):
+            self.difficulty_selected_button = self.ui.preference.get_temporary_preference(DIFFICULTY_PREFERENCES)
+
+    def export_last_game_settings(self):
+        """
+        Export setting to save the preference of the last game
+        :return: None
+        """
+
+        players_names = (self.players_entry_string_variable[0].get(),
+                         self.players_entry_string_variable[1].get())
+
+        self.ui.preference.set_temporary_preference(PLAYERS_NAMES_PREFERENCES, players_names)
+
+        players_ai = [self.player_ai_choose_var[0].get(),
+                      self.player_ai_choose_var[1].get()]
+
+        self.ui.preference.set_temporary_preference(PLAYERS_AI_PREFERENCES, players_ai)
+
+        self.ui.preference.set_temporary_preference(PLAYERS_TOKENS_PREFERENCES, self.players_tokens)
+
+        self.ui.preference.set_temporary_preference(DIFFICULTY_PREFERENCES, self.difficulty_selected_button)
 
     def button_play_command(self):
         """
         The command of the play button
         :return: None
         """
+        self.export_last_game_settings()
         if self.players_tokens[0] == self.players_tokens[1]:
             if not tkinter.messagebox.askokcancel("Same color", "You choose the same color for the player 1 and the "
                                                                 "player 2, it is more difficult to discern which "
@@ -179,6 +239,7 @@ class ConfigureGamePanel(Panel.Panel):
         The command of the main menu
         :return: None
         """
+        self.export_last_game_settings()
         self.ui.change_panel(MainMenuPanel.MainMenuPanel)
 
     def button_change_token_command(self, player):

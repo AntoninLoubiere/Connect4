@@ -1,5 +1,6 @@
-from TokenState import TokenState
 import random
+
+from TokenState import TokenState
 
 
 class Game(object):

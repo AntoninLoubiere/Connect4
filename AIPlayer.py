@@ -139,7 +139,7 @@ class AIPlayer(Player.Player):
                     current_score = 0
 
                     if align[0][0] >= 4 or align[1][0] >= 4 or align[2][0] >= 4 or align[3][0] >= 4:
-                        score = 100000 - (self.min_max_deep - 1 - deep) * 10
+                        score = 100000000 - (self.min_max_deep - 1 - deep) * 1000
                         break
                     else:
                         for i in range(0, 4):
@@ -166,7 +166,7 @@ class AIPlayer(Player.Player):
                 else:
                     current_score = 0
                     if align[0][0] >= 4 or align[1][0] >= 4 or align[2][0] >= 4 or align[3][0] >= 4:
-                        score = -100000 + (self.min_max_deep - 1 - deep) * 10
+                        score = -100000000 + (self.min_max_deep - 1 - deep) * 1000
                         break
 
                     else:

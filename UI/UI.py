@@ -1,5 +1,6 @@
 import tkinter.tix
 
+import Preferences
 from UI import ImageGetter
 
 
@@ -18,6 +19,7 @@ class UI(tkinter.tix.Tk):
         self.is_alive = True
 
         self.image_getter = ImageGetter.ImageGetter()
+        self.preference = Preferences.Preferences()
 
         # Configure
         self.title("Connect 4")
