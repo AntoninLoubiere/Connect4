@@ -3,9 +3,19 @@ import tkinter.tix
 
 import AIPlayer
 import Game
+import Player
 import TokenState
 from UI import Panel, ImageGetter, TokenColor, TokenFallAnimation
 from UI.ResizingCanvas import ResizingCanvas
+
+
+def get_opponent(player):
+    """
+    Get the opponent of the player
+    :param player: The player
+    :return: Player
+    """
+    return (TokenState.TokenState.Player_1, TokenState.TokenState.Player_2)[player == TokenState.TokenState.Player_1]
 
 
 class GamePanel(Panel.Panel):
@@ -35,7 +45,17 @@ class GamePanel(Panel.Panel):
 
         self.solo_mode = solo_mode
         if solo_mode:
-            self.ai_player = AIPlayer.AIPlayer(game_difficulty, self.game)
+            self.players = {
+                TokenState.TokenState.Player_1: AIPlayer.AIPlayer(game_difficulty, self.game,
+                                                                  TokenState.TokenState.Player_1, token_player_1),
+                TokenState.TokenState.Player_2: AIPlayer.AIPlayer(game_difficulty, self.game,
+                                                                  TokenState.TokenState.Player_2, token_player_2)
+            }
+        else:
+            self.players = {
+                TokenState.TokenState.Player_1: Player.Player(TokenState.TokenState.Player_1, token_player_1),
+                TokenState.TokenState.Player_2: Player.Player(TokenState.TokenState.Player_2, token_player_2)
+            }
 
         self.token_square_size = 0
 
@@ -47,11 +67,6 @@ class GamePanel(Panel.Panel):
         self.button_main_menu.place(x=0, y=0)
 
         self.ui.image_getter = ImageGetter.ImageGetter(token_size=self.token_square_size)
-
-        self.player_token_color = {
-            TokenState.TokenState.Player_1: token_player_1,
-            TokenState.TokenState.Player_2: token_player_2
-        }
 
         self.grid_image_create = []
         self.turn_text_id = -1
@@ -72,7 +87,7 @@ class GamePanel(Panel.Panel):
         """
         self.on_resize()
 
-        if self.solo_mode and self.game.current_turn == TokenState.TokenState.Player_2:
+        if isinstance(self.players[self.game.current_turn], AIPlayer.AIPlayer):
             thread = threading.Thread(target=self.run_ai_turn)
             thread.start()
 
@@ -186,7 +201,7 @@ class GamePanel(Panel.Panel):
 
         self.grid_image_create[x][y] = self.grid_canvas.create_image(
             coord[0][0], coord[0][1],
-            image=self.ui.image_getter.save_token_photos[player][self.player_token_color[player]],
+            image=self.ui.image_getter.save_token_photos[player][self.players[player].token],
             anchor=tkinter.tix.NW
         )
 
@@ -248,7 +263,7 @@ class GamePanel(Panel.Panel):
 
         if self.game.is_win():
             self.grid_canvas.itemconfigure(self.turn_text_id, text=self.win_text_format.format(
-                ("Player 2", "Player 1")[self.game.winner == TokenState.TokenState.Player_1]), fill="green")
+                self.players[self.game.winner].name), fill="green")
 
             if self.turn_image_id != -1:
                 self.grid_canvas.delete(self.turn_image_id)
@@ -256,13 +271,13 @@ class GamePanel(Panel.Panel):
             self.turn_image_id = self.grid_canvas.create_image(
                 self.grid_canvas.bbox(self.turn_text_id)[2] + 5, 0,
                 image=self.ui.image_getter.save_token_icons
-                [self.game.winner][self.player_token_color[self.game.winner]],
+                [self.game.winner][self.players[self.game.winner].token],
                 anchor=tkinter.tix.NW
             )
 
         else:
             self.grid_canvas.itemconfigure(self.turn_text_id, text=self.turn_text_format.format(
-                ("Player 2", "Player 1")[self.game.current_turn == TokenState.TokenState.Player_1]))
+                self.players[self.game.current_turn].name))
 
             if self.turn_image_id != -1:
                 self.grid_canvas.delete(self.turn_image_id)
@@ -270,7 +285,7 @@ class GamePanel(Panel.Panel):
             self.turn_image_id = self.grid_canvas.create_image(
                 self.grid_canvas.bbox(self.turn_text_id)[2] + 5, 0,
                 image=self.ui.image_getter.save_token_icons
-                [self.game.current_turn][self.player_token_color[self.game.current_turn]],
+                [self.game.current_turn][self.players[self.game.current_turn].token],
                 anchor=tkinter.tix.NW
             )
 
@@ -385,11 +400,11 @@ class GamePanel(Panel.Panel):
         Run the ai turn
         :return: None
         """
-
-        if self.solo_mode and not self.ai_player.thinking:
+        if isinstance(self.players[self.game.current_turn], AIPlayer.AIPlayer)\
+                and not self.players[self.game.current_turn].get_thinking():
             try:
                 self.config(cursor="watch")
-                self.add_token_column(self.ai_player.run_turn())
+                self.add_token_column(self.players[self.game.current_turn].run_turn())
                 self.config(cursor="")
             except tkinter.tix.TclError:
                 pass
@@ -410,6 +425,7 @@ class GamePanel(Panel.Panel):
         :param player: the owner of the token of the animation
         :return: None
         """
-        if player == TokenState.TokenState.Player_1 and self.game.current_turn == TokenState.TokenState.Player_2:
+        if isinstance(self.players[self.game.current_turn], AIPlayer.AIPlayer) and \
+                player == get_opponent(self.game.current_turn):
             thread = threading.Thread(target=self.run_ai_turn)
             thread.start()

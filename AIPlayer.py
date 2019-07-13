@@ -3,6 +3,7 @@ import random
 
 import math
 
+import Player
 from TokenState import TokenState
 
 
@@ -17,17 +18,24 @@ def can_place_token(grid, column):
     return grid[column][0] == TokenState.Blank
 
 
-class AIPlayer(object):
+class AIPlayer(Player.Player):
     """
     A ai player
     """
 
-    def __init__(self, min_max_deep, game):
+    def __init__(self, min_max_deep, game, player_enum, token, name=None):
         """
         Constructor
         :param min_max_deep: the deep
         :param game: link to game
         """
+        super().__init__(player_enum, token, name)
+
+        if name is None:
+            self.name = ("Computer 2", "Computer 1")[self.player_enum == TokenState.Player_1]
+        else:
+            self.name = name
+
         self.min_max_deep = min_max_deep
         self.game = game
         self.thinking = False
@@ -49,7 +57,7 @@ class AIPlayer(object):
 
                 y_coord_new_token = self.get_coord_add_token_grid(self.game.grid, column)
                 current_grid = copy.deepcopy(self.game.grid)
-                current_grid[column][y_coord_new_token] = TokenState.Player_2
+                current_grid[column][y_coord_new_token] = self.player_enum
 
                 align = [
                     self.get_number_horizontally_tokens(current_grid, column, y_coord_new_token),
@@ -80,7 +88,9 @@ class AIPlayer(object):
                         # if align[i][0] > 1 and align[i][1][0] != 0 and align[i][1][1] != 0:
                         #     current_score += 1
 
-                current_score += self.get_turn_min_max(current_grid, self.min_max_deep, TokenState.Player_1)
+                current_score += self.get_turn_min_max(current_grid, self.min_max_deep,
+                                                       (TokenState.Player_1, TokenState.Player_2)[
+                                                           self.player_enum == TokenState.Player_1])
                 # print(current_score)
 
                 if current_score > score:
@@ -107,7 +117,7 @@ class AIPlayer(object):
         if deep <= 0:
             raise RuntimeError("Error, you can't call with deep = 0")
 
-        score = (math.inf, -math.inf)[player_turn == TokenState.Player_2]
+        score = (math.inf, -math.inf)[player_turn == self.player_enum]
 
         for column in range(0, self.game.grid_width):
             if can_place_token(grid, column):
@@ -123,11 +133,11 @@ class AIPlayer(object):
                     self.get_number_diagonal_top_left_tokens(current_grid, column, y_coord_new_token)
                 ]  # list of all alignment of the new token
 
-                if player_turn == TokenState.Player_2:  # his turn
+                if player_turn == self.player_enum:  # his turn
                     current_score = 0
 
                     if align[0][0] >= 4 or align[1][0] >= 4 or align[2][0] >= 4 or align[3][0] >= 4:
-                        score = math.inf
+                        score = 100000 - (self.min_max_deep - 1 - deep) * 10
                         break
                     else:
                         for i in range(0, 4):
@@ -154,7 +164,7 @@ class AIPlayer(object):
                 else:
                     current_score = 0
                     if align[0][0] >= 4 or align[1][0] >= 4 or align[2][0] >= 4 or align[3][0] >= 4:
-                        score = -math.inf
+                        score = -100000 + (self.min_max_deep - 1 - deep) * 10
                         break
 
                     else:
@@ -442,3 +452,10 @@ class AIPlayer(object):
             current_y += 1
 
         return number_align, number_blank_align
+
+    def get_thinking(self):
+        """
+        Get thinking
+        :return: boolean -> thinking
+        """
+        return self.thinking
