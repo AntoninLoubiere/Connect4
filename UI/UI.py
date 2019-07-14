@@ -22,7 +22,7 @@ class UI(tkinter.tix.Tk):
         self.image_getter = ImageGetter.ImageGetter()
         self.preference = Preferences.Preferences()
 
-        self.translation = Translation.Translation()
+        self.translation = Translation.Translation(self.preference)
 
         # Configure
         self.title(self.translation.get_translation("connect_four"))

@@ -76,6 +76,6 @@ class MainMenuPanel(Panel.Panel):
         """
         self.language_combo_box.selection_clear()
 
-        self.ui.translation.current_language = self.language_combo_box.current()
+        self.ui.translation.set_current_language(self.language_combo_box.current())
 
         self.update_text()

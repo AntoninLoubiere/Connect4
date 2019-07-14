@@ -1,7 +1,7 @@
 import xml.dom.minidom
 import glob
 
-
+CURRENT_LANGUAGE_PREFERENCES = "current_language"
 TRANSLATION_FILES_PATH = "translations/*.xml"
 TRANSLATION_FILES_PATH_FORMAT = "translations/{}.xml"
 DEFAULT_LANGUAGE = "EN_en"
@@ -12,15 +12,20 @@ class Translation:
     A translation file
     """
 
-    def __init__(self):
+    def __init__(self, preference):
         """
         Constructor
         """
         self.current_language = -1
         self.list_translations = []
         self.update_dic_translation()
+        self.preference = preference
 
-        self.current_language = self.get_language(DEFAULT_LANGUAGE)
+        if self.preference.preference_exist(CURRENT_LANGUAGE_PREFERENCES):
+            self.current_language = self.preference.get_preference(CURRENT_LANGUAGE_PREFERENCES)
+
+        else:
+            self.current_language = self.get_language(DEFAULT_LANGUAGE)
 
     def update_dic_translation(self):
         """
@@ -109,3 +114,13 @@ class Translation:
             print("WARNING: The file of this language haven't a good format")
 
             return self.get_translation(key, DEFAULT_LANGUAGE)
+
+    def set_current_language(self, new_current_language):
+        """
+        Set the current language
+        :param new_current_language: the new value
+        :return: None
+        """
+        self.current_language = new_current_language
+        self.preference.set_preference(CURRENT_LANGUAGE_PREFERENCES, self.current_language)
+        self.preference.save_preferences()
