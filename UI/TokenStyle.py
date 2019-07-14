@@ -1,7 +1,7 @@
 import enum
 
 
-NUMBER_COLOR = 5
+NUMBER_COLOR = 7
 
 
 class TokenColor(enum.Enum):
@@ -9,8 +9,10 @@ class TokenColor(enum.Enum):
     The color of a Token
     """
 
-    Red = 0
-    Green = 1
-    Blue = 2
-    Orange = 3
+    Green = 0
+    Blue = 1
+    Orange = 2
+    Red = 3
     Purple = 4
+    Dragon = 5
+    Robot = 6

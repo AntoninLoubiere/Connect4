@@ -5,7 +5,7 @@ import AIPlayer
 import Game
 import Player
 import TokenState
-from UI import Panel, ImageGetter, TokenColor, TokenFallAnimation
+from UI import Panel, ImageGetter, TokenStyle, TokenFallAnimation
 from UI.ResizingCanvas import ResizingCanvas
 
 
@@ -24,8 +24,8 @@ class GamePanel(Panel.Panel):
     """
 
     def __init__(self, master, ui,
-                 player_1=Player.Player(TokenState.TokenState.Player_1, TokenColor.TokenColor.Blue),
-                 player_2=Player.Player(TokenState.TokenState.Player_1, TokenColor.TokenColor.Green),
+                 player_1=Player.Player(TokenState.TokenState.Player_1, TokenStyle.TokenColor.Blue),
+                 player_2=Player.Player(TokenState.TokenState.Player_2, TokenStyle.TokenColor.Green),
                  game=Game.Game()):
         """
         Constructor
@@ -34,8 +34,8 @@ class GamePanel(Panel.Panel):
         """
         super().__init__(master, ui)
 
-        self.turn_text_format = "It's the turn of: {}"
-        self.win_text_format = "The winner is: {}"
+        self.turn_text_format = self.ui.translation.get_translation("game_panel_turn_format")
+        self.win_text_format = self.ui.translation.get_translation("game_panel_win_format")
 
         self.grid_canvas = ResizingCanvas(self, self.ui, self.on_resize, disable=False)
         self.grid_canvas.pack(expand=True, fill=tkinter.tix.BOTH)
@@ -54,7 +54,10 @@ class GamePanel(Panel.Panel):
         self.width_center = 0
         self.turn_text_height = 15
 
-        self.button_main_menu = tkinter.tix.Button(self, text="<- Main menu", command=self.button_main_menu_command)
+        self.button_main_menu = tkinter.tix.Button(
+            self,
+            text=self.ui.translation.get_translation("game_panel_main_menu_button"),
+            command=self.button_main_menu_command)
         self.button_main_menu.place(x=0, y=0)
 
         self.ui.image_getter = ImageGetter.ImageGetter(token_size=self.token_square_size)

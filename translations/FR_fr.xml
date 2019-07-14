@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<language>
+    <name>Français</name>
+
+    <translations>
+        <string name="connect_four">Puissance 4</string>
+
+        <string name="play">Jouer</string>
+        <string name="quit">Quitter</string>
+        <string name="back">Retour</string>
+
+        <string name="configure_game_panel_name">Nom: </string>
+        <string name="configure_game_panel_artificial_intelligence">Intelligence Artificielle</string>
+        <string name="configure_game_panel_choose_tokens">Choissisez votre jeton: </string>
+
+        <string name="configure_game_panel_difficulty_very_easy">Très facile</string>
+        <string name="configure_game_panel_difficulty_easy">Facile</string>
+        <string name="configure_game_panel_difficulty_normal">Normale</string>
+        <string name="configure_game_panel_difficulty_little_hard">Un peu difficile</string>
+        <string name="configure_game_panel_difficulty_hard">Difficile</string>
+        <string name="configure_game_panel_difficulty_very_hard">Très difficile</string>
+
+            <string name="configure_game_panel_difficulty_text">La difficultée de l'intelligence artificielle:</string>
+
+        <string name="configure_game_panel_dialog_same_token_title">Avertissement même couleur</string>
+        <string name="configure_game_panel_dialog_same_token_message">Vous avez choisi le même jeton pour le joueur 1 et pour le joueur 2, cela rend plus difficile la dicernation pour savoir à qui un jeton appartient.&#xA;&#xA;Voulez vous continuer ?</string>
+        <string name="configure_game_panel_dialog_very_hard_title">Avertissement très difficile</string>
+        <string name="configure_game_panel_dialog_very_hard_message">Vous avez choisis la difficulté très difficile. Cela rend l'inteligence artifficielle très longue (~45 secondes par coup). Pour choisir cette difficulté il faut être patient.&#xA;&#xA;Voulez vous continuer ?"</string>
+
+
+        <string name="game_panel_turn_format">C'est le tour de: {}</string>
+        <string name="game_panel_win_format">Le gagnant est: {}</string>
+        <string name="game_panel_main_menu_button">&lt;- Menu principale</string>
+
+        <string name="default_player_name">Joueur {}</string>
+    </translations>
+</language>

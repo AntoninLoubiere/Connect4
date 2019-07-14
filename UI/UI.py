@@ -1,6 +1,7 @@
 import tkinter.tix
 
 import Preferences
+import Translation
 from UI import ImageGetter
 
 
@@ -21,8 +22,10 @@ class UI(tkinter.tix.Tk):
         self.image_getter = ImageGetter.ImageGetter()
         self.preference = Preferences.Preferences()
 
+        self.translation = Translation.Translation()
+
         # Configure
-        self.title("Connect 4")
+        self.title(self.translation.get_translation("connect_four"))
         self.geometry("600x520")
         self.minsize(560, 300)
         self.protocol("WM_DELETE_WINDOW", self.destroy)

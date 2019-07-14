@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<language>
+    <name>English</name>
+
+    <translations>
+        <string name="connect_four">Connect 4</string>
+
+        <string name="play">Play</string>
+        <string name="quit">Quit</string>
+        <string name="back">Back</string>
+
+        <string name="configure_game_panel_name">Name: </string>
+        <string name="configure_game_panel_artificial_intelligence">Artificial Intelligence</string>
+        <string name="configure_game_panel_choose_tokens">Choose your token: </string>
+
+        <string name="configure_game_panel_difficulty_very_easy">Very easy</string>
+        <string name="configure_game_panel_difficulty_easy">Easy</string>
+        <string name="configure_game_panel_difficulty_normal">Normal</string>
+        <string name="configure_game_panel_difficulty_little_hard">Little hard</string>
+        <string name="configure_game_panel_difficulty_hard">Hard</string>
+        <string name="configure_game_panel_difficulty_very_hard">Very hard</string>
+
+        <string name="configure_game_panel_dialog_same_token_title">Same color warning</string>
+        <string name="configure_game_panel_dialog_same_token_message">You choose the same color for the player 1 and the player 2, it is more difficult to discern which player is own a token.&#xA;&#xA;Would you like continue ?</string>
+        <string name="configure_game_panel_dialog_very_hard_title">Very hard warning</string>
+        <string name="configure_game_panel_dialog_very_hard_message">You choose the very hard difficulty, the artificial intelligence will take a long time to do his turn (~45 seconds per turn). You have to be very patient to do this difficulty.&#xA;&#xA;Would you like continue ?"</string>
+
+
+        <string name="configure_game_panel_difficulty_text">The artificial intelligence difficulty:</string>
+
+        <string name="game_panel_turn_format">It's the turn of: {}</string>
+        <string name="game_panel_win_format">The winner is: {}</string>
+        <string name="game_panel_main_menu_button">&lt;- Main menu</string>
+
+        <string name="default_player_name">Player {}</string>
+    </translations>
+</language>

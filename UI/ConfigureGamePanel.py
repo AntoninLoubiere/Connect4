@@ -6,7 +6,7 @@ import AIPlayer
 import Game
 import Player
 from TokenState import TokenState
-from UI import Panel, GamePanel, MainMenuPanel, TokenColor
+from UI import Panel, GamePanel, MainMenuPanel, TokenStyle
 
 PLAYERS_NAMES_PREFERENCES = "last_game_player_names_game"
 PLAYERS_TOKENS_PREFERENCES = "last_game_player_tokens_game"
@@ -34,16 +34,21 @@ class ConfigureGamePanel(Panel.Panel):
         self.players_name_frame[0].grid(row=0, column=0)
         self.players_name_frame[1].grid(row=0, column=1)
 
-        tkinter.tix.Label(self.players_name_frame[0], text="Name: ").grid(row=0, column=0)
-        tkinter.tix.Label(self.players_name_frame[1], text="Name: ").grid(row=0, column=0)
+        tkinter.tix.Label(self.players_name_frame[0], text=self.ui.translation.get_translation(
+            "configure_game_panel_name")).grid(row=0, column=0)
+        tkinter.tix.Label(self.players_name_frame[1], text=self.ui.translation.get_translation(
+            "configure_game_panel_name")).grid(row=0, column=0)
 
         self.players_entry_string_variable = [
             tkinter.tix.StringVar(),
             tkinter.tix.StringVar()
         ]
 
-        self.players_entry_string_variable[0].set("Player 1")
-        self.players_entry_string_variable[1].set("Player 2")
+        self.players_entry_string_variable[0].set(
+            self.ui.translation.get_translation("default_player_name").format("1"))
+        self.players_entry_string_variable[1].set(
+            self.ui.translation.get_translation("default_player_name").format("2")
+        )
 
         self.players_entry = [tkinter.tix.Entry(self.players_name_frame[0],
                                                 textvariable=self.players_entry_string_variable[0]),
@@ -64,25 +69,35 @@ class ConfigureGamePanel(Panel.Panel):
         self.player_ai_choose_var = [tkinter.tix.IntVar(),
                                      tkinter.tix.IntVar()]
 
-        self.player_ai_choose = [tkinter.tix.Checkbutton(self.players_settings_frame[0], text="Artificial Intelligence",
-                                                         variable=self.player_ai_choose_var[0],
-                                                         command=self.check_button_ai_command),
-                                 tkinter.tix.Checkbutton(self.players_settings_frame[1], text="Artificial Intelligence",
-                                                         variable=self.player_ai_choose_var[1],
-                                                         command=self.check_button_ai_command)
-                                 ]
+        self.player_ai_choose = [
+            tkinter.tix.Checkbutton(
+                self.players_settings_frame[0],
+                text=self.ui.translation.get_translation("configure_game_panel_artificial_intelligence"),
+                variable=self.player_ai_choose_var[0],
+                command=self.check_button_ai_command),
+            tkinter.tix.Checkbutton(
+                self.players_settings_frame[1],
+                text=self.ui.translation.get_translation("configure_game_panel_artificial_intelligence"),
+                variable=self.player_ai_choose_var[1],
+                command=self.check_button_ai_command)
+        ]
         self.player_ai_choose[0].grid(row=0, column=0, columnspan=2, sticky=tkinter.tix.W)
         self.player_ai_choose[1].grid(row=0, column=0, columnspan=2, sticky=tkinter.tix.W)
 
-        self.players_text_choose = [tkinter.tix.Label(self.players_settings_frame[0], text="Choose your token:"),
-                                    tkinter.tix.Label(self.players_settings_frame[1], text="Choose your token:")]
+        self.players_text_choose = [
+            tkinter.tix.Label(
+                self.players_settings_frame[0],
+                text=self.ui.translation.get_translation("configure_game_panel_choose_tokens")),
+            tkinter.tix.Label(
+                self.players_settings_frame[1],
+                text=self.ui.translation.get_translation("configure_game_panel_choose_tokens"))]
 
         self.players_text_choose[0].grid(row=1, column=0, sticky=tkinter.tix.W)
         self.players_text_choose[1].grid(row=1, column=0, sticky=tkinter.tix.W)
 
         self.players_tokens = [
-            TokenColor.TokenColor(random.randint(0, TokenColor.NUMBER_COLOR - 1)),
-            TokenColor.TokenColor(random.randint(0, TokenColor.NUMBER_COLOR - 1))
+            TokenStyle.TokenColor(random.randint(0, TokenStyle.NUMBER_COLOR - 1)),
+            TokenStyle.TokenColor(random.randint(0, TokenStyle.NUMBER_COLOR - 1))
         ]
 
         self.players_tokens_images = [
@@ -107,21 +122,35 @@ class ConfigureGamePanel(Panel.Panel):
         self.difficulty_selected_button = 0
 
         self.difficulty_buttons = [
-            tkinter.tix.Button(self.difficultly_choose_frame, text="Very easy",
-                               command=lambda: self.button_difficulty_command(0)),
-            tkinter.tix.Button(self.difficultly_choose_frame, text="Easy",
-                               command=lambda: self.button_difficulty_command(1)),
-            tkinter.tix.Button(self.difficultly_choose_frame, text="Normal",
-                               command=lambda: self.button_difficulty_command(2)),
-            tkinter.tix.Button(self.difficultly_choose_frame, text="Little hard",
-                               command=lambda: self.button_difficulty_command(3)),
-            tkinter.tix.Button(self.difficultly_choose_frame, text="Hard",
-                               command=lambda: self.button_difficulty_command(4)),
-            tkinter.tix.Button(self.difficultly_choose_frame, text="Very hard",
-                               command=lambda: self.button_difficulty_command(5))
+            tkinter.tix.Button(
+                self.difficultly_choose_frame,
+                text=self.ui.translation.get_translation("configure_game_panel_difficulty_very_easy"),
+                command=lambda: self.button_difficulty_command(0)),
+            tkinter.tix.Button(
+                self.difficultly_choose_frame,
+                text=self.ui.translation.get_translation("configure_game_panel_difficulty_easy"),
+                command=lambda: self.button_difficulty_command(1)),
+            tkinter.tix.Button(
+                self.difficultly_choose_frame,
+                text=self.ui.translation.get_translation("configure_game_panel_difficulty_normal"),
+                command=lambda: self.button_difficulty_command(2)),
+            tkinter.tix.Button(
+                self.difficultly_choose_frame,
+                text=self.ui.translation.get_translation("configure_game_panel_difficulty_little_hard"),
+                command=lambda: self.button_difficulty_command(3)),
+            tkinter.tix.Button(
+                self.difficultly_choose_frame,
+                text=self.ui.translation.get_translation("configure_game_panel_difficulty_hard"),
+                command=lambda: self.button_difficulty_command(4)),
+            tkinter.tix.Button(
+                self.difficultly_choose_frame,
+                text=self.ui.translation.get_translation("configure_game_panel_difficulty_very_hard"),
+                command=lambda: self.button_difficulty_command(5))
         ]
 
-        tkinter.tix.Label(self.difficultly_choose_frame, text="The artificial intelligence difficulty:").grid(
+        tkinter.tix.Label(self.difficultly_choose_frame,
+                          text=self.ui.translation.get_translation("configure_game_panel_difficulty_text")
+                          ).grid(
             row=0, column=0, columnspan=len(self.difficulty_buttons))
 
         for i in range(0, len(self.difficulty_buttons)):
@@ -130,10 +159,16 @@ class ConfigureGamePanel(Panel.Panel):
 
         self.button_difficulty_command(2)
 
-        self.button_main_menu = tkinter.tix.Button(self, text="Back", command=self.button_main_menu_command)
+        self.button_main_menu = tkinter.tix.Button(
+            self,
+            text=self.ui.translation.get_translation("back"),
+            command=self.button_main_menu_command)
         self.button_main_menu.grid(row=3, column=0, sticky=tkinter.tix.NSEW)
 
-        self.button_play = tkinter.tix.Button(self, text="Play", command=self.button_play_command)
+        self.button_play = tkinter.tix.Button(
+            self,
+            text=self.ui.translation.get_translation("play"),
+            command=self.button_play_command)
         self.button_play.grid(row=3, column=1, sticky=tkinter.tix.NSEW)
 
         self.import_last_game_setting()
@@ -199,18 +234,15 @@ class ConfigureGamePanel(Panel.Panel):
         """
         self.export_last_game_settings()
         if self.players_tokens[0] == self.players_tokens[1]:
-            if not tkinter.messagebox.askokcancel("Same color", "You choose the same color for the player 1 and the "
-                                                                "player 2, it is more difficult to discern which "
-                                                                "player is own a token.\n\nWould you like continue ?"):
+            if not tkinter.messagebox.askokcancel(
+                    self.ui.translation.get_translation("configure_game_panel_dialog_same_token_title"),
+                    self.ui.translation.get_translation("configure_game_panel_dialog_same_token_message")):
                 return None
 
         if self.difficulty_selected_button == 5:
-            if not tkinter.messagebox.askokcancel("Long wait",
-                                                  "You choose the very hard difficulty, the artificial "
-                                                  "intelligence will take a long time to do his turn (~45 seconds per "
-                                                  "turn). You have to be very patient to do this difficulty\n\nWould "
-                                                  ""
-                                                  "you like continue ?"):
+            if not tkinter.messagebox.askokcancel(
+                    self.ui.translation.get_translation("configure_game_panel_dialog_very_hard_title"),
+                    self.ui.translation.get_translation("configure_game_panel_dialog_very_hard_message")):
                 return None
 
         game = Game.Game()
@@ -253,10 +285,10 @@ class ConfigureGamePanel(Panel.Panel):
 
         color_index = self.players_tokens[player_index].value + 1
 
-        if color_index >= TokenColor.NUMBER_COLOR:
+        if color_index >= TokenStyle.NUMBER_COLOR:
             color_index = 0
 
-        self.players_tokens[player_index] = TokenColor.TokenColor(color_index)
+        self.players_tokens[player_index] = TokenStyle.TokenColor(color_index)
 
         self.players_tokens_images[player_index] = \
             self.ui.image_getter.save_token_photos[player][self.players_tokens[player_index]]
