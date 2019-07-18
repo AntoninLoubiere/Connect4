@@ -9,6 +9,9 @@
         <string name="quit">Quit</string>
         <string name="back">Back</string>
 
+        <string name="play_local">Play local</string>
+        <string name="play_online">Play online</string>
+
         <string name="configure_game_panel_name">Name: </string>
         <string name="configure_game_panel_artificial_intelligence">Computer</string>
         <string name="configure_game_panel_choose_tokens">Choose your token: </string>

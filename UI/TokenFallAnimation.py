@@ -1,6 +1,6 @@
 import tkinter.tix
 
-import TickUpdater
+from main import TickUpdater
 
 TIME_ANIMATION = 0.75
 

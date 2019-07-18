@@ -1,4 +1,4 @@
-#!/home/antonin/PycharmProjects/Power4/venv/bin/python2.7
+#!/home/antonin/PycharmProjects/Connect4/venv/bin/python
 # -*- coding: utf-8 -*-
 import re
 import sys

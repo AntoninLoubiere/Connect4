@@ -2,11 +2,9 @@ import random
 import tkinter.messagebox
 import tkinter.tix
 
-import AIPlayer
-import Game
-import Player
-from TokenState import TokenState
 from UI import Panel, GamePanel, MainMenuPanel, TokenStyle
+from main import Game, AIPlayer, Player
+from main.TokenState import TokenState
 
 PLAYERS_NAMES_PREFERENCES = "last_game_player_names_game"
 PLAYERS_TOKENS_PREFERENCES = "last_game_player_tokens_game"
@@ -21,7 +19,7 @@ class ConfigureGamePanel(Panel.Panel):
 
     def __init__(self, master, ui):
         super().__init__(master, ui)
-        self.ui.image_getter.resize_tokens_images(150)
+        self.ui.image_getter.resize_tokens_images(100)
 
         for i in range(0, 2):
             self.grid_columnconfigure(i, weight=1)
@@ -106,14 +104,38 @@ class ConfigureGamePanel(Panel.Panel):
         ]
 
         self.players_tokens_buttons = [
-            tkinter.tix.Button(self.players_settings_frame[0], image=self.players_tokens_images[0],
-                               command=lambda: self.button_change_token_command(TokenState.Player_1)),
-            tkinter.tix.Button(self.players_settings_frame[1], image=self.players_tokens_images[1],
-                               command=lambda: self.button_change_token_command(TokenState.Player_2))
+            tkinter.tix.Label(self.players_settings_frame[0], image=self.players_tokens_images[0]),
+            tkinter.tix.Label(self.players_settings_frame[1], image=self.players_tokens_images[1])
         ]
 
         self.players_tokens_buttons[0].grid(row=1, column=1, sticky=tkinter.tix.NSEW)
         self.players_tokens_buttons[1].grid(row=1, column=1, sticky=tkinter.tix.NSEW)
+
+        self.token_choose_frame = [tkinter.tix.Frame(self.players_settings_frame[0]),
+                                   tkinter.tix.Frame(self.players_settings_frame[1])]
+
+        self.token_choose_frame[0].grid(row=2, column=0, columnspan=2, sticky=tkinter.tix.NSEW)
+        self.token_choose_frame[1].grid(row=2, column=0, columnspan=2, sticky=tkinter.tix.NSEW)
+
+        self.token_choose_buttons = [[], []]
+
+        for index, token_style in enumerate(self.ui.image_getter.save_token_icons[TokenState.Player_1]):
+            self.token_choose_buttons[0].append(tkinter.tix.Button(self.token_choose_frame[0],
+                                                                   image=self.ui.image_getter.save_token_icons[
+                                                                       TokenState.Player_1][token_style],
+                                                                   command=lambda _index=index:
+                                                                   self.button_change_token_command(
+                                                                       _index, TokenState.Player_1)))
+            self.token_choose_buttons[0][index].grid(row=0, column=index)
+
+        for index, token_style in enumerate(self.ui.image_getter.save_token_icons[TokenState.Player_2]):
+            self.token_choose_buttons[1].append(tkinter.tix.Button(self.token_choose_frame[1],
+                                                                   image=self.ui.image_getter.save_token_icons[
+                                                                       TokenState.Player_2][token_style],
+                                                                   command=lambda _index=index:
+                                                                   self.button_change_token_command(
+                                                                       _index, TokenState.Player_2)))
+            self.token_choose_buttons[1][index].grid(row=0, column=index)
 
         self.difficultly_choose_frame = tkinter.tix.Frame(self)
         self.difficultly_choose_frame.grid(row=2, column=0, columnspan=2, sticky=tkinter.tix.SE + tkinter.W,
@@ -274,21 +296,16 @@ class ConfigureGamePanel(Panel.Panel):
         self.export_last_game_settings()
         self.ui.change_panel(MainMenuPanel.MainMenuPanel)
 
-    def button_change_token_command(self, player):
+    def button_change_token_command(self, index, player):
         """
         When a button to change token is clicked
         :param player: the player which have this token
+        :param index: the index of the button
         :return: None
         """
-
         player_index = (1, 0)[player == TokenState.Player_1]
 
-        color_index = self.players_tokens[player_index].value + 1
-
-        if color_index >= TokenStyle.NUMBER_COLOR:
-            color_index = 0
-
-        self.players_tokens[player_index] = TokenStyle.TokenColor(color_index)
+        self.players_tokens[player_index] = TokenStyle.TokenColor(index)
 
         self.players_tokens_images[player_index] = \
             self.ui.image_getter.save_token_photos[player][self.players_tokens[player_index]]

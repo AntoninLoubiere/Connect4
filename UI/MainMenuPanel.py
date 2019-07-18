@@ -27,14 +27,20 @@ class MainMenuPanel(Panel.Panel):
                                             font=("Arial Bold", 50))
         self.text_title.grid(row=0, column=0, columnspan=2, sticky=tkinter.tix.NSEW)
 
-        self.button_play_local_play = tkinter.tix.Button(
-            self, text=self.ui.translation.get_translation("play"), command=self.button_play_local_play_command,
+        self.button_play_local = tkinter.tix.Button(
+            self, text=self.ui.translation.get_translation("play_local"), command=self.button_play_local_play_command,
             height=1, font=("Arial Bold", 20))
-        self.button_play_local_play.grid(row=1, column=0, columnspan=2, sticky=tkinter.tix.NSEW)
+        self.button_play_local.grid(row=1, column=0, columnspan=2, sticky=tkinter.tix.NSEW)
+
+        self.button_play_online = tkinter.tix.Button(
+            self, text=self.ui.translation.get_translation("play_online"), height=1, font=("Arial Bold", 20)
+        )
+
+        self.button_play_online.grid(row=2, column=0, columnspan=2, sticky=tkinter.tix.NSEW)
 
         self.button_quit = tkinter.tix.Button(self, text=self.ui.translation.get_translation("quit"),
                                               command=self.button_quit_command)
-        self.button_quit.grid(row=2, column=0, sticky=tkinter.tix.NSEW)
+        self.button_quit.grid(row=3, column=0, sticky=tkinter.tix.NSEW)
 
         self.language_combo_box_values = []
         for language in self.ui.translation.list_translations:
@@ -43,7 +49,7 @@ class MainMenuPanel(Panel.Panel):
         self.language_combo_box = tkinter.ttk.Combobox(self, values=self.language_combo_box_values,
                                                        state='readonly')
         self.language_combo_box.current(self.ui.translation.current_language)
-        self.language_combo_box.grid(row=2, column=1, sticky=tkinter.tix.NSEW)
+        self.language_combo_box.grid(row=3, column=1, sticky=tkinter.tix.NSEW)
         self.language_combo_box.bind("<<ComboboxSelected>>", lambda event: self.language_combobox_on_selected())
 
     def update_text(self):
@@ -52,7 +58,7 @@ class MainMenuPanel(Panel.Panel):
         :return:
         """
         self.text_title.configure(text=self.ui.translation.get_translation("connect_four"))
-        self.button_play_local_play.configure(text=self.ui.translation.get_translation("play"))
+        self.button_play_local.configure(text=self.ui.translation.get_translation("play"))
         self.button_quit.configure(text=self.ui.translation.get_translation("quit"))
 
     def button_play_local_play_command(self):

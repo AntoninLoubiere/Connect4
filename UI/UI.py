@@ -1,7 +1,6 @@
 import tkinter.tix
 
-import Preferences
-import Translation
+from main import Preferences, Translation
 from UI import ImageGetter
 
 

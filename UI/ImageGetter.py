@@ -2,7 +2,7 @@ import os
 
 from PIL import Image, ImageTk
 
-import TokenState
+from main import TokenState
 from UI import TokenStyle
 
 

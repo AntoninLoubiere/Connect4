@@ -1,10 +1,7 @@
 import threading
 import tkinter.tix
 
-import AIPlayer
-import Game
-import Player
-import TokenState
+from main import TokenState, Game, AIPlayer, Player
 from UI import Panel, ImageGetter, TokenStyle, TokenFallAnimation
 from UI.ResizingCanvas import ResizingCanvas
 
