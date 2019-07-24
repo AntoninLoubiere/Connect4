@@ -8,7 +8,8 @@ class Game(object):
     A class to save some variables (the grid...). It represent a game
     """
 
-    def __init__(self, grid_width=7, grid_height=6):
+    def __init__(self, grid_width=7, grid_height=6,
+                 first_player=random.choice((TokenState.Player_1, TokenState.Player_2))):
         """
         Constructor
         """
@@ -23,7 +24,7 @@ class Game(object):
             for y in range(self.grid_height):
                 self.grid[x].append(TokenState.Blank)
 
-        self.current_turn = (TokenState.Player_1, TokenState.Player_2)[random.randint(0, 1) == 0]
+        self.current_turn = first_player
 
         self.winner = TokenState.Blank
         self.win_tokens_coord = [[-1, -1], [-1, -1]]
@@ -46,6 +47,26 @@ class Game(object):
                 return [True, [column, y]]
 
         return [False, [-1, -1]]
+
+    def add_token_with_coord(self, x, y):
+        """
+        Add the token of the current player at coord
+        :param x: The x coord of the new token
+        :param y: The y coord of the new token
+        :return: 0: if this action was do 1: a list with coord of the token
+        """
+        if self.is_win():
+            return [False, [-1, -1]]
+
+        if self.grid[x][y] == TokenState.Blank:
+            #  add token
+            self.grid[x][y] = self.current_turn
+            self.swap_turn()
+            self.update_win(x, y)
+            return [True, [x, y]]
+
+        else:
+            return [False, [-1, -1]]
 
     def swap_turn(self):
         """

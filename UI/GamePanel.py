@@ -21,8 +21,8 @@ class GamePanel(Panel.Panel):
     """
 
     def __init__(self, master, ui,
-                 player_1=Player.Player(TokenState.TokenState.Player_1, TokenStyle.TokenColor.Blue),
-                 player_2=Player.Player(TokenState.TokenState.Player_2, TokenStyle.TokenColor.Green),
+                 player_1=Player.Player(TokenState.TokenState.Player_1, TokenStyle.TokenStyle.Blue),
+                 player_2=Player.Player(TokenState.TokenState.Player_2, TokenStyle.TokenStyle.Green),
                  game=Game.Game()):
         """
         Constructor
@@ -215,7 +215,7 @@ class GamePanel(Panel.Panel):
         """
         Add a token in the column
         :param column: the column
-        :return: None
+        :return: if is do
         """
 
         current_player = self.game.current_turn
@@ -228,6 +228,26 @@ class GamePanel(Panel.Panel):
             self.update_turn_label()
             if self.game.is_win():
                 self.on_win()
+        return add_token_result
+
+    def add_token_with_coord(self, x, y):
+        """
+        Add a token with coord
+        :param y: the y cooed
+        :param x: the x coord
+        :return: if is do
+        """
+        current_player = self.game.current_turn
+
+        add_token_result = self.game.add_token_with_coord(x, y)
+
+        if add_token_result[0]:
+            self.add_token_animation(TokenFallAnimation.TokenFallAnimation(
+                add_token_result[1][0], add_token_result[1][1], current_player, self))
+            self.update_turn_label()
+            if self.game.is_win():
+                self.on_win()
+        return add_token_result
 
     def get_square_coord(self, x, y):
         """

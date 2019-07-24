@@ -8,9 +8,11 @@
         <string name="play">Play</string>
         <string name="quit">Quit</string>
         <string name="back">Back</string>
+        <string name="ready">Ready</string>
+        <string name="not_ready">Not ready</string>
 
-        <string name="play_local">Play local</string>
-        <string name="play_online">Play online</string>
+        <string name="play_local">Play on this computer</string>
+        <string name="play_online">Play with a remote computer</string>
 
         <string name="configure_game_panel_name">Name: </string>
         <string name="configure_game_panel_artificial_intelligence">Computer</string>
@@ -23,17 +25,50 @@
         <string name="configure_game_panel_difficulty_hard">Hard</string>
         <string name="configure_game_panel_difficulty_very_hard">Very hard</string>
 
+        <string name="configure_game_panel_difficulty_text">The artificial intelligence difficulty:</string>
+
         <string name="configure_game_panel_dialog_same_token_title">Same color warning</string>
         <string name="configure_game_panel_dialog_same_token_message">You choose the same color for the player 1 and the player 2, it is more difficult to discern which player is own a token.&#xA;&#xA;Would you like continue ?</string>
         <string name="configure_game_panel_dialog_very_hard_title">Very hard warning</string>
         <string name="configure_game_panel_dialog_very_hard_message">You choose the very hard difficulty, the artificial intelligence will take a long time to do his turn (~45 seconds per turn). You have to be very patient to do this difficulty.&#xA;&#xA;Would you like continue ?"</string>
-
-
-        <string name="configure_game_panel_difficulty_text">The artificial intelligence difficulty:</string>
+        <string name="configure_game_panel_dialog_same_name_title">Name error</string>
+        <string name="configure_game_panel_dialog_same_name_message">The game can't start, the player 1 and the player 2 have the same name. Please change at least 1 name.</string>
+        <string name="configure_game_panel_dialog_name_blank_title">Name error</string>
+        <string name="configure_game_panel_dialog_name_blank_message">The player {} have a name with less than 3 character. Please change his name.</string>
 
         <string name="game_panel_turn_format">It's the turn of: {}</string>
         <string name="game_panel_win_format">The winner is: {}</string>
         <string name="game_panel_main_menu_button">&lt;- Main menu</string>
+
+        <string name="server_list_create_game">Create a game</string>
+        <string name="server_list_manual_connexion">Manual connexion</string>
+
+        <string name="server_list_manual_connexion_frame_text">Manual connexion: </string>
+        <string name="server_list_manual_connexion_frame_host">Host: </string>
+        <string name="server_list_manual_connexion_frame_port">Port: </string>
+
+        <string name="server_list_dialog_host_error_title">IP incorrect</string>
+        <string name="server_list_dialog_host_error_message">The IP address of the host is incorrect, the program needs a valid IP address, composed with four number which are between 0 and 255 and separated with dots (example you IP address is {}).</string>
+        <string name="server_list_dialog_unreachable_title">Unreachable host</string>
+        <string name="server_list_dialog_unreachable_message">The host is unreachable. Check if it is the right IP address, and the right port (this information is write in the host window). Check if the host have turn on the server.</string>
+
+        <string name="server_configuration_frame_text">Configuration of the server</string>
+        <string name="server_configuration_start">Start server</string>
+        <string name="server_configuration_stop">Stop server</string>
+        <string name="server_configuration_kick">Kick opponent</string>
+        <string name="server_configuration_open_console">Open the console</string>
+        <string name="server_configuration_host_label">Host: {}</string>
+        <string name="server_configuration_port_entry_title">Port: </string>
+        <string name="server_configuration_waiting">Waiting...</string>
+        <string name="server_configuration_player_1_want_start">The player 1 want to play, check if you are ready to start the game</string>
+        <string name="server_configuration_player_2_not_ready">The player 2 isn't ready</string>
+        <string name="server_configuration_player_2_ready">The player 2 is ready</string>
+
+        <string name="server_configuration_dialog_port_error_title">Port incorrect</string>
+        <string name="server_configuration_dialog_port_error_message">The port is incorrect, it must be a number between 3000 and 4000.</string>
+
+        <string name="server_state_stopped">The server is stopped</string>
+        <string name="server_state_started">The server is started</string>
 
         <string name="default_player_name">Player {}</string>
     </translations>

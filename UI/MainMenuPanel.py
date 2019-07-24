@@ -1,7 +1,7 @@
 import tkinter.tix
 import tkinter.ttk
 
-from UI import Panel, ConfigureGamePanel
+from UI import Panel, ConfigureGamePanel, ServerListPanel
 
 
 class MainMenuPanel(Panel.Panel):
@@ -28,12 +28,13 @@ class MainMenuPanel(Panel.Panel):
         self.text_title.grid(row=0, column=0, columnspan=2, sticky=tkinter.tix.NSEW)
 
         self.button_play_local = tkinter.tix.Button(
-            self, text=self.ui.translation.get_translation("play_local"), command=self.button_play_local_play_command,
+            self, text=self.ui.translation.get_translation("play_local"), command=self.button_play_local_command,
             height=1, font=("Arial Bold", 20))
         self.button_play_local.grid(row=1, column=0, columnspan=2, sticky=tkinter.tix.NSEW)
 
         self.button_play_online = tkinter.tix.Button(
-            self, text=self.ui.translation.get_translation("play_online"), height=1, font=("Arial Bold", 20)
+            self, text=self.ui.translation.get_translation("play_online"), height=1, font=("Arial Bold", 20),
+            command=self.button_play_online_command
         )
 
         self.button_play_online.grid(row=2, column=0, columnspan=2, sticky=tkinter.tix.NSEW)
@@ -58,15 +59,23 @@ class MainMenuPanel(Panel.Panel):
         :return:
         """
         self.text_title.configure(text=self.ui.translation.get_translation("connect_four"))
-        self.button_play_local.configure(text=self.ui.translation.get_translation("play"))
+        self.button_play_local.configure(text=self.ui.translation.get_translation("play_local"))
+        self.button_play_online.configure(text=self.ui.translation.get_translation("play_online"))
         self.button_quit.configure(text=self.ui.translation.get_translation("quit"))
 
-    def button_play_local_play_command(self):
+    def button_play_local_command(self):
         """
         The command of the multi players button
         :return: None
         """
         self.ui.change_panel(ConfigureGamePanel.ConfigureGamePanel)
+
+    def button_play_online_command(self):
+        """
+        The command of the online button
+        :return: None
+        """
+        self.ui.change_panel(ServerListPanel.ServerListPanel)
 
     def button_quit_command(self):
         """

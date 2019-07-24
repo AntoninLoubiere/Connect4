@@ -41,7 +41,7 @@ class ImageGetter:
         self.token_size = token_size
 
         for i_player, player in enumerate(self.save_token_photos):
-            for color in TokenStyle.TokenColor:
+            for color in TokenStyle.TokenStyle:
                 self.save_token_photos[player][color] = ImageTk.PhotoImage(create_player_token_image
                                                                            (player, color, token_size, token_size))
 
@@ -60,6 +60,6 @@ class ImageGetter:
         self.token_size = token_size
 
         for i_player, player in enumerate(self.save_token_photos):
-            for color in TokenStyle.TokenColor:
+            for color in TokenStyle.TokenStyle:
                 self.save_token_photos[player][color] = ImageTk.PhotoImage(
                     create_player_token_image(player, color, token_size, token_size))

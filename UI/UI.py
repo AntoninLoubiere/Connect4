@@ -2,6 +2,7 @@ import tkinter.tix
 
 from main import Preferences, Translation
 from UI import ImageGetter
+from main.Server import Server
 
 
 class UI(tkinter.tix.Tk):
@@ -17,6 +18,9 @@ class UI(tkinter.tix.Tk):
         super().__init__()
         self.current_panel = None
         self.is_alive = True
+
+        self.server = Server(max_clients_connected=1)
+        self.client = None
 
         self.image_getter = ImageGetter.ImageGetter()
         self.preference = Preferences.Preferences()
@@ -60,4 +64,11 @@ class UI(tkinter.tix.Tk):
 
     def destroy(self):
         self.is_alive = False
+
+        if self.server.server_is_on:
+            self.server.stop_server()
+
+        if self.client is not None and self.client.connected:
+            self.client.close_connection()
+
         super().destroy()

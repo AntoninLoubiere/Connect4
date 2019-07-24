@@ -27,7 +27,7 @@ class Translation:
         else:
             self.current_language = self.get_language(DEFAULT_LANGUAGE)
 
-    def update_dic_translation(self):
+    def update_dic_translation(self) -> None:
         """
         Update list translations available
         :return: None
@@ -51,7 +51,7 @@ class Translation:
             except xml.dom.DOMException:
                 pass
 
-    def get_language(self, name):
+    def get_language(self, name) -> int:
         """
         Get a language by using his name
         :param name: the name of the language (EN_en, FR_fr...)
@@ -63,7 +63,7 @@ class Translation:
 
         return -1
 
-    def get_translation(self, key, language_name=None):
+    def get_translation(self, key, language_name=None) -> str:
         """
         Get a translation from a key
         :param language_name: The language name by default the current
@@ -115,7 +115,7 @@ class Translation:
 
             return self.get_translation(key, DEFAULT_LANGUAGE)
 
-    def set_current_language(self, new_current_language):
+    def set_current_language(self, new_current_language) -> None:
         """
         Set the current language
         :param new_current_language: the new value

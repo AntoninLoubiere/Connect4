@@ -52,6 +52,15 @@ class ConfigureGamePanel(Panel.Panel):
                                                 textvariable=self.players_entry_string_variable[0]),
                               tkinter.tix.Entry(self.players_name_frame[1],
                                                 textvariable=self.players_entry_string_variable[1])]
+
+        self.players_entry_string_variable[0].trace_add(
+            "write", lambda x, y, z: self.name_string_var_trace_write()
+        )
+
+        self.players_entry_string_variable[1].trace_add(
+            "write", lambda x, y, z: self.name_string_var_trace_write()
+        )
+
         self.players_entry[0].grid(row=0, column=1)
         self.players_entry[1].grid(row=0, column=1)
 
@@ -94,8 +103,8 @@ class ConfigureGamePanel(Panel.Panel):
         self.players_text_choose[1].grid(row=1, column=0, sticky=tkinter.tix.W)
 
         self.players_tokens = [
-            TokenStyle.TokenColor(random.randint(0, TokenStyle.NUMBER_COLOR - 1)),
-            TokenStyle.TokenColor(random.randint(0, TokenStyle.NUMBER_COLOR - 1))
+            TokenStyle.TokenStyle(random.randint(0, TokenStyle.NUMBER_COLOR - 1)),
+            TokenStyle.TokenStyle(random.randint(0, TokenStyle.NUMBER_COLOR - 1))
         ]
 
         self.players_tokens_images = [
@@ -103,13 +112,13 @@ class ConfigureGamePanel(Panel.Panel):
             self.ui.image_getter.save_token_photos[TokenState.Player_2][self.players_tokens[1]]
         ]
 
-        self.players_tokens_buttons = [
+        self.players_tokens_labels = [
             tkinter.tix.Label(self.players_settings_frame[0], image=self.players_tokens_images[0]),
             tkinter.tix.Label(self.players_settings_frame[1], image=self.players_tokens_images[1])
         ]
 
-        self.players_tokens_buttons[0].grid(row=1, column=1, sticky=tkinter.tix.NSEW)
-        self.players_tokens_buttons[1].grid(row=1, column=1, sticky=tkinter.tix.NSEW)
+        self.players_tokens_labels[0].grid(row=1, column=1, sticky=tkinter.tix.NSEW)
+        self.players_tokens_labels[1].grid(row=1, column=1, sticky=tkinter.tix.NSEW)
 
         self.token_choose_frame = [tkinter.tix.Frame(self.players_settings_frame[0]),
                                    tkinter.tix.Frame(self.players_settings_frame[1])]
@@ -119,19 +128,20 @@ class ConfigureGamePanel(Panel.Panel):
 
         self.token_choose_buttons = [[], []]
 
-        for index, token_style in enumerate(self.ui.image_getter.save_token_icons[TokenState.Player_1]):
+        for index in range(0, TokenStyle.NUMBER_COLOR):
             self.token_choose_buttons[0].append(tkinter.tix.Button(self.token_choose_frame[0],
                                                                    image=self.ui.image_getter.save_token_icons[
-                                                                       TokenState.Player_1][token_style],
+                                                                       TokenState.Player_1]
+                                                                   [TokenStyle.TokenStyle(index)],
                                                                    command=lambda _index=index:
                                                                    self.button_change_token_command(
                                                                        _index, TokenState.Player_1)))
             self.token_choose_buttons[0][index].grid(row=0, column=index)
 
-        for index, token_style in enumerate(self.ui.image_getter.save_token_icons[TokenState.Player_2]):
             self.token_choose_buttons[1].append(tkinter.tix.Button(self.token_choose_frame[1],
                                                                    image=self.ui.image_getter.save_token_icons[
-                                                                       TokenState.Player_2][token_style],
+                                                                       TokenState.Player_2]
+                                                                   [TokenStyle.TokenStyle(index)],
                                                                    command=lambda _index=index:
                                                                    self.button_change_token_command(
                                                                        _index, TokenState.Player_2)))
@@ -224,7 +234,7 @@ class ConfigureGamePanel(Panel.Panel):
                 self.players_tokens_images[i] = \
                     self.ui.image_getter.save_token_photos[TokenState(i + 1)][self.players_tokens[i]]
 
-                self.players_tokens_buttons[i].config(image=self.players_tokens_images[i])
+                self.players_tokens_labels[i].config(image=self.players_tokens_images[i])
 
         if self.ui.preference.temporary_preference_exist(DIFFICULTY_PREFERENCES):
             self.difficulty_selected_button = self.ui.preference.get_temporary_preference(DIFFICULTY_PREFERENCES)
@@ -235,8 +245,8 @@ class ConfigureGamePanel(Panel.Panel):
         :return: None
         """
 
-        players_names = (self.players_entry_string_variable[0].get(),
-                         self.players_entry_string_variable[1].get())
+        players_names = (self.players_entry_string_variable[0].get().strip(),
+                         self.players_entry_string_variable[1].get().strip())
 
         self.ui.preference.set_temporary_preference(PLAYERS_NAMES_PREFERENCES, players_names)
 
@@ -255,13 +265,36 @@ class ConfigureGamePanel(Panel.Panel):
         :return: None
         """
         self.export_last_game_settings()
+
+        if len(self.players_entry_string_variable[0].get().strip()) < 3:
+            tkinter.messagebox.showerror(
+                self.ui.translation.get_translation("configure_game_panel_dialog_name_blank_title"),
+                self.ui.translation.get_translation("configure_game_panel_dialog_name_blank_message").format("1")
+            )
+            return None
+
+        if len(self.players_entry_string_variable[1].get().strip()) < 3:
+            tkinter.messagebox.showerror(
+                self.ui.translation.get_translation("configure_game_panel_dialog_name_blank_title"),
+                self.ui.translation.get_translation("configure_game_panel_dialog_name_blank_message").format("2")
+            )
+            return None
+
+        if self.players_entry_string_variable[0].get().strip() == self.players_entry_string_variable[1].get().strip():
+            tkinter.messagebox.showerror(
+                self.ui.translation.get_translation("configure_game_panel_dialog_same_name_title"),
+                self.ui.translation.get_translation("configure_game_panel_dialog_same_name_message")
+            )
+            return None
+
         if self.players_tokens[0] == self.players_tokens[1]:
             if not tkinter.messagebox.askokcancel(
                     self.ui.translation.get_translation("configure_game_panel_dialog_same_token_title"),
                     self.ui.translation.get_translation("configure_game_panel_dialog_same_token_message")):
                 return None
 
-        if self.difficulty_selected_button == 5:
+        if (self.player_ai_choose_var[0].get() or self.player_ai_choose_var[1].get()) and \
+                self.difficulty_selected_button == 5:
             if not tkinter.messagebox.askokcancel(
                     self.ui.translation.get_translation("configure_game_panel_dialog_very_hard_title"),
                     self.ui.translation.get_translation("configure_game_panel_dialog_very_hard_message")):
@@ -271,22 +304,39 @@ class ConfigureGamePanel(Panel.Panel):
 
         if self.player_ai_choose_var[0].get():
             player_1 = AIPlayer.AIPlayer(self.difficulty_selected_button + 1, game, TokenState.Player_1,
-                                         self.players_tokens[0], self.players_entry_string_variable[0].get())
+                                         self.players_tokens[0], self.players_entry_string_variable[0].get().strip())
         else:
             player_1 = Player.Player(TokenState.Player_1, self.players_tokens[0],
-                                     self.players_entry_string_variable[0].get())
+                                     self.players_entry_string_variable[0].get().strip())
 
         if self.player_ai_choose_var[1].get():
             player_2 = AIPlayer.AIPlayer(self.difficulty_selected_button + 1, game, TokenState.Player_2,
-                                         self.players_tokens[1], self.players_entry_string_variable[1].get())
+                                         self.players_tokens[1], self.players_entry_string_variable[1].get().strip())
         else:
             player_2 = Player.Player(TokenState.Player_2, self.players_tokens[1],
-                                     self.players_entry_string_variable[1].get())
+                                     self.players_entry_string_variable[1].get().strip())
 
         self.ui.change_panel(GamePanel.GamePanel,
                              player_1=player_1,
                              player_2=player_2,
                              game=game)
+
+    def name_string_var_trace_write(self):
+        """
+        The trace function of names strings vars
+        :return: None
+        """
+        self.players_entry[0].configure(
+            fg=("black", "#ee2e31")[len(self.players_entry_string_variable[0].get().strip()) < 3]
+        )
+        self.players_entry[1].configure(
+            fg=("black", "#ee2e31")[len(self.players_entry_string_variable[1].get().strip()) < 3]
+        )
+        if len(self.players_entry_string_variable[0].get().strip()) >= 3 and \
+                self.players_entry_string_variable[0].get().strip() == \
+                self.players_entry_string_variable[1].get().strip():
+            self.players_entry[0].configure(fg="#ee8f2f")
+            self.players_entry[1].configure(fg="#ee8f2f")
 
     def button_main_menu_command(self):
         """
@@ -305,12 +355,12 @@ class ConfigureGamePanel(Panel.Panel):
         """
         player_index = (1, 0)[player == TokenState.Player_1]
 
-        self.players_tokens[player_index] = TokenStyle.TokenColor(index)
+        self.players_tokens[player_index] = TokenStyle.TokenStyle(index)
 
         self.players_tokens_images[player_index] = \
             self.ui.image_getter.save_token_photos[player][self.players_tokens[player_index]]
 
-        self.players_tokens_buttons[player_index].config(image=self.players_tokens_images[player_index])
+        self.players_tokens_labels[player_index].config(image=self.players_tokens_images[player_index])
 
     def button_difficulty_command(self, index):
         """
