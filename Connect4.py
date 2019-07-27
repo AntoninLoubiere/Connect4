@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 """
 Project: Power 4
 By: Antonin LOUBIERE (github.com/AntoninLoubiere)

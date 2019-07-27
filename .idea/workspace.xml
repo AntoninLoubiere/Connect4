@@ -2,21 +2,17 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="bd1cde12-7a76-43ca-890e-fa01120f398b" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/UI/ServerGameConfigurationPanel.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/UI/ServerGamePanel.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/main/Client/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/main/Server/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Connect4.desktop" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/UI/res/connect4_logo.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/main/Server/ServerScanner.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dictionaries/antonin.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dictionaries/antonin.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UI/ConfigureGamePanel.py" beforeDir="false" afterPath="$PROJECT_DIR$/UI/ConfigureGamePanel.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UI/GamePanel.py" beforeDir="false" afterPath="$PROJECT_DIR$/UI/GamePanel.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Connect4.py" beforeDir="false" afterPath="$PROJECT_DIR$/Connect4.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/UI/ImageGetter.py" beforeDir="false" afterPath="$PROJECT_DIR$/UI/ImageGetter.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UI/MainMenuPanel.py" beforeDir="false" afterPath="$PROJECT_DIR$/UI/MainMenuPanel.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UI/ServerGameConfigurationPanel.py" beforeDir="false" afterPath="$PROJECT_DIR$/UI/ServerGameConfigurationPanel.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UI/ServerGamePanel.py" beforeDir="false" afterPath="$PROJECT_DIR$/UI/ServerGamePanel.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/UI/ServerListPanel.py" beforeDir="false" afterPath="$PROJECT_DIR$/UI/ServerListPanel.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UI/TokenStyle.py" beforeDir="false" afterPath="$PROJECT_DIR$/UI/TokenStyle.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/UI/UI.py" beforeDir="false" afterPath="$PROJECT_DIR$/UI/UI.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UI/res/down.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/main/Game.py" beforeDir="false" afterPath="$PROJECT_DIR$/main/Game.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main/Translation.py" beforeDir="false" afterPath="$PROJECT_DIR$/main/Translation.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/translations/EN_en.xml" beforeDir="false" afterPath="$PROJECT_DIR$/translations/EN_en.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/translations/FR_fr.xml" beforeDir="false" afterPath="$PROJECT_DIR$/translations/FR_fr.xml" afterDir="false" />
     </list>
@@ -25,94 +21,6 @@
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
-  </component>
-  <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/UI/MainMenuPanel.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="870">
-              <caret line="61" column="93" selection-start-line="61" selection-start-column="93" selection-end-line="61" selection-end-column="93" />
-              <folding>
-                <element signature="e#0#18#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/UI/ServerListPanel.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="485">
-              <caret line="125" column="38" selection-start-line="125" selection-start-column="38" selection-end-line="125" selection-end-column="38" />
-              <folding>
-                <element signature="e#0#9#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/UI/ConfigureGamePanel.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="110">
-              <caret line="345" column="40" lean-forward="true" selection-start-line="345" selection-start-column="40" selection-end-line="345" selection-end-column="40" />
-              <folding>
-                <element signature="e#0#13#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/translations/EN_en.xml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1065">
-              <caret line="71" selection-start-line="71" selection-end-line="71" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/translations/FR_fr.xml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="816">
-              <caret line="69" column="33" selection-start-line="69" selection-start-column="33" selection-end-line="69" selection-end-column="33" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/UI/ServerGameConfigurationPanel.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="284">
-              <caret line="375" column="40" selection-start-line="375" selection-start-column="40" selection-end-line="375" selection-end-column="40" />
-              <folding>
-                <element signature="e#0#13#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/main/Game.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="165">
-              <caret line="31" column="32" lean-forward="true" selection-start-line="31" selection-start-column="32" selection-end-line="31" selection-end-column="32" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/main/TokenState.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="150">
-              <caret line="10" column="4" selection-start-line="10" selection-start-column="4" selection-end-line="10" selection-end-column="4" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -123,27 +31,18 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>str(i</find>
-      <find>color</find>
-      <find>re</find>
-      <find>self</find>
-      <find>disco</find>
-      <find>disconnect</find>
       <find>server_on</find>
       <find>Start</find>
       <find>self.encode_message</find>
       <find>self.decode_message</find>
-      <find>des</find>
       <find>mai</find>
       <find>chan</find>
       <find>mainmen</find>
       <find>play</find>
       <find>Game</find>
       <find>ServerGamePanel</find>
-      <find>set</find>
       <find>#e</find>
       <find>server_configuration_player_ready</find>
-      <find>print</find>
       <find>set re</find>
       <find>player_2_re</find>
       <find>is</find>
@@ -153,6 +52,15 @@
       <find>Erreu</find>
       <find>inategnable</find>
       <find>choice</find>
+      <find>Finis</find>
+      <find>set</find>
+      <find>connectr</find>
+      <find>&quot;Port</find>
+      <find>des</find>
+      <find>Remove</find>
+      <find>fr</find>
+      <find>bg=&quot;red</find>
+      <find>print</find>
     </findStrings>
     <replaceStrings>
       <replace>token</replace>
@@ -183,113 +91,12 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="IdeDocumentHistory">
-    <option name="CHANGED_PATHS">
-      <list>
-        <option value="$PROJECT_DIR$/TileState.py" />
-        <option value="$PROJECT_DIR$/UI/MainMeniuPanel.py" />
-        <option value="$PROJECT_DIR$/TokenState.py" />
-        <option value="$PROJECT_DIR$/UI/Panel.py" />
-        <option value="$PROJECT_DIR$/UI/TokenColor.py" />
-        <option value="$PROJECT_DIR$/Power4.py" />
-        <option value="$PROJECT_DIR$/UI/ImageGetter.py" />
-        <option value="$PROJECT_DIR$/UI/ResizingCanvas.py" />
-        <option value="$PROJECT_DIR$/Game.py" />
-        <option value="$PROJECT_DIR$/UI/TokenFallAnimation.py" />
-        <option value="$PROJECT_DIR$/TickUpdater.py" />
-        <option value="$PROJECT_DIR$/AIPlayer.py" />
-        <option value="$PROJECT_DIR$/UI/Panel.py" />
-        <option value="$PROJECT_DIR$/UI/TokenColor.py" />
-        <option value="$PROJECT_DIR$/UI/TokenFallAnimation.py" />
-        <option value="$PROJECT_DIR$/AIPlayer.py" />
-        <option value="$PROJECT_DIR$/translations/EN_en" />
-        <option value="$PROJECT_DIR$/Player.py" />
-        <option value="$PROJECT_DIR$/UI/ComboBox.py" />
-        <option value="$PROJECT_DIR$/Translation.py" />
-        <option value="$PROJECT_DIR$/Preferences.py" />
-        <option value="$PROJECT_DIR$/main/TickUpdater.py" />
-        <option value="$PROJECT_DIR$/main/Server.py" />
-        <option value="$PROJECT_DIR$/main/Client.py" />
-        <option value="$PROJECT_DIR$/main/Translation.py" />
-        <option value="$PROJECT_DIR$/UI/UI.py" />
-        <option value="$PROJECT_DIR$/UI/UI.py" />
-        <option value="$PROJECT_DIR$/main/Server/Client.py" />
-        <option value="$PROJECT_DIR$/UI/TokenStyle.py" />
-        <option value="$PROJECT_DIR$/UI/MainMenuPanel.py" />
-        <option value="$PROJECT_DIR$/UI/MainMenuPanel.py" />
-        <option value="$PROJECT_DIR$/UI/GamePanel.py" />
-        <option value="$PROJECT_DIR$/UI/GamePanel.py" />
-        <option value="$PROJECT_DIR$/UI/ServerGamePanel.py" />
-        <option value="$PROJECT_DIR$/main/Server/__init__.py" />
-        <option value="$PROJECT_DIR$/main/Client/__init__.py" />
-        <option value="$PROJECT_DIR$/UI/ServerGameConfigurationPanel.py" />
-        <option value="$PROJECT_DIR$/UI/ServerListPanel.py" />
-        <option value="$PROJECT_DIR$/UI/ConfigureGamePanel.py" />
-        <option value="$PROJECT_DIR$/translations/EN_en.xml" />
-        <option value="$PROJECT_DIR$/translations/FR_fr.xml" />
-        <option value="$PROJECT_DIR$/main/Game.py" />
-      </list>
-    </option>
-  </component>
-  <component name="ProjectFrameBounds" extendedState="7">
-    <option name="x" value="293" />
-    <option name="width" value="806" />
-    <option name="height" value="766" />
-  </component>
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
-  <component name="ProjectView">
-    <navigator proportions="" version="1">
-      <foldersAlwaysOnTop value="true" />
-    </navigator>
-    <panes>
-      <pane id="ProjectPane">
-        <subPane>
-          <expand>
-            <path>
-              <item name="Connect4" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Connect4" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Connect4" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Connect4" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Connect4" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Connect4" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="Client" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Connect4" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Connect4" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="Server" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Connect4" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Connect4" type="462c0819:PsiDirectoryNode" />
-              <item name="translations" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Connect4" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Connect4" type="462c0819:PsiDirectoryNode" />
-              <item name="UI" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Connect4" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Connect4" type="462c0819:PsiDirectoryNode" />
-              <item name="UI" type="462c0819:PsiDirectoryNode" />
-              <item name="res" type="462c0819:PsiDirectoryNode" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
-      <pane id="Scope" />
-    </panes>
+  <component name="ProjectId" id="1OXzMOh7eAIg2jhrxDVR7bWHNqc" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
   </component>
   <component name="PropertiesComponent">
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="last_opened_file_path" value="$USER_HOME$/Documents/Python/ServerSocket" />
     <property name="restartRequiresConfirmation" value="false" />
@@ -349,6 +156,9 @@
       <method v="2" />
     </configuration>
   </component>
+  <component name="StructureViewFactory">
+    <option name="AUTOSCROLL_FROM_SOURCE" value="true" />
+  </component>
   <component name="SvnConfiguration">
     <configuration />
   </component>
@@ -362,310 +172,23 @@
     </task>
     <servers />
   </component>
-  <component name="ToolWindowManager">
-    <frame x="0" y="-1" width="1366" height="768" extended-state="7" />
-    <editor active="true" />
-    <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.26468402" />
-      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
-      <window_info id="Favorites" order="2" side_tool="true" />
-      <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.32668713" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49926794" weight="0.42638037" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.39723927" />
-      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
-      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
-      <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info anchor="bottom" id="Version Control" order="7" weight="0.3297546" />
-      <window_info anchor="bottom" id="Terminal" order="8" weight="0.3297546" />
-      <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.50073206" side_tool="true" weight="0.49925706" />
-      <window_info anchor="bottom" id="Python Console" order="10" weight="0.3297546" />
-      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
-      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
-      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.24924472" />
-    </layout>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="COLUMN_ORDER" />
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <ignored-roots>
       <path value="$PROJECT_DIR$" />
     </ignored-roots>
-  </component>
-  <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/UI/MainMeniuPanel.py" />
-    <entry file="file://$PROJECT_DIR$/UI/res/Token/Player_1/blue.svg" />
-    <entry file="file://$USER_HOME$/.local/lib/python3.7/site-packages/PIL/Image.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-316">
-          <caret line="1886" selection-start-line="1886" selection-end-line="1886" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/UI/res/Token/Player_1/blue.png">
-      <provider selected="true" editor-type-id="images" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/UI/res/Token/Player_2/orange.png">
-      <provider selected="true" editor-type-id="images" />
-    </entry>
-    <entry file="file:///usr/lib/python3.7/traceback.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="166" selection-start-line="166" selection-end-line="166" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Connect4.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="165">
-          <caret line="11" selection-start-line="11" selection-end-line="11" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/UI/ResizingCanvas.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="750">
-          <caret line="50" column="40" selection-start-line="50" selection-start-column="40" selection-end-line="50" selection-end-column="40" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/UI/Panel.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="260">
-          <caret line="18" column="21" selection-start-line="18" selection-start-column="21" selection-end-line="18" selection-end-column="21" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file:///usr/lib/python3.7/threading.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="134">
-          <caret line="967" column="13" selection-start-line="967" selection-start-column="8" selection-end-line="967" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/UI/res/Token/Player_1/multi_color.gif">
-      <provider selected="true" editor-type-id="images" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/UI/res/Token/Player_1/green.png">
-      <provider selected="true" editor-type-id="images" />
-    </entry>
-    <entry file="file:///usr/lib/python3.7/enum.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="194">
-          <caret line="348" selection-start-line="348" selection-end-line="348" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/UI/TokenFallAnimation.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="390">
-          <caret line="28" column="32" selection-start-line="28" selection-start-column="32" selection-end-line="28" selection-end-column="32" />
-          <folding>
-            <element signature="e#0#18#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/translations/test/test.xml" />
-    <entry file="file://$PROJECT_DIR$/UI/ComboBox.py" />
-    <entry file="file:///usr/lib/python3.7/tkinter/tix.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2770">
-          <caret line="1941" column="11" selection-start-line="1941" selection-start-column="6" selection-end-line="1941" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/main/TickUpdater.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="630">
-          <caret line="43" column="20" selection-start-line="43" selection-start-column="20" selection-end-line="43" selection-end-column="20" />
-          <folding>
-            <element signature="e#0#16#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/UI/ImageGetter.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="405">
-          <caret line="32" column="8" selection-start-line="32" selection-start-column="8" selection-end-line="32" selection-end-column="8" />
-          <folding>
-            <element signature="e#0#9#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/main/Preferences.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1230">
-          <caret line="83" column="48" selection-start-line="83" selection-start-column="48" selection-end-line="83" selection-end-column="48" />
-          <folding>
-            <element signature="e#0#9#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/main/AIPlayer.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="275">
-          <caret line="148" lean-forward="true" selection-start-line="148" selection-end-line="148" />
-          <folding>
-            <element signature="e#0#11#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/UI/res/down.gif" />
-    <entry file="file://$PROJECT_DIR$/main/Server.py" />
-    <entry file="file://$PROJECT_DIR$/main/Client.py" />
-    <entry file="file://$PROJECT_DIR$/main/Translation.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="55">
-          <caret line="117" column="64" selection-start-line="117" selection-start-column="64" selection-end-line="117" selection-end-column="64" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/main/Server/Client.py" />
-    <entry file="file://$PROJECT_DIR$/UI/UI.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="830">
-          <caret line="71" column="41" selection-start-line="71" selection-start-column="41" selection-end-line="71" selection-end-column="41" />
-          <folding>
-            <element signature="e#0#18#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/UI/TokenStyle.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="18" column="21" selection-start-line="18" selection-start-column="21" selection-end-line="18" selection-end-column="21" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file:///usr/lib/python3.7/tkinter/__init__.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="109">
-          <caret line="2765" selection-start-line="2765" selection-end-line="2765" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/main/Player.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="8" column="8" selection-start-line="8" selection-start-column="8" selection-end-line="8" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/UI/GamePanel.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="14">
-          <caret line="404" column="11" lean-forward="true" selection-start-line="403" selection-start-column="21" selection-end-line="404" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/UI/ServerGamePanel.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="22" column="58" selection-start-line="22" selection-start-column="58" selection-end-line="22" selection-end-column="58" />
-          <folding>
-            <element signature="e#0#36#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/main/Server/__init__.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="147">
-          <caret line="66" column="111" selection-start-line="66" selection-start-column="111" selection-end-line="66" selection-end-column="111" />
-          <folding>
-            <element signature="e#0#12#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/main/Client/__init__.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="339">
-          <caret line="86" column="39" selection-start-line="86" selection-start-column="39" selection-end-line="86" selection-end-column="39" />
-          <folding>
-            <element signature="e#0#12#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/.PyCharmCE2019.1/system/python_stubs/1388920931/builtins.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="206">
-          <caret line="5094" column="8" selection-start-line="5094" selection-start-column="8" selection-end-line="5094" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/UI/MainMenuPanel.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="870">
-          <caret line="61" column="93" selection-start-line="61" selection-start-column="93" selection-end-line="61" selection-end-column="93" />
-          <folding>
-            <element signature="e#0#18#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/translations/EN_en.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1065">
-          <caret line="71" selection-start-line="71" selection-end-line="71" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/translations/FR_fr.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="816">
-          <caret line="69" column="33" selection-start-line="69" selection-start-column="33" selection-end-line="69" selection-end-column="33" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/UI/ConfigureGamePanel.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="110">
-          <caret line="345" column="40" lean-forward="true" selection-start-line="345" selection-start-column="40" selection-end-line="345" selection-end-column="40" />
-          <folding>
-            <element signature="e#0#13#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/UI/ServerListPanel.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="485">
-          <caret line="125" column="38" selection-start-line="125" selection-start-column="38" selection-end-line="125" selection-end-column="38" />
-          <folding>
-            <element signature="e#0#9#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/main/TokenState.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="10" column="4" selection-start-line="10" selection-start-column="4" selection-end-line="10" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/UI/ServerGameConfigurationPanel.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="284">
-          <caret line="375" column="40" selection-start-line="375" selection-start-column="40" selection-end-line="375" selection-end-column="40" />
-          <folding>
-            <element signature="e#0#13#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/main/Game.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="165">
-          <caret line="31" column="32" lean-forward="true" selection-start-line="31" selection-start-column="32" selection-end-line="31" selection-end-column="32" />
-        </state>
-      </provider>
-    </entry>
   </component>
 </project>

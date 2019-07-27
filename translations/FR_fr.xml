@@ -40,6 +40,8 @@
         <string name="game_panel_win_format">Le gagnant est: {}</string>
         <string name="game_panel_main_menu_button">&lt;- Menu principal</string>
 
+        <string name="server_list_server_detected">Serveurs détectés: </string>
+        <string name="server_list_server_frame_text">Serveur: sur "{2}" ({0}), port: {1}</string>
         <string name="server_list_create_game">Créer une partie</string>
         <string name="server_list_manual_connexion">Connexion manuelle</string>
 
@@ -64,7 +66,12 @@
         <string name="server_configuration_player_2_not_ready">Le joueur 2 n'est pas prêt</string>
         <string name="server_configuration_player_2_ready">Le joueur 2 est prêt</string>
 
-        <string name="server_configuration_dialog_port_error_title">ort incorectt</string>
+        <string name="server_dialog_quit_title">Quitter ?</string>
+        <string name="server_dialog_quit_message">Vous ếtes sur le point de partir. Êtes vous sûr de vouloir quitter ?</string>
+        <string name="server_dialog_server_stop_title">Arrêter le serveur ?</string>
+        <string name="server_dialog_server_stop_message">Vous allez arrêter le serveur. Le second joueur va être expulser. Êtes vous sûr de vouloir arrêter le serveur ?</string>
+
+	<string name="server_configuration_dialog_port_error_title">Port incorrect</string>
         <string name="server_configuration_dialog_port_error_message">Le port est incorect, ce doit être un nombre compris entre 3000 et 4000.</string>
 
         <string name="server_state_stopped">Le serveur est arrêté</string>

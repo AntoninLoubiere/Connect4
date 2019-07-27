@@ -276,17 +276,20 @@ class ServerGameConfigurationPanel(Panel.Panel):
         :return: None
         """
         if self.ui.server.server_is_on:
+            if not self.player_2_is_connected or tkinter.messagebox.askquestion(
+                    self.ui.translation.get_translation("server_dialog_server_stop_title"),
+                    self.ui.translation.get_translation("server_dialog_server_stop_message")
+            ) == tkinter.messagebox.YES:
+                if self.ui.server.stop_server():
+                    self.server_port_spin_box.configure(state=tkinter.tix.NORMAL, increment=1)
+                    self.server_start_stop.configure(
+                        text=self.ui.translation.get_translation("server_configuration_start")
+                    )
 
-            if self.ui.server.stop_server():
-                self.server_port_spin_box.configure(state=tkinter.tix.NORMAL, increment=1)
-                self.server_start_stop.configure(
-                    text=self.ui.translation.get_translation("server_configuration_start")
-                )
-
-                self.server_state_label.configure(
-                    text=self.ui.translation.get_translation("server_state_stopped"),
-                    fg="#ee2e31"
-                )
+                    self.server_state_label.configure(
+                        text=self.ui.translation.get_translation("server_state_stopped"),
+                        fg="#ee2e31"
+                    )
         else:
             try:
                 port = int(self.server_port_spin_box.get())
@@ -325,17 +328,20 @@ class ServerGameConfigurationPanel(Panel.Panel):
         When the main menu button is press
         :return: None
         """
+        if tkinter.messagebox.askquestion(
+                self.ui.translation.get_translation("server_dialog_quit_title"),
+                self.ui.translation.get_translation("server_dialog_quit_message")
+        ) == tkinter.messagebox.YES:
+            self.export_last_game_settings()
 
-        self.export_last_game_settings()
+            if self.ui.server.server_is_on:
+                self.ui.server.stop_server()
 
-        if self.ui.server.server_is_on:
-            self.ui.server.stop_server()
+            from UI.ServerListPanel import ServerListPanel
+            self.ui.change_panel(ServerListPanel)
 
-        from UI.ServerListPanel import ServerListPanel
-        self.ui.change_panel(ServerListPanel)
-
-        if self.ui.client is not None and self.ui.client.connected:
-            self.ui.client.close_connection()
+            if self.ui.client is not None and self.ui.client.connected:
+                self.ui.client.close_connection()
 
     def button_change_token_command(self, index):
         """

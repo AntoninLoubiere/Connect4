@@ -1,3 +1,5 @@
+import tkinter.messagebox
+
 from UI import GamePanel, TokenStyle
 from main import Player, TokenState, Game, Server
 
@@ -130,9 +132,13 @@ class ServerGamePanel(GamePanel.GamePanel):
             self.ui.change_panel(ServerGameConfigurationPanel, create_game=self.is_server)  # TODO sync server on
             self.ui.server.send_message_to_all(Server.Server.encode_message(MESSAGE_BACK_MENU))
         else:
-            from UI.ServerListPanel import ServerListPanel
-            self.ui.client.close_connection()
-            self.ui.change_panel(ServerListPanel)
+            if tkinter.messagebox.askquestion(
+                self.ui.translation.get_translation("server_dialog_quit_title"),
+                self.ui.translation.get_translation("server_dialog_quit_message")
+            ) == tkinter.messagebox.YES:
+                from UI.ServerListPanel import ServerListPanel
+                self.ui.client.close_connection()
+                self.ui.change_panel(ServerListPanel)
 
     def server_on_client_connect_function(self, client):
         """

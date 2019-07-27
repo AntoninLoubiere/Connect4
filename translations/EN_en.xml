@@ -40,6 +40,8 @@
         <string name="game_panel_win_format">The winner is: {}</string>
         <string name="game_panel_main_menu_button">&lt;- Main menu</string>
 
+        <string name="server_list_server_detected">Servers detected: </string>
+        <string name="server_list_server_frame_text">Server: on "{2}" ({0}), port: {1}</string>
         <string name="server_list_create_game">Create a game</string>
         <string name="server_list_manual_connexion">Manual connexion</string>
 
@@ -63,6 +65,11 @@
         <string name="server_configuration_player_1_want_start">The player 1 want to play, check if you are ready to start the game</string>
         <string name="server_configuration_player_2_not_ready">The player 2 isn't ready</string>
         <string name="server_configuration_player_2_ready">The player 2 is ready</string>
+
+        <string name="server_dialog_quit_title">Quit ?</string>
+        <string name="server_dialog_quit_message">You are going to quit. Are you sure to quit ?</string>
+        <string name="server_dialog_server_stop_title">Stop the server ?</string>
+        <string name="server_dialog_server_stop_message">You are going to stop the server. The second player will be kick. Are you sure to stop ther server ?</string>
 
         <string name="server_configuration_dialog_port_error_title">Port incorrect</string>
         <string name="server_configuration_dialog_port_error_message">The port is incorrect, it must be a number between 3000 and 4000.</string>
