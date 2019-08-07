@@ -1,9 +1,10 @@
-import xml.dom.minidom
 import glob
+import os
+import xml.dom.minidom
 
 CURRENT_LANGUAGE_PREFERENCES = "current_language"
-TRANSLATION_FILES_PATH = "translations/*.xml"
-TRANSLATION_FILES_PATH_FORMAT = "translations/{}.xml"
+TRANSLATION_FILES_PATH = "translations" + os.sep + "*.xml"
+TRANSLATION_FILES_PATH_FORMAT = "translations" + os.sep + "{}.xml"
 DEFAULT_LANGUAGE = "EN_en"
 
 
@@ -44,7 +45,7 @@ class Translation:
             try:
                 doc = xml.dom.minidom.parse(t)
                 name = doc.getElementsByTagName("name")[0]
-                self.list_translations.append((t.split('/')[-1][:-4], name.firstChild.data))
+                self.list_translations.append((t.split(os.sep)[-1][:-4], name.firstChild.data))
 
                 if t.split('/')[-1][:-4] == language_name:
                     self.current_language = len(self.list_translations) - 1

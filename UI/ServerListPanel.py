@@ -63,7 +63,7 @@ class ServerListPanel(Panel.Panel):
             text=self.ui.translation.get_translation("server_list_manual_connexion_frame_port")
         ).grid(row=0, column=3, sticky=tkinter.tix.E)
 
-        self.manual_connexion_port = tkinter.tix.Spinbox(self.manual_connexion_frame, from_=3000, to=4000, wrap=True)
+        self.manual_connexion_port = tkinter.tix.Spinbox(self.manual_connexion_frame, from_=3000, to=3020, wrap=True)
         self.manual_connexion_port.grid(row=0, column=4, sticky=tkinter.tix.NSEW)
 
         self.play_button = tkinter.tix.Button(
@@ -185,7 +185,7 @@ class ServerListPanel(Panel.Panel):
             )
             return None
 
-        if not (3000 <= port <= 4000):
+        if not (3000 <= port <= 3020):
             tkinter.messagebox.showerror(
                 self.ui.translation.get_translation("server_configuration_dialog_port_error_title"),
                 self.ui.translation.get_translation("server_configuration_dialog_port_error_message")

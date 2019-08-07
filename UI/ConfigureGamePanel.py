@@ -10,6 +10,7 @@ PLAYERS_NAMES_PREFERENCES = "last_game_player_names_game"
 PLAYERS_TOKENS_PREFERENCES = "last_game_player_tokens_game"
 PLAYERS_AI_PREFERENCES = "last_game_ai_game"
 DIFFICULTY_PREFERENCES = "last_game_difficulty"
+DIFFICULTY_LEVEL = [1, 2, 3, 5, 6, 7]
 
 
 class ConfigureGamePanel(Panel.Panel):
@@ -293,24 +294,18 @@ class ConfigureGamePanel(Panel.Panel):
                     self.ui.translation.get_translation("configure_game_panel_dialog_same_token_message")):
                 return None
 
-        if (self.player_ai_choose_var[0].get() or self.player_ai_choose_var[1].get()) and \
-                self.difficulty_selected_button == 5:
-            if not tkinter.messagebox.askokcancel(
-                    self.ui.translation.get_translation("configure_game_panel_dialog_very_hard_title"),
-                    self.ui.translation.get_translation("configure_game_panel_dialog_very_hard_message")):
-                return None
-
         game = Game.Game()
+        game.current_turn = random.choice((TokenState.Player_1, TokenState.Player_2))
 
         if self.player_ai_choose_var[0].get():
-            player_1 = AIPlayer.AIPlayer(self.difficulty_selected_button + 1, game, TokenState.Player_1,
+            player_1 = AIPlayer.AIPlayer(DIFFICULTY_LEVEL[self.difficulty_selected_button], game, TokenState.Player_1,
                                          self.players_tokens[0], self.players_entry_string_variable[0].get().strip())
         else:
             player_1 = Player.Player(TokenState.Player_1, self.players_tokens[0],
                                      self.players_entry_string_variable[0].get().strip())
 
         if self.player_ai_choose_var[1].get():
-            player_2 = AIPlayer.AIPlayer(self.difficulty_selected_button + 1, game, TokenState.Player_2,
+            player_2 = AIPlayer.AIPlayer(DIFFICULTY_LEVEL[self.difficulty_selected_button], game, TokenState.Player_2,
                                          self.players_tokens[1], self.players_entry_string_variable[1].get().strip())
         else:
             player_2 = Player.Player(TokenState.Player_2, self.players_tokens[1],

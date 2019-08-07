@@ -11,6 +11,9 @@
         <string name="ready">Ready</string>
         <string name="not_ready">Not ready</string>
 
+        <string name="no_default_image_dialog_title">Default Image Not Found</string>
+        <string name="no_default_image_dialog_message">The default image was not found! It mean also there aren't at least one token image! missing Please check this problem by moving/downloading resources files in the directory UI -> res</string>
+
         <string name="play_local">Play on this computer</string>
         <string name="play_online">Play with a remote computer</string>
 
@@ -72,7 +75,7 @@
         <string name="server_dialog_server_stop_message">You are going to stop the server. The second player will be kick. Are you sure to stop ther server ?</string>
 
         <string name="server_configuration_dialog_port_error_title">Port incorrect</string>
-        <string name="server_configuration_dialog_port_error_message">The port is incorrect, it must be a number between 3000 and 4000.</string>
+        <string name="server_configuration_dialog_port_error_message">The port is incorrect, it must be a number between 3000 and 3020.</string>
 
         <string name="server_state_stopped">The server is stopped</string>
         <string name="server_state_started">The server is started</string>

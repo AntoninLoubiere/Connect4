@@ -78,7 +78,7 @@ class ServerGameConfigurationPanel(Panel.Panel):
             )
             self.server_port_label.grid(row=0, column=0, sticky=tkinter.tix.E)
 
-            self.server_port_spin_box = tkinter.tix.Spinbox(self.server_port_frame, from_=3000, to=4000, wrap=True)
+            self.server_port_spin_box = tkinter.tix.Spinbox(self.server_port_frame, from_=3000, to=3020, wrap=True)
             self.server_port_spin_box.grid(row=0, column=1, sticky=tkinter.tix.W)
 
             self.server_action_frame = tkinter.tix.Frame(self.server_configure_frame)
@@ -300,7 +300,7 @@ class ServerGameConfigurationPanel(Panel.Panel):
                 )
 
             else:
-                if 3000 <= port <= 4000:
+                if 3000 <= port <= 3020:
                     self.ui.server = Server.Server(
                         port=port, max_clients_connected=1,
                         on_message_function=self.server_on_message,

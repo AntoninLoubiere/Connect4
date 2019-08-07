@@ -1,3 +1,4 @@
+import errno
 import socket
 import threading
 from queue import Queue
@@ -7,6 +8,7 @@ import netifaces
 TIMEOUT = 2
 SERVER_ADD = 'add'
 SERVER_REMOVE = 'remove'
+SERVER_TEST_REMOVE = "test-remove"
 
 
 class ServerScanner(threading.Thread):
@@ -14,7 +16,7 @@ class ServerScanner(threading.Thread):
     A scanner of servers
     """
 
-    def __init__(self, port_min=3000, port_max=4000, max_thread=50,
+    def __init__(self, port_min=3000, port_max=3020, max_thread=100,
                  list_update_function=lambda add_remove, host_port: None):
         """
         Constructor
@@ -47,9 +49,10 @@ class ServerScanner(threading.Thread):
         """
         while not self.stop_scan:
             # verify if server not close
-            if len(self.server_detected_list) >= 1:
+            if SERVER_TEST_REMOVE not in self.list_in_queue and len(self.server_detected_list) >= 1:
                 thread = threading.Thread(target=self.verify_detected_server)
                 self.threads.put(thread)
+                self.list_in_queue.append(SERVER_TEST_REMOVE)
 
             interface_list = netifaces.interfaces()
 
@@ -70,34 +73,24 @@ class ServerScanner(threading.Thread):
                             if self.stop_scan:
                                 break
 
-                            try:
-                                socket.gethostbyaddr(current_ip)
-                            except socket.herror:
-                                pass
-                            else:
-                                if current_ip not in self.list_in_queue:
-                                    thread = threading.Thread(target=self.scan_ip, kwargs={'ip': current_ip})
-                                    thread.setDaemon(True)
-                                    self.threads.put(thread)
-                                    self.update_thread()
-                                    self.list_in_queue.append(current_ip)
-
-                            current_ip = self.increment_ip(current_ip)
-
-                        if self.stop_scan:
-                            break
-
-                        try:
-                            socket.gethostbyaddr(ip)
-                        except socket.herror:
-                            pass
-                        else:
                             if current_ip not in self.list_in_queue:
                                 thread = threading.Thread(target=self.scan_ip, kwargs={'ip': current_ip})
                                 thread.setDaemon(True)
                                 self.threads.put(thread)
                                 self.update_thread()
                                 self.list_in_queue.append(current_ip)
+
+                            current_ip = self.increment_ip(current_ip)
+
+                        if self.stop_scan:
+                            break
+
+                        if current_ip not in self.list_in_queue:
+                            thread = threading.Thread(target=self.scan_ip, kwargs={'ip': current_ip})
+                            thread.setDaemon(True)
+                            self.threads.put(thread)
+                            self.update_thread()
+                            self.list_in_queue.append(current_ip)
 
                 except KeyError:
                     continue  # if AF_INET don't exist
@@ -121,6 +114,9 @@ class ServerScanner(threading.Thread):
             for p in range(self.port_min, self.port_max + 1):
                 if self.stop_scan:
                     return None
+
+                # if ip == '192.168.1.123':
+                #     print(p)
 
                 if (ip, p) not in self.server_detected_list and self.test_address(ip, p):
                     self.add_server_detected(ip, p)
@@ -162,8 +158,15 @@ class ServerScanner(threading.Thread):
         :return: None
         """
         for ip, port in self.server_detected_list[:]:
-            if not self.test_address(ip, port):
+            try:
+                if not self.test_address(ip, port):
+                    self.remove_server_detected(ip, port)
+            except socket.gaierror:
                 self.remove_server_detected(ip, port)
+
+        self.list_in_queue.remove(SERVER_TEST_REMOVE)
+        self.thread_running -= 1
+        self.update_thread()
 
     @staticmethod
     def test_address(host, port):
@@ -173,14 +176,14 @@ class ServerScanner(threading.Thread):
         :param port: the port to test
         :return: if the port is open
         """
-        try:
-            s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            s.settimeout(TIMEOUT)
-            result = s.connect_ex((host, port))
-            s.close()
-            return result == 0
-        except (socket.socket, socket.gaierror):
-            return False
+        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        s.settimeout(TIMEOUT)
+        result = s.connect_ex((host, port))
+        s.close()
+        if result == errno.EHOSTDOWN or result == errno.EHOSTUNREACH or result == errno.EWOULDBLOCK or \
+                result == errno.ECONNABORTED:
+            raise socket.gaierror
+        return result == 0
 
     @staticmethod
     def get_min_max_ip(ip, mask):

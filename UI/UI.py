@@ -22,11 +22,9 @@ class UI(tkinter.tix.Tk):
         self.server = Server(max_clients_connected=1)
         self.client = None
 
-        self.image_getter = ImageGetter.ImageGetter()
         self.preference = Preferences.Preferences()
-
         self.translation = Translation.Translation(self.preference)
-
+        self.image_getter = ImageGetter.ImageGetter(self.translation)
         # Configure
         self.title(self.translation.get_translation("connect_four"))
         # noinspection SpellCheckingInspection

@@ -1,9 +1,10 @@
 import threading
+import time
 import tkinter.tix
 
-from main import TokenState, Game, AIPlayer, Player
-from UI import Panel, ImageGetter, TokenStyle, TokenFallAnimation
+from UI import Panel, TokenStyle, TokenFallAnimation
 from UI.ResizingCanvas import ResizingCanvas
+from main import TokenState, Game, AIPlayer, Player
 
 
 def get_opponent(player):
@@ -56,8 +57,6 @@ class GamePanel(Panel.Panel):
             text=self.ui.translation.get_translation("game_panel_main_menu_button"),
             command=self.button_main_menu_command)
         self.button_main_menu.place(x=0, y=0)
-
-        self.ui.image_getter = ImageGetter.ImageGetter(token_size=self.token_square_size)
 
         self.grid_image_create = []
         self.turn_text_id = -1
@@ -293,12 +292,15 @@ class GamePanel(Panel.Panel):
             if self.turn_image_id != -1:
                 self.grid_canvas.delete(self.turn_image_id)
 
-            self.turn_image_id = self.grid_canvas.create_image(
-                self.grid_canvas.bbox(self.turn_text_id)[2] + 5, 0,
-                image=self.ui.image_getter.save_token_icons
-                [self.game.current_turn][self.players[self.game.current_turn].token],
-                anchor=tkinter.tix.NW
-            )
+            try:
+                self.turn_image_id = self.grid_canvas.create_image(
+                    self.grid_canvas.bbox(self.turn_text_id)[2] + 5, 0,
+                    image=self.ui.image_getter.save_token_icons
+                    [self.game.current_turn][self.players[self.game.current_turn].token],
+                    anchor=tkinter.tix.NW
+                )
+            except TypeError:
+                pass
 
     def on_win(self):
         """
@@ -415,7 +417,9 @@ class GamePanel(Panel.Panel):
                 and not self.players[self.game.current_turn].get_thinking():
             try:
                 self.config(cursor="watch")
+                start_time = time.time()
                 self.add_token_column(self.players[self.game.current_turn].run_turn())
+                print("AI turn run in: {:.2f} second(s)".format(time.time() - start_time))
                 self.config(cursor="")
             except tkinter.tix.TclError:
                 pass

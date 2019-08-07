@@ -2,17 +2,20 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="bd1cde12-7a76-43ca-890e-fa01120f398b" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/Connect4.desktop" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/UI/res/connect4_logo.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/main/Server/ServerScanner.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dictionaries/antonin.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dictionaries/antonin.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/UI/res/Token/default_token.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/main/DirectoryManager.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Connect4.py" beforeDir="false" afterPath="$PROJECT_DIR$/Connect4.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Connect4.desktop" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/UI/ConfigureGamePanel.py" beforeDir="false" afterPath="$PROJECT_DIR$/UI/ConfigureGamePanel.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UI/GamePanel.py" beforeDir="false" afterPath="$PROJECT_DIR$/UI/GamePanel.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/UI/ImageGetter.py" beforeDir="false" afterPath="$PROJECT_DIR$/UI/ImageGetter.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/UI/ServerGameConfigurationPanel.py" beforeDir="false" afterPath="$PROJECT_DIR$/UI/ServerGameConfigurationPanel.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UI/ServerGamePanel.py" beforeDir="false" afterPath="$PROJECT_DIR$/UI/ServerGamePanel.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/UI/ServerListPanel.py" beforeDir="false" afterPath="$PROJECT_DIR$/UI/ServerListPanel.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/UI/UI.py" beforeDir="false" afterPath="$PROJECT_DIR$/UI/UI.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/AIPlayer.py" beforeDir="false" afterPath="$PROJECT_DIR$/main/AIPlayer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/Server/ServerScanner.py" beforeDir="false" afterPath="$PROJECT_DIR$/main/Server/ServerScanner.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/TokenState.py" beforeDir="false" afterPath="$PROJECT_DIR$/main/TokenState.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/Translation.py" beforeDir="false" afterPath="$PROJECT_DIR$/main/Translation.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/translations/EN_en.xml" beforeDir="false" afterPath="$PROJECT_DIR$/translations/EN_en.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/translations/FR_fr.xml" beforeDir="false" afterPath="$PROJECT_DIR$/translations/FR_fr.xml" afterDir="false" />
     </list>
@@ -26,67 +29,9 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Python Script" />
+        <option value="Setup Script" />
       </list>
     </option>
-  </component>
-  <component name="FindInProjectRecents">
-    <findStrings>
-      <find>server_on</find>
-      <find>Start</find>
-      <find>self.encode_message</find>
-      <find>self.decode_message</find>
-      <find>mai</find>
-      <find>chan</find>
-      <find>mainmen</find>
-      <find>play</find>
-      <find>Game</find>
-      <find>ServerGamePanel</find>
-      <find>#e</find>
-      <find>server_configuration_player_ready</find>
-      <find>set re</find>
-      <find>player_2_re</find>
-      <find>is</find>
-      <find>self.players_entry_string_variable[1].get()</find>
-      <find>self.players_entry_string_variable[0].get()</find>
-      <find>dialog</find>
-      <find>Erreu</find>
-      <find>inategnable</find>
-      <find>choice</find>
-      <find>Finis</find>
-      <find>set</find>
-      <find>connectr</find>
-      <find>&quot;Port</find>
-      <find>des</find>
-      <find>Remove</find>
-      <find>fr</find>
-      <find>bg=&quot;red</find>
-      <find>print</find>
-    </findStrings>
-    <replaceStrings>
-      <replace>token</replace>
-      <replace>self.space_minimal</replace>
-      <replace>self.height_center</replace>
-      <replace>number_align = 1  # current number TODO temp_coord = [[x, -y], [x, y]]</replace>
-      <replace>number_align = 1 temp_coord = [[x, -y], [x, y]]</replace>
-      <replace>temp_coord = [[x, y], [x, y]]</replace>
-      <replace>coord_2</replace>
-      <replace>!= -1</replace>
-      <replace>token_animation_to_remove[i]</replace>
-      <replace>[0, 0]</replace>
-      <replace>1</replace>
-      <replace>math.inf</replace>
-      <replace>Connect 4</replace>
-      <replace>ui.image_getter</replace>
-      <replace>permanent</replace>
-      <replace>started</replace>
-      <replace>fg</replace>
-      <replace>client</replace>
-      <replace>Server.Server.decode_message</replace>
-      <replace>ready</replace>
-      <replace>self.players_entry_string_variable[1].get().strip()</replace>
-      <replace>self.players_entry_string_variable[0].get().strip()</replace>
-      <replace>inaccessible</replace>
-    </replaceStrings>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -98,7 +43,7 @@
   <component name="PropertiesComponent">
     <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
-    <property name="last_opened_file_path" value="$USER_HOME$/Documents/Python/ServerSocket" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/setup.py" />
     <property name="restartRequiresConfirmation" value="false" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
@@ -113,6 +58,8 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/UI/res/Token" />
       <recent name="$PROJECT_DIR$/UI/res" />
       <recent name="$PROJECT_DIR$/UI" />
     </key>
@@ -133,7 +80,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Python.Connect4">
     <configuration name="Connect4" type="PythonConfigurationType" factoryName="Python">
       <module name="Connect4" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -155,6 +102,31 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="Setup" type="PythonConfigurationType" factoryName="Python">
+      <module name="Connect4" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="$PROJECT_DIR$/venv/bin/python" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/setup.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="Python.Connect4" />
+      <item itemvalue="Python.Setup" />
+    </list>
   </component>
   <component name="StructureViewFactory">
     <option name="AUTOSCROLL_FROM_SOURCE" value="true" />
