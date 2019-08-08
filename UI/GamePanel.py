@@ -36,6 +36,7 @@ class GamePanel(Panel.Panel):
         self.win_text_format = self.ui.translation.get_translation("game_panel_win_format")
 
         self.grid_canvas = ResizingCanvas(self, self.ui, self.on_resize, disable=False)
+
         self.grid_canvas.pack(expand=True, fill=tkinter.tix.BOTH)
         self.after(500, lambda: self.grid_canvas.bind("<Button>", self.grid_canvas_on_click))
 
@@ -70,6 +71,21 @@ class GamePanel(Panel.Panel):
 
         self.token_animation_list = []
 
+    def destroy(self):
+        """
+        When the panel is destroy, force the AI turn to stop
+        :return: None
+        """
+        if isinstance(self.players[TokenState.TokenState.Player_1], AIPlayer.AIPlayer) and \
+                self.players[TokenState.TokenState.Player_1].get_thinking():
+            self.players[TokenState.TokenState.Player_1].stop_turn()
+            
+        if isinstance(self.players[TokenState.TokenState.Player_2], AIPlayer.AIPlayer) and \
+                self.players[TokenState.TokenState.Player_2].get_thinking():
+            self.players[TokenState.TokenState.Player_2].stop_turn()
+
+        super().destroy()
+
     def on_create_finish(self):
         """
         See panel class
@@ -99,7 +115,6 @@ class GamePanel(Panel.Panel):
         self.grid_canvas.delete("grid")
 
         self.turn_text_id = self.grid_canvas.create_text(self.grid_canvas.width / 2, self.turn_text_height, tag="grid")
-        self.update_turn_label()
 
         self.grid_canvas.create_rectangle(self.width_center, self.height_center + self.turn_text_height,
                                           self.grid_canvas.width - self.width_center,
@@ -121,6 +136,8 @@ class GamePanel(Panel.Panel):
                                          tag="grid")
 
         self.recreate_images()
+        # self.grid_canvas.update()
+        self.update_turn_label()
 
     def recreate_images(self):
         """
@@ -292,15 +309,12 @@ class GamePanel(Panel.Panel):
             if self.turn_image_id != -1:
                 self.grid_canvas.delete(self.turn_image_id)
 
-            try:
-                self.turn_image_id = self.grid_canvas.create_image(
-                    self.grid_canvas.bbox(self.turn_text_id)[2] + 5, 0,
-                    image=self.ui.image_getter.save_token_icons
-                    [self.game.current_turn][self.players[self.game.current_turn].token],
-                    anchor=tkinter.tix.NW
-                )
-            except TypeError:
-                pass
+            self.turn_image_id = self.grid_canvas.create_image(
+                self.grid_canvas.bbox(self.turn_text_id)[2] + 5, 0,
+                image=self.ui.image_getter.save_token_icons
+                [self.game.current_turn][self.players[self.game.current_turn].token],
+                anchor=tkinter.tix.NW
+            )
 
     def on_win(self):
         """
@@ -413,7 +427,7 @@ class GamePanel(Panel.Panel):
         Run the ai turn
         :return: None
         """
-        if isinstance(self.players[self.game.current_turn], AIPlayer.AIPlayer)\
+        if isinstance(self.players[self.game.current_turn], AIPlayer.AIPlayer) \
                 and not self.players[self.game.current_turn].get_thinking():
             try:
                 self.config(cursor="watch")

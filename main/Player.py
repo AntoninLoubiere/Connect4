@@ -37,3 +37,10 @@ class Player(object):
         """
 
         raise NotImplementedError("You must use this function with a AI class")
+
+    def stop_turn(self):
+        """
+        Function for AI class (see AI class)
+        :return: See AI class
+        """
+        raise NotImplementedError("You must use this function with a AI class")

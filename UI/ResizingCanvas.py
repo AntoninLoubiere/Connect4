@@ -49,3 +49,23 @@ class ResizingCanvas(tkinter.tix.Canvas):
         :return: None
         """
         self.window.unbind("<Configure>")
+
+    def set_width(self, new_width):
+        """
+        Set the width
+        :param new_width: the new width 
+        :return: None
+        """
+        if new_width <= 0:
+            new_width = 1
+        self.width = new_width
+        
+    def set_height(self, new_height):
+        """
+        Set the height
+        :param new_height: the new height 
+        :return: None
+        """
+        if new_height <= 0:
+            new_height = 1
+        self.height = new_height

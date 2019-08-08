@@ -43,6 +43,8 @@ class AIPlayer(Player.Player):
         """
         super().__init__(player_enum, token, name)
 
+        self.force_stop = False
+
         if name is None:
             self.name = ("Computer 2", "Computer 1")[self.player_enum == TokenState.Player_1]
         else:
@@ -65,6 +67,9 @@ class AIPlayer(Player.Player):
         print(self.get_evaluation(self.game.grid))
 
         for column in range(0, self.game.grid_width):
+            if self.force_stop:
+                break
+
             if can_place_token(self.game.grid, column):
 
                 print("Column: " + str(column))
@@ -102,7 +107,10 @@ class AIPlayer(Player.Player):
                     column_max_score_possibility.append(column)
 
         self.thinking = False
-        if len(column_max_score_possibility) == 0:
+        self.force_stop = False
+        if self.force_stop:
+            return 0
+        elif len(column_max_score_possibility) == 0:
             return 0
         else:
             return random.choice(column_max_score_possibility)
@@ -123,6 +131,9 @@ class AIPlayer(Player.Player):
         score = (math.inf, -math.inf)[player_turn == self.player_enum]
 
         for column in range(0, self.game.grid_width):
+            if self.force_stop:
+                return 0
+
             if can_place_token(grid, column):
 
                 y_coord_new_token = self.get_coord_add_token_grid(grid, column)
@@ -329,3 +340,10 @@ class AIPlayer(Player.Player):
             for x in range(0, self.game.grid_width):
                 print('{:7}|'.format(grid[x][y].name), end='')
             print("")
+
+    def stop_turn(self):
+        """
+        Stop the AI turn
+        :return: None
+        """
+        self.force_stop = True
