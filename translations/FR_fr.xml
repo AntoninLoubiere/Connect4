@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<language>
+    <name>Français</name>
+
+    <translations>
+        <string name="connect_four">Puissance 4</string>
+
+        <string name="play">Jouer</string>
+        <string name="quit">Quitter</string>
+        <string name="back">Retour</string>
+        <string name="ready">Prêt</string>
+        <string name="not_ready">Pas prêt</string>
+
+        <string name="play_local">Jouer sur cet ordinateur</string>
+        <string name="play_online">Jouer sur un ordinateur distant</string>
+
+        <string name="configure_game_panel_name">Nom: </string>
+        <string name="configure_game_panel_artificial_intelligence">Ordinateur</string>
+        <string name="configure_game_panel_choose_tokens">Choissisez votre jeton: </string>
+
+        <string name="configure_game_panel_difficulty_very_easy">Très facile</string>
+        <string name="configure_game_panel_difficulty_easy">Facile</string>
+        <string name="configure_game_panel_difficulty_normal">Normale</string>
+        <string name="configure_game_panel_difficulty_little_hard">Un peu difficile</string>
+        <string name="configure_game_panel_difficulty_hard">Difficile</string>
+        <string name="configure_game_panel_difficulty_very_hard">Très difficile</string>
+
+        <string name="configure_game_panel_difficulty_text">La difficultée de l'intelligence artificielle:</string>
+
+        <string name="configure_game_panel_dialog_same_token_title">Avertissement même couleur</string>
+        <string name="configure_game_panel_dialog_same_token_message">Vous avez choisi le même jeton pour le joueur 1 et pour le joueur 2, cela rend plus difficile la dicernation pour savoir à qui un jeton appartient.&#xA;&#xA;Voulez vous continuer ?</string>
+        <string name="configure_game_panel_dialog_very_hard_title">Avertissement très difficile</string>
+        <string name="configure_game_panel_dialog_very_hard_message">Vous avez choisis la difficulté très difficile. Cela rend l'inteligence artifficielle très longue (~45 secondes par coup). Pour choisir cette difficulté il faut être patient.&#xA;&#xA;Voulez vous continuer ?"</string>
+        <string name="configure_game_panel_dialog_same_name_title">Erreur de nom</string>
+        <string name="configure_game_panel_dialog_same_name_message">La partie ne peut pas commencer, les deux joueurs on le même nom. Merci de changer au moins un nom.</string>
+        <string name="configure_game_panel_dialog_name_blank_title">Erreur de nom</string>
+        <string name="configure_game_panel_dialog_name_blank_message">Le joueur {} a un nom avec moins de 3 caractères. Merci de changer ce nom.</string>
+
+        <string name="game_panel_turn_format">C'est au tour de: {}</string>
+        <string name="game_panel_win_format">Le gagnant est: {}</string>
+        <string name="game_panel_main_menu_button">&lt;- Menu principal</string>
+
+        <string name="server_list_server_detected">Serveurs détectés: </string>
+        <string name="server_list_server_frame_text">Serveur: sur "{2}" ({0}), port: {1}</string>
+        <string name="server_list_create_game">Créer une partie</string>
+        <string name="server_list_manual_connexion">Connexion manuelle</string>
+
+        <string name="server_list_manual_connexion_frame_text">Connexion manuelle: </string>
+        <string name="server_list_manual_connexion_frame_host">Adresse IP: </string>
+        <string name="server_list_manual_connexion_frame_port">Port: </string>
+
+        <string name="server_list_dialog_host_error_title">IP incorrecte</string>
+        <string name="server_list_dialog_host_error_message">L'adresse IP de l'hôte entrée est incorrected, le programme a besoin d'une adresse IP valide, c'est à dire 4 nombre entre 0 est 255 séparés par des poins (exemple: votre adresse IP est {}).</string>
+        <string name="server_list_dialog_unreachable_title">Hôte inaccessible</string>
+        <string name="server_list_dialog_unreachable_message">L'hôte est inaccessible. Verifier si vous avez la bonne adresse IP et le bon port (Ces informations sont écrites dans la feneêtre de l'hôte). Vérifier si l'hôte a bien démaré le serveur.</string>
+
+        <string name="server_configuration_frame_text">Configuration du serveur</string>
+        <string name="server_configuration_start">Démarrer le serveur</string>
+        <string name="server_configuration_stop">Arrêter le serveur</string>
+        <string name="server_configuration_kick">Éjecter l'adversaire</string>
+        <string name="server_configuration_open_console">Ouvrir la console</string>
+        <string name="server_configuration_host_label">Adresse IP: {}</string>
+        <string name="server_configuration_port_entry_title">Port: </string>
+        <string name="server_configuration_waiting">En attente...</string>
+        <string name="server_configuration_player_1_want_start">Le joueur 1 veut commencer à jouer, vérifier si vous êtes prêt</string>
+        <string name="server_configuration_player_2_not_ready">Le joueur 2 n'est pas prêt</string>
+        <string name="server_configuration_player_2_ready">Le joueur 2 est prêt</string>
+
+        <string name="server_dialog_quit_title">Quitter ?</string>
+        <string name="server_dialog_quit_message">Vous ếtes sur le point de partir. Êtes vous sûr de vouloir quitter ?</string>
+        <string name="server_dialog_server_stop_title">Arrêter le serveur ?</string>
+        <string name="server_dialog_server_stop_message">Vous allez arrêter le serveur. Le second joueur va être expulser. Êtes vous sûr de vouloir arrêter le serveur ?</string>
+
+	<string name="server_configuration_dialog_port_error_title">Port incorrect</string>
+        <string name="server_configuration_dialog_port_error_message">Le port est incorect, ce doit être un nombre compris entre 3000 et 3020.</string>
+
+        <string name="server_state_stopped">Le serveur est arrêté</string>
+        <string name="server_state_started">Le serveur est en route</string>
+
+        <string name="default_player_name">Joueur {}</string>
+    </translations>
+</language>
