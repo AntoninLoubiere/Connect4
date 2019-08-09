@@ -36,8 +36,8 @@ class GamePanel(Panel.Panel):
         self.win_text_format = self.ui.translation.get_translation("game_panel_win_format")
 
         self.grid_canvas = ResizingCanvas(self, self.ui, self.on_resize, disable=False)
-
         self.grid_canvas.pack(expand=True, fill=tkinter.tix.BOTH)
+
         self.after(500, lambda: self.grid_canvas.bind("<Button>", self.grid_canvas_on_click))
 
         self.game = game
@@ -136,7 +136,6 @@ class GamePanel(Panel.Panel):
                                          tag="grid")
 
         self.recreate_images()
-        # self.grid_canvas.update()
         self.update_turn_label()
 
     def recreate_images(self):
