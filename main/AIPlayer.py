@@ -72,7 +72,7 @@ class AIPlayer(Player.Player):
 
             if can_place_token(self.game.grid, column):
 
-                print("Column: " + str(column))
+                # print("Column: " + str(column))
 
                 y_coord_new_token = self.get_coord_add_token_grid(self.game.grid, column)
                 current_grid = copy.deepcopy(self.game.grid)
@@ -96,7 +96,7 @@ class AIPlayer(Player.Player):
                                                           self.player_enum == TokenState.Player_1],
                                                       +math.inf, -math.inf)
                 # print(current_score)
-                print("Score choose:", current_score)
+                # print("Score choose:", current_score)
 
                 if current_score > score:
                     score = max(current_score, score)
@@ -108,12 +108,19 @@ class AIPlayer(Player.Player):
 
         self.thinking = False
         self.force_stop = False
+
         if self.force_stop:
             return 0
         elif len(column_max_score_possibility) == 0:
             return 0
         else:
-            return random.choice(column_max_score_possibility)
+            column_choose = random.choice(column_max_score_possibility)
+            y_coord_new_token = self.get_coord_add_token_grid(self.game.grid, column_choose)
+            current_grid = copy.deepcopy(self.game.grid)
+            current_grid[column_choose][y_coord_new_token] = self.player_enum
+
+            print(self.get_evaluation(current_grid))
+            return column_choose
 
     def get_turn_min_max(self, grid, deep, player_turn, alpha, beta):
         """
@@ -182,7 +189,8 @@ class AIPlayer(Player.Player):
                         current_score = self.get_evaluation(current_grid)
 
                     if deep == self.min_max_deep:
-                        print(current_score)
+                        # print(current_score)
+                        pass
 
                     score = min(current_score, score)
                     if beta >= score:  # beta cut

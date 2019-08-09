@@ -23,7 +23,7 @@ class Translation:
         self.preference = preference
 
         if self.preference.preference_exist(CURRENT_LANGUAGE_PREFERENCES):
-            self.current_language = self.preference.get_preference(CURRENT_LANGUAGE_PREFERENCES)
+            self.current_language = self.get_language(self.preference.get_preference(CURRENT_LANGUAGE_PREFERENCES))
 
         else:
             self.current_language = self.get_language(DEFAULT_LANGUAGE)
@@ -123,5 +123,5 @@ class Translation:
         :return: None
         """
         self.current_language = new_current_language
-        self.preference.set_preference(CURRENT_LANGUAGE_PREFERENCES, self.current_language)
+        self.preference.set_preference(CURRENT_LANGUAGE_PREFERENCES, self.list_translations[self.current_language][0])
         self.preference.save_preferences()
