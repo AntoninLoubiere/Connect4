@@ -7,6 +7,9 @@ from UI import TokenStyle
 from main import TokenState, DirectoryManager, Translation
 
 
+TOKEN_ICON_SIZE = 30
+
+
 class ImageGetter:
     """
     The getter and the saver of photos
@@ -32,7 +35,7 @@ class ImageGetter:
                 token_size, token_size))
 
             self.default_token_icon = ImageTk.PhotoImage(image=self.get_default_token_image(
-                30, 30))
+                TOKEN_ICON_SIZE, TOKEN_ICON_SIZE))
         except FileNotFoundError:
             if translation.get_language(Translation.DEFAULT_LANGUAGE) != -1:
                 tkinter.messagebox.showerror(
@@ -58,7 +61,7 @@ class ImageGetter:
                                                                                (player, color, token_size, token_size))
 
                     self.save_token_icons[player][color] = ImageTk.PhotoImage(self.create_player_token_image
-                                                                              (player, color, 30, 30))
+                                                                              (player, color, TOKEN_ICON_SIZE, TOKEN_ICON_SIZE))
                 except FileNotFoundError:
                     print("The token of the player {}, {}, isn't found !".format(player.value, color))
                     self.save_token_photos[player][color] = self.default_token_image

@@ -2,7 +2,7 @@ import random
 import tkinter.messagebox
 import tkinter.tix
 
-from UI import Panel, GamePanel, MainMenuPanel, TokenStyle
+from UI import Panel, GamePanel, MainMenuPanel, TokenStyle, ImageGetter
 from main import Game, AIPlayer, Player
 from main.TokenState import TokenState
 
@@ -127,6 +127,8 @@ class ConfigureGamePanel(Panel.Panel):
         self.token_choose_frame[0].grid(row=2, column=0, columnspan=2, sticky=tkinter.tix.NSEW)
         self.token_choose_frame[1].grid(row=2, column=0, columnspan=2, sticky=tkinter.tix.NSEW)
 
+        self.button_token_choose_per_line = 0
+
         self.token_choose_buttons = [[], []]
 
         for index in range(0, TokenStyle.NUMBER_COLOR):
@@ -206,6 +208,14 @@ class ConfigureGamePanel(Panel.Panel):
 
         self.import_last_game_setting()
         self.check_button_ai_command()
+
+    def on_create_finish(self):
+        """
+        When the panel is pack (See panel class)
+        :return: None
+        """
+        self.button_token_choose_per_line = self.token_choose_frame[0].winfo_reqwidth() / ImageGetter.TOKEN_ICON_SIZE
+        # print(self.button_token_choose_per_line)
 
     def import_last_game_setting(self):
         """
