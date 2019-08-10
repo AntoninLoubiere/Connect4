@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="bd1cde12-7a76-43ca-890e-fa01120f398b" name="Default Changelist" comment="" />
+    <list default="true" id="bd1cde12-7a76-43ca-890e-fa01120f398b" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/preferences.pkl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UI/ServerGameConfigurationPanel.py" beforeDir="false" afterPath="$PROJECT_DIR$/UI/ServerGameConfigurationPanel.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/Server/ServerScanner.py" beforeDir="false" afterPath="$PROJECT_DIR$/main/Server/ServerScanner.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/Server/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/main/Server/__init__.py" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

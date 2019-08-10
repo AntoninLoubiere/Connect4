@@ -192,6 +192,13 @@ class Server(threading.Thread):
             self.output_list.append(client)
             self.message_queues[client].put(message)
 
+    def get_number_client(self):
+        """
+        Get the number of clients connected
+        :return: Int: number client connected
+        """
+        return len(self.input_list) - 1 # remove the server input
+
     @staticmethod
     def log(msg, thread_name=threading.current_thread().getName()):
         """

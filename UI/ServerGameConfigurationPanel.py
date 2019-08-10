@@ -494,7 +494,7 @@ class ServerGameConfigurationPanel(Panel.Panel):
         :return: None
         """
         self.set_player_2_ready(False)
-        self.player_2_is_connected = False
+        self.player_2_is_connected = self.ui.server.get_number_client() >= 1
         self.player_1_label.configure(bg=self.cget("bg"), text="")
 
         self.players_entry_string_variable[self.opponent_id].set(
