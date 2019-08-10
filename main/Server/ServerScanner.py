@@ -5,10 +5,13 @@ from queue import Queue
 
 import netifaces
 
+from main.Server import Server
+
 TIMEOUT = 2
 SERVER_ADD = 'add'
 SERVER_REMOVE = 'remove'
 SERVER_TEST_REMOVE = "test-remove"
+LOCAL_LOOP = "127.0.0.1"
 
 
 class ServerScanner(threading.Thread):
@@ -41,6 +44,8 @@ class ServerScanner(threading.Thread):
 
         self.list_in_queue = []
 
+        self.disable_local_loop = Server.get_ip() != LOCAL_LOOP
+
     # noinspection SpellCheckingInspection
     def run(self):
         """
@@ -64,7 +69,7 @@ class ServerScanner(threading.Thread):
                     mask = netifaces.ifaddresses(interface)[netifaces.AF_INET][0]['netmask']
                     ip = netifaces.ifaddresses(interface)[netifaces.AF_INET][0]['addr']
 
-                    if ip != "127.0.0.1":  # Don't scan the local loop
+                    if not (self.disable_local_loop and ip == self.disable_local_loop):  # Don't scan the local loop
                         # Scan all ip
 
                         current_ip, ip_max = self.get_min_max_ip(ip, mask)
