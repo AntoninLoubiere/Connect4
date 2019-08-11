@@ -8,8 +8,11 @@
         <string name="play">Jouer</string>
         <string name="quit">Quitter</string>
         <string name="back">Retour</string>
+        <string name="restart">Recommencer</string>
+        <string name="main_menu">Menu principal</string>
         <string name="ready">Prêt</string>
         <string name="not_ready">Pas prêt</string>
+        <string name="draw">Égalité !</string>
 
         <string name="play_local">Jouer sur cet ordinateur</string>
         <string name="play_online">Jouer sur un ordinateur distant</string>
@@ -37,7 +40,7 @@
         <string name="configure_game_panel_dialog_name_blank_message">Le joueur {} a un nom avec moins de 3 caractères. Merci de changer ce nom.</string>
 
         <string name="game_panel_turn_format">C'est au tour de: {}</string>
-        <string name="game_panel_win_format">Le gagnant est: {}</string>
+        <string name="game_panel_win_format">{} a gagné cette partie !</string>
         <string name="game_panel_main_menu_button">&lt;- Menu principal</string>
 
         <string name="server_list_server_detected">Serveurs détectés: </string>
@@ -71,11 +74,13 @@
         <string name="server_dialog_server_stop_title">Arrêter le serveur ?</string>
         <string name="server_dialog_server_stop_message">Vous allez arrêter le serveur. Le second joueur va être expulser. Êtes vous sûr de vouloir arrêter le serveur ?</string>
 
-	<string name="server_configuration_dialog_port_error_title">Port incorrect</string>
+	    <string name="server_configuration_dialog_port_error_title">Port incorrect</string>
         <string name="server_configuration_dialog_port_error_message">Le port est incorect, ce doit être un nombre compris entre 3000 et 3020.</string>
 
         <string name="server_state_stopped">Le serveur est arrêté</string>
         <string name="server_state_started">Le serveur est en route</string>
+
+        <string name="server_game_wait_host">En attende du Joueur 1...</string>
 
         <string name="default_player_name">Joueur {}</string>
     </translations>

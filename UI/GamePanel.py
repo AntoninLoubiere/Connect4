@@ -7,15 +7,6 @@ from UI.ResizingCanvas import ResizingCanvas
 from main import TokenState, Game, AIPlayer, Player
 
 
-def get_opponent(player):
-    """
-    Get the opponent of the player
-    :param player: The player
-    :return: Player
-    """
-    return (TokenState.TokenState.Player_1, TokenState.TokenState.Player_2)[player == TokenState.TokenState.Player_1]
-
-
 class GamePanel(Panel.Panel):
     """
     GamePanel is a panel for UI, is the UI for the game
@@ -24,7 +15,7 @@ class GamePanel(Panel.Panel):
     def __init__(self, master, ui,
                  player_1=Player.Player(TokenState.TokenState.Player_1, TokenStyle.TokenStyle.Blue),
                  player_2=Player.Player(TokenState.TokenState.Player_2, TokenStyle.TokenStyle.Green),
-                 game=Game.Game()):
+                 game=Game.Game(), disable_end_button=False):
         """
         Constructor
         :param master: see Panel class
@@ -63,6 +54,43 @@ class GamePanel(Panel.Panel):
         self.turn_text_id = -1
         self.turn_image_id = - 1
         self.win_line_id = -1
+        self.win_icon_id = -1
+
+        self.win_text_frame = tkinter.tix.Frame(self, relief=tkinter.tix.RAISED, borderwidth=2)
+
+        self.win_text_label = tkinter.tix.Label(self.win_text_frame)
+        self.win_text_label.grid(row=0, column=0)
+
+        if not disable_end_button:
+            self.end_buttons_frame = tkinter.tix.Frame(self.win_text_frame)
+            self.end_buttons_frame.columnconfigure(0, weight=1)
+            self.end_buttons_frame.columnconfigure(1, weight=1)
+            self.end_buttons_frame.grid(row=1, column=0)
+
+            max_width = max(len(self.ui.translation.get_translation("back")),
+                            len(self.ui.translation.get_translation("restart")),
+                            len(self.ui.translation.get_translation("main_menu")))
+
+            self.button_main_menu_end = tkinter.tix.Button(
+                self.end_buttons_frame,
+                text=self.ui.translation.get_translation("main_menu"),
+                command=self.button_main_menu_command, width=max_width
+            )
+            self.button_main_menu_end.grid(row=0, column=0, sticky=tkinter.tix.NSEW, padx=5)
+
+            self.back_button = tkinter.tix.Button(
+                self.end_buttons_frame,
+                text=self.ui.translation.get_translation("back"),
+                command=self.button_back_command, width=max_width
+            )
+            self.back_button.grid(row=0, column=1, sticky=tkinter.tix.NSEW, padx=5)
+
+            self.restart_button = tkinter.tix.Button(
+                self.end_buttons_frame,
+                text=self.ui.translation.get_translation("restart"),
+                command=self.button_restart_command, width=max_width
+            )
+            self.restart_button.grid(row=0, column=2, sticky=tkinter.tix.NSEW, padx=5)
 
         for x in range(0, self.game.grid_width):
             self.grid_image_create.append([])
@@ -79,10 +107,13 @@ class GamePanel(Panel.Panel):
         if isinstance(self.players[TokenState.TokenState.Player_1], AIPlayer.AIPlayer) and \
                 self.players[TokenState.TokenState.Player_1].get_thinking():
             self.players[TokenState.TokenState.Player_1].stop_turn()
-            
+
         if isinstance(self.players[TokenState.TokenState.Player_2], AIPlayer.AIPlayer) and \
                 self.players[TokenState.TokenState.Player_2].get_thinking():
             self.players[TokenState.TokenState.Player_2].stop_turn()
+
+        self.remove_all_token_animation()
+        self.grid_canvas.remove_resizing()
 
         super().destroy()
 
@@ -149,7 +180,6 @@ class GamePanel(Panel.Panel):
         for x in range(0, self.game.grid_width):
             for y in range(0, self.game.grid_height):
                 if self.grid_image_create[x][y] != -1:
-                    self.grid_canvas.delete(self.grid_image_create[x][y])
                     self.create_image(x, y, self.game.grid[x][y])
 
     def on_resize(self):
@@ -160,7 +190,7 @@ class GamePanel(Panel.Panel):
         self.draw_grid()
 
         if self.game.is_win():
-            self.draw_win_line()
+            self.update_win()
 
     def redraw_animation(self):
         """
@@ -210,9 +240,6 @@ class GamePanel(Panel.Panel):
             image=self.ui.image_getter.save_token_photos[player][self.players[player].token],
             anchor=tkinter.tix.NW
         )
-
-        if self.game.is_win():
-            self.draw_win_line()
 
     def grid_canvas_on_click(self, event):
         """
@@ -287,9 +314,9 @@ class GamePanel(Panel.Panel):
         :return: None
         """
 
-        if self.game.is_win():
+        if self.game.is_win() and self.game.winner != TokenState.TokenState.Blank:
             self.grid_canvas.itemconfigure(self.turn_text_id, text=self.win_text_format.format(
-                self.players[self.game.winner].name), fill="green")
+                self.players[self.game.winner].name), fill="#016533")
 
             if self.turn_image_id != -1:
                 self.grid_canvas.delete(self.turn_image_id)
@@ -300,6 +327,13 @@ class GamePanel(Panel.Panel):
                 [self.game.winner][self.players[self.game.winner].token],
                 anchor=tkinter.tix.NW
             )
+
+        elif self.game.is_win():
+            self.grid_canvas.itemconfigure(
+                self.turn_text_id,
+                text=self.ui.translation.get_translation("draw"), fill="#016533")
+            if self.turn_image_id != -1:
+                self.grid_canvas.delete(self.turn_image_id)
 
         else:
             self.grid_canvas.itemconfigure(self.turn_text_id, text=self.turn_text_format.format(
@@ -321,7 +355,7 @@ class GamePanel(Panel.Panel):
         :return: None
         """
         self.grid_canvas.unbind("<Button>")
-        self.draw_win_line()
+        self.update_win()
 
     def all_win_tokens_are_fall(self):
         """
@@ -354,13 +388,22 @@ class GamePanel(Panel.Panel):
 
         return True
 
-    def draw_win_line(self):
+    def all_tokens_are_fall(self):
+        """
+        Test if all tokens are fall
+        :return: boolean if all token are fall
+        """
+        for x in range(0, self.game.grid_width):
+            if self.grid_image_create[x][0] == -1:  # if a token don't fall
+                return False
+        return True
+
+    def update_win(self):
         """
         Draw the win line
         :return: None
         """
-
-        if self.all_win_tokens_are_fall():
+        if self.game.winner != TokenState.TokenState.Blank and self.all_win_tokens_are_fall():
             coord_1 = self.get_square_coord(self.game.win_tokens_coord[0][0], self.game.win_tokens_coord[0][1])
             coord_1 = [coord_1[0][0] + (coord_1[1][0] - coord_1[0][0]) / 2.,
                        coord_1[0][1] + (coord_1[1][1] - coord_1[0][1]) / 2.]  # get coord in the center
@@ -372,7 +415,54 @@ class GamePanel(Panel.Panel):
             if self.win_line_id != -1:
                 self.grid_canvas.delete(self.win_line_id)
             self.win_line_id = self.grid_canvas.create_line(
-                coord_1[0], coord_1[1], coord_2[0], coord_2[1], width=5, fill="green")
+                coord_1[0], coord_1[1], coord_2[0], coord_2[1], width=5, fill="#33cc80")
+
+            if self.win_icon_id != -1:
+                self.grid_canvas.delete(self.win_icon_id)
+
+            self.win_icon_id = self.grid_canvas.create_image(
+                self.grid_canvas.width / 2,
+                self.grid_canvas.height / 2 - self.token_square_size / 2 - 10,
+                image=self.ui.image_getter.save_token_photos[self.game.winner][self.players[self.game.winner].token]
+            )
+
+            self.grid_canvas.disable = True
+            self.win_text_frame.place(relx=0.5, y=self.grid_canvas.height / 2 + 20, anchor=tkinter.tix.CENTER)
+            self.win_text_label.configure(
+                text=self.ui.translation.get_translation("game_panel_win_format")
+                .format(self.players[self.game.winner].name),
+                fg="#016533", font=("Arial Bold", 20)
+            )
+            self.update_idletasks()
+            self.grid_canvas.disable = False
+
+        elif self.game.is_win() and self.all_tokens_are_fall():
+
+            if self.win_icon_id != -1:
+                self.grid_canvas.delete(self.win_icon_id[0])
+                self.grid_canvas.delete(self.win_icon_id[1])
+
+            self.win_icon_id = (
+                self.grid_canvas.create_image(
+                    self.grid_canvas.width / 2 - self.token_square_size / 2 + 5,
+                    self.grid_canvas.height / 2 - self.token_square_size / 2 - 10,
+                    image=self.ui.image_getter.save_token_photos[TokenState.TokenState.Player_1]
+                    [self.players[TokenState.TokenState.Player_1].token]
+                ),
+                self.grid_canvas.create_image(
+                    self.grid_canvas.width / 2 + self.token_square_size / 2 - 5,
+                    self.grid_canvas.height / 2 - self.token_square_size / 2 - 10,
+                    image=self.ui.image_getter.save_token_photos[TokenState.TokenState.Player_2]
+                    [self.players[TokenState.TokenState.Player_2].token]
+                )
+            )
+
+            self.grid_canvas.disable = True
+            self.win_text_frame.place(relx=0.5, y=self.grid_canvas.height / 2 + 30, anchor=tkinter.tix.CENTER)
+            self.win_text_label.configure(text=self.ui.translation.get_translation("draw"),
+                                          fg="#016533", font=("Arial Bold", 30))
+            self.update_idletasks()
+            self.grid_canvas.disable = False
 
     def tick_update(self):
         """
@@ -427,7 +517,8 @@ class GamePanel(Panel.Panel):
         :return: None
         """
         if isinstance(self.players[self.game.current_turn], AIPlayer.AIPlayer) \
-                and not self.players[self.game.current_turn].get_thinking():
+                and not self.players[self.game.current_turn].get_thinking() \
+                and not self.game.is_win():
             try:
                 self.config(cursor="watch")
                 start_time = time.time()
@@ -443,9 +534,26 @@ class GamePanel(Panel.Panel):
         :return: None
         """
         from UI.MainMenuPanel import MainMenuPanel
-        self.remove_all_token_animation()
-        self.grid_canvas.remove_resizing()
         self.ui.change_panel(MainMenuPanel)
+
+    def button_restart_command(self):
+        """
+        The command of the button restart
+        :return: None
+        """
+        self.game.reset()
+        self.ui.change_panel(GamePanel,
+                             player_1=self.players[TokenState.TokenState.Player_1],
+                             player_2=self.players[TokenState.TokenState.Player_2],
+                             game=self.game)
+
+    def button_back_command(self):
+        """
+        The command of the button back
+        :return: None
+        """
+        from UI.ConfigureGamePanel import ConfigureGamePanel
+        self.ui.change_panel(ConfigureGamePanel)
 
     def on_end_animation(self, player):
         """
@@ -454,6 +562,9 @@ class GamePanel(Panel.Panel):
         :return: None
         """
         if isinstance(self.players[self.game.current_turn], AIPlayer.AIPlayer) and \
-                player == get_opponent(self.game.current_turn):
+                player == TokenState.TokenState.get_opponent(self.game.current_turn):
             thread = threading.Thread(target=self.run_ai_turn)
             thread.start()
+
+        if self.game.is_win():
+            self.update_win()

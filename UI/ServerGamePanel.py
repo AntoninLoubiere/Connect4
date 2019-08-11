@@ -1,10 +1,12 @@
 import tkinter.messagebox
+import tkinter.tix
 
 from UI import GamePanel, TokenStyle
 from main import Player, TokenState, Game, Server
 
 MESSAGE_NEW_TOKEN = "new-token"
 MESSAGE_BACK_MENU = "back-to-main-menu"
+MESSAGE_RESTART_GAME = "restart"
 
 
 class ServerGamePanel(GamePanel.GamePanel):
@@ -19,11 +21,21 @@ class ServerGamePanel(GamePanel.GamePanel):
         """
         Constructor
         """
-        super().__init__(master, ui, player_1, player_2, game)
+        super().__init__(master, ui, player_1, player_2, game, disable_end_button=not is_server)
 
         self.button_main_menu.configure(
-            text=self.ui.translation.get_translation("back")
+            text=self.ui.translation.get_translation("quit")
         )
+
+        self.button_main_menu_end.configure(
+            text=self.ui.translation.get_translation("quit")
+        )
+
+        if not is_server:
+            tkinter.tix.Label(
+                self.win_text_frame,
+                text=self.ui.translation.get_translation("server_game_wait_host")
+            ).grid(row=1, column=0)
 
         self.is_server = is_server
 
@@ -127,14 +139,44 @@ class ServerGamePanel(GamePanel.GamePanel):
         When the button main menu is press
         :return: None
         """
+        if tkinter.messagebox.askquestion(
+                self.ui.translation.get_translation("server_dialog_quit_title"),
+                self.ui.translation.get_translation("server_dialog_quit_message")
+        ) == tkinter.messagebox.YES:
+            if self.is_server:
+                self.ui.server.stop_server()
+            else:
+                self.ui.client.close_connection()
+
+            from UI.ServerListPanel import ServerListPanel
+            self.ui.change_panel(ServerListPanel)
+
+    def button_restart_command(self):
+        """
+        The command of the button restart
+        :return: None
+        """
+        if self.is_server:
+            self.ui.server.send_message_to_all(Server.Server.encode_message(MESSAGE_RESTART_GAME))
+        self.game.reset()
+        self.ui.change_panel(ServerGamePanel,
+                             player_1=self.players[TokenState.TokenState.Player_1],
+                             player_2=self.players[TokenState.TokenState.Player_2],
+                             game=self.game, is_server=self.is_server)
+
+    def button_back_command(self):
+        """
+        The command of the button back
+        :return: None
+        """
         if self.is_server:
             from UI.ServerGameConfigurationPanel import ServerGameConfigurationPanel
-            self.ui.change_panel(ServerGameConfigurationPanel, create_game=self.is_server)  # TODO sync server on
+            self.ui.change_panel(ServerGameConfigurationPanel, create_game=self.is_server)
             self.ui.server.send_message_to_all(Server.Server.encode_message(MESSAGE_BACK_MENU))
         else:
             if tkinter.messagebox.askquestion(
-                self.ui.translation.get_translation("server_dialog_quit_title"),
-                self.ui.translation.get_translation("server_dialog_quit_message")
+                    self.ui.translation.get_translation("server_dialog_quit_title"),
+                    self.ui.translation.get_translation("server_dialog_quit_message")
             ) == tkinter.messagebox.YES:
                 from UI.ServerListPanel import ServerListPanel
                 self.ui.client.close_connection()
@@ -155,7 +197,7 @@ class ServerGamePanel(GamePanel.GamePanel):
         :return: None
         """
         from UI.ServerGameConfigurationPanel import ServerGameConfigurationPanel
-        self.ui.change_panel(ServerGameConfigurationPanel, create_game=self.is_server)  # TODO sync server on
+        self.ui.change_panel(ServerGameConfigurationPanel, create_game=self.is_server)
 
     def client_on_message(self, message):
         """
@@ -187,7 +229,10 @@ class ServerGamePanel(GamePanel.GamePanel):
 
             elif message[0] == MESSAGE_BACK_MENU:
                 from UI.ServerGameConfigurationPanel import ServerGameConfigurationPanel
-                self.ui.change_panel(ServerGameConfigurationPanel, create_game=self.is_server)  # TODO sync server on
+                self.ui.change_panel(ServerGameConfigurationPanel, create_game=self.is_server)
+
+            elif message[0] == MESSAGE_RESTART_GAME:
+                self.button_restart_command()
 
     def client_on_connection_function(self):
         """

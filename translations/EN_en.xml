@@ -8,8 +8,11 @@
         <string name="play">Play</string>
         <string name="quit">Quit</string>
         <string name="back">Back</string>
+        <string name="main_menu">Main menu</string>
+        <string name="restart">Restart</string>
         <string name="ready">Ready</string>
         <string name="not_ready">Not ready</string>
+        <string name="draw">Draw !</string>
 
         <string name="no_default_image_dialog_title">Default Image Not Found</string>
         <string name="no_default_image_dialog_message">The default image was not found! It mean also there aren't at least one token image! missing Please check this problem by moving/downloading resources files in the directory UI -> res</string>
@@ -40,7 +43,7 @@
         <string name="configure_game_panel_dialog_name_blank_message">The player {} have a name with less than 3 character. Please change his name.</string>
 
         <string name="game_panel_turn_format">It's the turn of: {}</string>
-        <string name="game_panel_win_format">The winner is: {}</string>
+        <string name="game_panel_win_format">{} won this game !</string>
         <string name="game_panel_main_menu_button">&lt;- Main menu</string>
 
         <string name="server_list_server_detected">Servers detected: </string>
@@ -79,6 +82,8 @@
 
         <string name="server_state_stopped">The server is stopped</string>
         <string name="server_state_started">The server is started</string>
+
+        <string name="server_game_wait_host">Waiting for Player 1...</string>
 
         <string name="default_player_name">Player {}</string>
     </translations>
