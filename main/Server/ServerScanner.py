@@ -69,7 +69,7 @@ class ServerScanner(threading.Thread):
                     mask = netifaces.ifaddresses(interface)[netifaces.AF_INET][0]['netmask']
                     ip = netifaces.ifaddresses(interface)[netifaces.AF_INET][0]['addr']
 
-                    if not (self.disable_local_loop and ip == self.disable_local_loop):  # Don't scan the local loop
+                    if not (self.disable_local_loop and ip == LOCAL_LOOP):  # Don't scan the local loop
                         # Scan all ip
 
                         current_ip, ip_max = self.get_min_max_ip(ip, mask)

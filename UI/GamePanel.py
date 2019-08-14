@@ -55,6 +55,7 @@ class GamePanel(Panel.Panel):
         self.turn_image_id = - 1
         self.win_line_id = -1
         self.win_icon_id = -1
+        self.win_icon_background_id = -1
 
         self.win_text_frame = tkinter.tix.Frame(self, relief=tkinter.tix.RAISED, borderwidth=2)
 
@@ -420,9 +421,18 @@ class GamePanel(Panel.Panel):
             if self.win_icon_id != -1:
                 self.grid_canvas.delete(self.win_icon_id)
 
+            if self.win_icon_background_id != -1:
+                self.grid_canvas.delete(self.win_icon_background_id)
+
+            self.win_icon_background_id = self.grid_canvas.create_image(
+                self.grid_canvas.width / 2,
+                self.grid_canvas.height / 2 - self.token_square_size / 2 - 25,
+                image=self.ui.image_getter.win_token_background
+            )
+
             self.win_icon_id = self.grid_canvas.create_image(
                 self.grid_canvas.width / 2,
-                self.grid_canvas.height / 2 - self.token_square_size / 2 - 10,
+                self.grid_canvas.height / 2 - self.token_square_size / 2 - 25,
                 image=self.ui.image_getter.save_token_photos[self.game.winner][self.players[self.game.winner].token]
             )
 
@@ -442,16 +452,33 @@ class GamePanel(Panel.Panel):
                 self.grid_canvas.delete(self.win_icon_id[0])
                 self.grid_canvas.delete(self.win_icon_id[1])
 
+            if self.win_icon_background_id != -1:
+                self.grid_canvas.delete(self.win_icon_background_id[0])
+                self.grid_canvas.delete(self.win_icon_background_id[1])
+
+            self.win_icon_background_id = (
+                self.grid_canvas.create_image(
+                    self.grid_canvas.width / 2 - self.token_square_size / 2 - 20,
+                    self.grid_canvas.height / 2 - self.token_square_size / 2 - 25,
+                    image=self.ui.image_getter.win_token_background
+                ),
+                self.grid_canvas.create_image(
+                    self.grid_canvas.width / 2 + self.token_square_size / 2 + 20,
+                    self.grid_canvas.height / 2 - self.token_square_size / 2 - 25,
+                    image=self.ui.image_getter.win_token_background
+                )
+            )
+
             self.win_icon_id = (
                 self.grid_canvas.create_image(
-                    self.grid_canvas.width / 2 - self.token_square_size / 2 + 5,
-                    self.grid_canvas.height / 2 - self.token_square_size / 2 - 10,
+                    self.grid_canvas.width / 2 - self.token_square_size / 2 - 20,
+                    self.grid_canvas.height / 2 - self.token_square_size / 2 - 30,
                     image=self.ui.image_getter.save_token_photos[TokenState.TokenState.Player_1]
                     [self.players[TokenState.TokenState.Player_1].token]
                 ),
                 self.grid_canvas.create_image(
-                    self.grid_canvas.width / 2 + self.token_square_size / 2 - 5,
-                    self.grid_canvas.height / 2 - self.token_square_size / 2 - 10,
+                    self.grid_canvas.width / 2 + self.token_square_size / 2 + 20,
+                    self.grid_canvas.height / 2 - self.token_square_size / 2 - 30,
                     image=self.ui.image_getter.save_token_photos[TokenState.TokenState.Player_2]
                     [self.players[TokenState.TokenState.Player_2].token]
                 )
