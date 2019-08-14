@@ -7,6 +7,9 @@ from UI.ResizingCanvas import ResizingCanvas
 from main import TokenState, Game, AIPlayer, Player
 
 
+DEFAULT_DELAY = 500
+
+
 class GamePanel(Panel.Panel):
     """
     GamePanel is a panel for UI, is the UI for the game
@@ -15,9 +18,14 @@ class GamePanel(Panel.Panel):
     def __init__(self, master, ui,
                  player_1=Player.Player(TokenState.TokenState.Player_1, TokenStyle.TokenStyle.Blue),
                  player_2=Player.Player(TokenState.TokenState.Player_2, TokenStyle.TokenStyle.Green),
-                 game=Game.Game(), disable_end_button=False):
+                 game=Game.Game(), disable_end_button=False, delay=DEFAULT_DELAY):
         """
         Constructor
+        :param player_1: the player 1
+        :param player_2: the player 2
+        :param game: a link to the game
+        :param disable_end_button: if need to disable end buttons (for the client)
+        :param delay: the delay between click in ms
         :param master: see Panel class
         :param ui: see Panel class
         """
@@ -99,6 +107,9 @@ class GamePanel(Panel.Panel):
                 self.grid_image_create[x].append(-1)
 
         self.token_animation_list = []
+
+        self.delay = delay / 1000.  # convert in second
+        self.last_click_time = time.time()
 
     def destroy(self):
         """
@@ -248,10 +259,11 @@ class GamePanel(Panel.Panel):
         :param event: the event
         :return: None
         """
-        if event.num == 1:
+        if event.num == 1 and time.time() >= self.last_click_time + self.delay:
             column = (event.x - self.width_center) / self.token_square_size
             if 0 <= column <= self.game.grid_width:
                 if not isinstance(self.players[self.game.current_turn], AIPlayer.AIPlayer):
+                    self.last_click_time = time.time()
                     self.add_token_column(int(column))
 
     def add_token_column(self, column):
@@ -572,7 +584,8 @@ class GamePanel(Panel.Panel):
         self.ui.change_panel(GamePanel,
                              player_1=self.players[TokenState.TokenState.Player_1],
                              player_2=self.players[TokenState.TokenState.Player_2],
-                             game=self.game)
+                             game=self.game,
+                             delay=self.delay * 1000)
 
     def button_back_command(self):
         """
