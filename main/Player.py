@@ -10,7 +10,7 @@ class Player(object):
         """
         Constructor
         :param player_enum: the token state to know which player is
-        :param token: the token color of the player
+        :param token: the token style of the player
         :param name: the name of the player
         """
 

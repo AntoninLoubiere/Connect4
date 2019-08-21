@@ -2,10 +2,10 @@ import glob
 import os
 import xml.dom.minidom
 
-CURRENT_LANGUAGE_PREFERENCES = "current_language"
+from main.Preferences import PREFERENCE_CURRENT_LANGUAGE, DEFAULT_LANGUAGE
+
 TRANSLATION_FILES_PATH = "translations" + os.sep + "*.xml"
 TRANSLATION_FILES_PATH_FORMAT = "translations" + os.sep + "{}.xml"
-DEFAULT_LANGUAGE = "EN_en"
 
 
 class Translation:
@@ -22,8 +22,8 @@ class Translation:
         self.update_dic_translation()
         self.preference = preference
 
-        if self.preference.preference_exist(CURRENT_LANGUAGE_PREFERENCES):
-            self.current_language = self.get_language(self.preference.get_preference(CURRENT_LANGUAGE_PREFERENCES))
+        if self.preference.preference_exist(PREFERENCE_CURRENT_LANGUAGE):
+            self.current_language = self.get_language(self.preference.get_preference(PREFERENCE_CURRENT_LANGUAGE))
 
         else:
             self.current_language = self.get_language(DEFAULT_LANGUAGE)
@@ -116,12 +116,21 @@ class Translation:
 
             return self.get_translation(key, DEFAULT_LANGUAGE)
 
-    def set_current_language(self, new_current_language) -> None:
+    def set_current_language(self, new_current_language, save_preferences=True) -> None:
         """
         Set the current language
+        :param save_preferences: If the language need to be save in the file
         :param new_current_language: the new value
         :return: None
         """
         self.current_language = new_current_language
-        self.preference.set_preference(CURRENT_LANGUAGE_PREFERENCES, self.list_translations[self.current_language][0])
-        self.preference.save_preferences()
+        self.preference.set_preference(PREFERENCE_CURRENT_LANGUAGE, self.list_translations[self.current_language][0])
+        if save_preferences:
+            self.preference.save_preferences()
+
+    def reload_current_language(self) -> None:
+        """
+        Reload the current language from preferences
+        :return: None
+        """
+        self.current_language = self.get_language(self.preference.get_preference(PREFERENCE_CURRENT_LANGUAGE))

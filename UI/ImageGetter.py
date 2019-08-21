@@ -3,8 +3,12 @@ import tkinter.messagebox
 
 from PIL import Image, ImageTk
 
+import main.Preferences
 from UI import TokenStyle
-from main import TokenState, DirectoryManager, Translation
+from main import TokenState, DirectoryManager
+
+WIN_TOKEN_BACKGROUND_RAPPORT_TOKEN = 1.4  # fraction size background / size token
+ICON_SIZE = 30
 
 
 class ImageGetter:
@@ -34,7 +38,7 @@ class ImageGetter:
             self.default_token_icon = ImageTk.PhotoImage(image=self.get_default_token_image(
                 30, 30))
         except FileNotFoundError:
-            if translation.get_language(Translation.DEFAULT_LANGUAGE) != -1:
+            if translation.get_language(main.Preferences.DEFAULT_LANGUAGE) != -1:
                 tkinter.messagebox.showerror(
                     translation.get_translation("no_default_image_dialog_title"),
                     translation.get_translation("no_default_image_dialog_message")
@@ -65,6 +69,29 @@ class ImageGetter:
                     self.save_token_icons[player][color] = self.default_token_icon
                     continue
 
+        if token_size is None:
+            win_token_background_size = token_size
+        else:
+            win_token_background_size = token_size * WIN_TOKEN_BACKGROUND_RAPPORT_TOKEN
+
+        self.win_token_background = ImageTk.PhotoImage(
+            self.create_image(DirectoryManager.get_path((DirectoryManager.UI_RES_DIRECTORY, "Token",
+                                                         "win_token_background.png"),
+                                                        add_current_directory=True),
+                              win_token_background_size,
+                              win_token_background_size)
+        )
+
+        try:
+            self.door_exit_icon = ImageTk.PhotoImage(
+                self.create_image(DirectoryManager.get_path((DirectoryManager.UI_RES_DIRECTORY, "door_exit_icon.png"),
+                                                            add_current_directory=True),
+                                  ICON_SIZE,
+                                  ICON_SIZE)
+            )
+        except FileNotFoundError:
+            print("The file door_exit_icon was not found")
+
     def resize_tokens_images(self, token_size):
         """
         Resize tokens images
@@ -81,6 +108,19 @@ class ImageGetter:
                 self.save_token_photos[player][color] = ImageTk.PhotoImage(
                     self.create_player_token_image(player, color, token_size, token_size))
 
+        if token_size is None:
+            win_token_background_size = token_size
+        else:
+            win_token_background_size = token_size * WIN_TOKEN_BACKGROUND_RAPPORT_TOKEN
+
+        self.win_token_background = ImageTk.PhotoImage(
+            self.create_image(DirectoryManager.get_path((DirectoryManager.UI_RES_DIRECTORY, "Token",
+                                                         "win_token_background.png"),
+                                                        add_current_directory=True),
+                              win_token_background_size,
+                              win_token_background_size)
+        )
+
     @staticmethod
     def create_player_token_image(player, color, size_x=None, size_y=None):
         """
@@ -95,7 +135,19 @@ class ImageGetter:
         file_path = DirectoryManager.get_path((DirectoryManager.UI_RES_DIRECTORY, "Token", player.name,
                                                color.name.lower() + ".png"), add_current_directory=True)
 
-        img = Image.open(file_path, 'r')
+        return ImageGetter.create_image(file_path, size_x, size_y)
+
+    @staticmethod
+    def create_image(path, size_x=None, size_y=None):
+        """
+        Create an image
+        :param path: the path of the image
+        :param size_x: the size (x) of the image
+        :param size_y: the size (y) of the image
+        :return: Return the image
+        """
+        img = Image.open(path, 'r')
+
         if size_x is not None and size_y is not None and size_x > 0 and size_y > 0:
             img = img.resize((int(size_x), int(size_y)), Image.ANTIALIAS)
 
@@ -112,8 +164,4 @@ class ImageGetter:
         file_path = DirectoryManager.get_path((DirectoryManager.UI_RES_DIRECTORY, "Token", "default_token.png"),
                                               add_current_directory=True)
 
-        img = Image.open(file_path, 'r')
-        if size_x is not None and size_y is not None and size_x > 0 and size_y > 0:
-            img = img.resize((int(size_x), int(size_y)), Image.ANTIALIAS)
-
-        return img
+        return ImageGetter.create_image(file_path, size_x, size_y)

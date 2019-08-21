@@ -8,8 +8,14 @@
         <string name="play">Play</string>
         <string name="quit">Quit</string>
         <string name="back">Back</string>
+        <string name="cancel">Cancel</string>
+        <string name="valid">Valid</string>
+        <string name="main_menu">Main menu</string>
+        <string name="restart">Restart</string>
         <string name="ready">Ready</string>
         <string name="not_ready">Not ready</string>
+        <string name="draw">Draw !</string>
+        <string name="settings">Settings</string>
 
         <string name="no_default_image_dialog_title">Default Image Not Found</string>
         <string name="no_default_image_dialog_message">The default image was not found! It mean also there aren't at least one token image! missing Please check this problem by moving/downloading resources files in the directory UI -> res</string>
@@ -21,26 +27,24 @@
         <string name="configure_game_panel_artificial_intelligence">Computer</string>
         <string name="configure_game_panel_choose_tokens">Choose your token: </string>
 
-        <string name="configure_game_panel_difficulty_very_easy">Very easy</string>
-        <string name="configure_game_panel_difficulty_easy">Easy</string>
-        <string name="configure_game_panel_difficulty_normal">Normal</string>
-        <string name="configure_game_panel_difficulty_little_hard">Little hard</string>
-        <string name="configure_game_panel_difficulty_hard">Hard</string>
-        <string name="configure_game_panel_difficulty_very_hard">Very hard</string>
+        <string name="configure_game_panel_difficulty_very_easy">Very easy ({})</string>
+        <string name="configure_game_panel_difficulty_easy">Easy ({})</string>
+        <string name="configure_game_panel_difficulty_normal">Normal ({})</string>
+        <string name="configure_game_panel_difficulty_little_hard">Little hard ({})</string>
+        <string name="configure_game_panel_difficulty_hard">Hard ({})</string>
+        <string name="configure_game_panel_difficulty_very_hard">Very hard ({})</string>
 
-        <string name="configure_game_panel_difficulty_text">The artificial intelligence difficulty:</string>
+        <string name="configure_game_panel_difficulty_text">The computer difficulty:</string>
 
         <string name="configure_game_panel_dialog_same_token_title">Same color warning</string>
         <string name="configure_game_panel_dialog_same_token_message">You choose the same color for the player 1 and the player 2, it is more difficult to discern which player is own a token.&#xA;&#xA;Would you like continue ?</string>
-        <string name="configure_game_panel_dialog_very_hard_title">Very hard warning</string>
-        <string name="configure_game_panel_dialog_very_hard_message">You choose the very hard difficulty, the artificial intelligence will take a long time to do his turn (~45 seconds per turn). You have to be very patient to do this difficulty.&#xA;&#xA;Would you like continue ?"</string>
         <string name="configure_game_panel_dialog_same_name_title">Name error</string>
         <string name="configure_game_panel_dialog_same_name_message">The game can't start, the player 1 and the player 2 have the same name. Please change at least 1 name.</string>
         <string name="configure_game_panel_dialog_name_blank_title">Name error</string>
         <string name="configure_game_panel_dialog_name_blank_message">The player {} have a name with less than 3 character. Please change his name.</string>
 
         <string name="game_panel_turn_format">It's the turn of: {}</string>
-        <string name="game_panel_win_format">The winner is: {}</string>
+        <string name="game_panel_win_format">{} won this game !</string>
         <string name="game_panel_main_menu_button">&lt;- Main menu</string>
 
         <string name="server_list_server_detected">Servers detected: </string>
@@ -52,8 +56,6 @@
         <string name="server_list_manual_connexion_frame_host">Host: </string>
         <string name="server_list_manual_connexion_frame_port">Port: </string>
 
-        <string name="server_list_dialog_host_error_title">IP incorrect</string>
-        <string name="server_list_dialog_host_error_message">The IP address of the host is incorrect, the program needs a valid IP address, composed with four number which are between 0 and 255 and separated with dots (example you IP address is {}).</string>
         <string name="server_list_dialog_unreachable_title">Unreachable host</string>
         <string name="server_list_dialog_unreachable_message">The host is unreachable. Check if it is the right IP address, and the right port (this information is write in the host window). Check if the host have turn on the server.</string>
 
@@ -72,7 +74,7 @@
         <string name="server_dialog_quit_title">Quit ?</string>
         <string name="server_dialog_quit_message">You are going to quit. Are you sure to quit ?</string>
         <string name="server_dialog_server_stop_title">Stop the server ?</string>
-        <string name="server_dialog_server_stop_message">You are going to stop the server. The second player will be kick. Are you sure to stop ther server ?</string>
+        <string name="server_dialog_server_stop_message">You are going to stop the server. The second player will be kick. Are you sure to stop this server ?</string>
 
         <string name="server_configuration_dialog_port_error_title">Port incorrect</string>
         <string name="server_configuration_dialog_port_error_message">The port is incorrect, it must be a number between 3000 and 3020.</string>
@@ -80,6 +82,28 @@
         <string name="server_state_stopped">The server is stopped</string>
         <string name="server_state_started">The server is started</string>
 
+        <string name="server_game_wait_host">Waiting for Player 1...</string>
+
         <string name="default_player_name">Player {}</string>
+
+        <string name="preference_settings_column">Settings:</string>
+        <string name="preference_value_column">Value:</string>
+        <string name="preference_default_column">Default:</string>
+        <string name="preference_section_global">Global settings</string>
+        <string name="preference_reset_preferences">Restore default values</string>
+        <string name="preference_language">Language: </string>
+        <string name="preference_delay">Minimum delay between two token place (ms, 0,001s):</string>
+        <string name="preference_section_difficulty">Computer difficulty</string>
+        <string name="preference_difficulty">Set the difficulty by setting the number of turns that the computer looks to play (minimum: 1). Longer the computer looks turns longer he is slow.</string>
+        <string name="preference_difficulty_very_easy">Very easy:</string>
+        <string name="preference_difficulty_easy">Easy:</string>
+        <string name="preference_difficulty_normal">Normal:</string>
+        <string name="preference_difficulty_little_hard">Little hard:</string>
+        <string name="preference_difficulty_hard">Hard:</string>
+        <string name="preference_difficulty_very_hard">Very hard:</string>
+
+        <string name="preference_error_input_title">Input error !</string>
+        <string name="preference_error_input_delay">The text input in "delay" ({}), is incorrect. It must be an integer between {} and {}. Please change that, or set the default preference by clicking on the button on the right of the input; to save preferences.</string>
+        <string name="preference_error_input_difficulty">The text input in "{}" ({}), is incorrect. It must be an integer between {} and {}. Please change that, or set the default preference by clicking on the button on the right of the input; to save preferences.</string>
     </translations>
 </language>

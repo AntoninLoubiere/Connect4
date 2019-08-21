@@ -1,4 +1,5 @@
 import random
+import time
 
 from main.TokenState import TokenState
 
@@ -26,6 +27,7 @@ class Game(object):
 
         self.current_turn = first_player
 
+        self.game_win = False
         self.winner = TokenState.Blank
         self.win_tokens_coord = [[-1, -1], [-1, -1]]
 
@@ -107,6 +109,7 @@ class Game(object):
         if number_align >= 4:
             self.winner = self.grid[x][y]
             self.win_tokens_coord = temp_coord
+            self.game_win = True
             return True
 
         number_align = 1 
@@ -133,6 +136,7 @@ class Game(object):
         if number_align >= 4:
             self.winner = self.grid[x][y]
             self.win_tokens_coord = temp_coord
+            self.game_win = True
             return True
 
         number_align = 1 
@@ -169,6 +173,7 @@ class Game(object):
         if number_align >= 4:
             self.winner = self.grid[x][y]
             self.win_tokens_coord = temp_coord
+            self.game_win = True
             return True
 
         # #Test diagonal top right - bottom left#
@@ -205,8 +210,14 @@ class Game(object):
         if number_align >= 4:
             self.winner = self.grid[x][y]
             self.win_tokens_coord = temp_coord
+            self.game_win = True
             return True
         else:
+            for x in range(0, self.grid_width):
+                if self.grid[x][0] == TokenState.Blank:
+                    return False
+
+            self.game_win = True
             return False
 
     def test_win(self):
@@ -215,15 +226,15 @@ class Game(object):
         :return: Blank if nobody has won, Player_x: the player x has won
         """
 
-        if self.winner != TokenState.Blank:
+        if self.is_win():
             return self.winner
 
         for x in range(0, self.grid_width):
             for y in range(0, self.grid_height):
                 if self.grid[x][y] != TokenState.Blank and self.update_win(x, y):
-                    break
+                    return self.winner
 
-        return self.winner
+        return TokenState.Blank  # draw
 
     def start_in_console(self):
         """
@@ -283,4 +294,20 @@ class Game(object):
         :return: if anybody won (boolean)
         """
 
-        return self.winner != TokenState.Blank
+        return self.game_win
+
+    def reset(self):
+        """
+        Reset the game
+        :return: None
+        """
+        for x in range(0, self.grid_width):
+            for y in range(0, self.grid_height):
+                self.grid[x][y] = TokenState.Blank
+
+        random.seed = int(time.time())
+        self.current_turn = random.choice((TokenState.Player_1, TokenState.Player_2))
+
+        self.game_win = False
+        self.winner = TokenState.Blank
+        self.win_tokens_coord = [[-1, -1], [-1, -1]]

@@ -22,6 +22,9 @@ class ResizingCanvas(tkinter.tix.Canvas):
         self.on_resize_var = on_resize_var
         self.disable = disable
 
+        self.last_event = None
+        self.resize_in_progress = None
+
     def on_resize(self, event):
         """
         When the window is resize, resize the canvas
@@ -30,6 +33,21 @@ class ResizingCanvas(tkinter.tix.Canvas):
         """
         if self.disable:
             return None
+
+        if self.resize_in_progress:
+            self.last_event = event
+
+        else:
+            self.do_resize(event)
+
+    def do_resize(self, event):
+        """
+        Do the resize
+        :param event: the event
+        :return: None
+        """
+        self.resize_in_progress = True
+
         # determine the ratio of old width/height to new width/height
         w_scale = float(event.width) / self.width
         h_scale = float(event.height) / self.height
@@ -42,6 +60,14 @@ class ResizingCanvas(tkinter.tix.Canvas):
 
         if self.on_resize_var is not None:
             self.on_resize_var()
+
+        if self.last_event is None:
+            self.resize_in_progress = False
+
+        else:
+            new_event = self.last_event
+            self.last_event = None
+            self.do_resize(new_event)
 
     def remove_resizing(self):
         """
