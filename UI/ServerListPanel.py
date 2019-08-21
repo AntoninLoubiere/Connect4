@@ -29,10 +29,12 @@ class ServerListPanel(Panel.Panel):
             text=self.ui.translation.get_translation("server_list_server_detected")
         ).grid(row=0, column=0, sticky=tkinter.tix.W)
 
-        self.frame_server_detected = tkinter.tix.Frame(self)
-        self.frame_server_detected.grid(row=1, column=0, columnspan=2, sticky=tkinter.tix.NSEW)
+        self.scrolled_window_server_detected = tkinter.tix.ScrolledWindow(self)
+        self.scrolled_window_server_detected.grid(row=1, column=0, columnspan=2, sticky=tkinter.tix.NSEW)
 
-        self.frame_server_detected.grid_columnconfigure(0, weight=1)
+        self.window_server_detected = self.scrolled_window_server_detected.window
+
+        self.window_server_detected.grid_columnconfigure(0, weight=1)
 
         self.dict_server_detected = {}
 
@@ -99,7 +101,7 @@ class ServerListPanel(Panel.Panel):
         :return: None
         """
         if add_remove == ServerScanner.SERVER_ADD:
-            self.dict_server_detected[host_port] = tkinter.tix.Frame(self.frame_server_detected,
+            self.dict_server_detected[host_port] = tkinter.tix.Frame(self.window_server_detected,
                                                                      relief=tkinter.tix.SUNKEN,
                                                                      borderwidth=2)
             self.dict_server_detected[host_port].grid_columnconfigure(0, weight=1)

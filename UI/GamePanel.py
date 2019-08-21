@@ -3,11 +3,7 @@ import time
 import tkinter.tix
 
 from UI import Panel, TokenStyle, TokenFallAnimation
-from UI.ResizingCanvas import ResizingCanvas
-from main import TokenState, Game, AIPlayer, Player
-
-
-DEFAULT_DELAY = 500
+from main import TokenState, Game, AIPlayer, Player, Preferences
 
 
 class GamePanel(Panel.Panel):
@@ -18,7 +14,7 @@ class GamePanel(Panel.Panel):
     def __init__(self, master, ui,
                  player_1=Player.Player(TokenState.TokenState.Player_1, TokenStyle.TokenStyle.Blue),
                  player_2=Player.Player(TokenState.TokenState.Player_2, TokenStyle.TokenStyle.Green),
-                 game=Game.Game(), disable_end_button=False, delay=DEFAULT_DELAY):
+                 game=Game.Game(), disable_end_button=False, delay=Preferences.DEFAULT_DELAY):
         """
         Constructor
         :param player_1: the player 1
@@ -34,7 +30,7 @@ class GamePanel(Panel.Panel):
         self.turn_text_format = self.ui.translation.get_translation("game_panel_turn_format")
         self.win_text_format = self.ui.translation.get_translation("game_panel_win_format")
 
-        self.grid_canvas = ResizingCanvas(self, self.ui, self.on_resize, disable=False)
+        self.grid_canvas = tkinter.tix.Canvas(self)
         self.grid_canvas.pack(expand=True, fill=tkinter.tix.BOTH)
 
         self.after(500, lambda: self.grid_canvas.bind("<Button>", self.grid_canvas_on_click))
@@ -54,8 +50,8 @@ class GamePanel(Panel.Panel):
 
         self.button_main_menu = tkinter.tix.Button(
             self,
-            text=self.ui.translation.get_translation("game_panel_main_menu_button"),
-            command=self.button_main_menu_command)
+            # text=self.ui.translation.get_translation("game_panel_main_menu_button"),
+            command=self.button_main_menu_command, image=self.ui.image_getter.door_exit_icon)
         self.button_main_menu.place(x=0, y=0)
 
         self.grid_image_create = []
@@ -125,7 +121,6 @@ class GamePanel(Panel.Panel):
             self.players[TokenState.TokenState.Player_2].stop_turn()
 
         self.remove_all_token_animation()
-        self.grid_canvas.remove_resizing()
 
         super().destroy()
 
@@ -134,7 +129,7 @@ class GamePanel(Panel.Panel):
         See panel class
         :return: See panel class
         """
-        self.on_resize()
+        self.on_resize(None)
 
         if isinstance(self.players[self.game.current_turn], AIPlayer.AIPlayer):
             thread = threading.Thread(target=self.run_ai_turn)
@@ -146,35 +141,39 @@ class GamePanel(Panel.Panel):
         :return: None
         """
 
-        space_between_column_line = (self.grid_canvas.width - 10) / float(self.game.grid_width)
-        space_between_row_line = (self.grid_canvas.height - 20 - self.turn_text_height) / float(self.game.grid_height)
+        space_between_column_line = (self.grid_canvas.winfo_width() - 10) / float(self.game.grid_width)
+        space_between_row_line = (self.grid_canvas.winfo_height() - 20 - self.turn_text_height
+                                  ) / float(self.game.grid_height)
         self.token_square_size = min(space_between_column_line, space_between_row_line)
 
         #  print(space_between_column_line, space_between_column_line, self.token_square_size)
 
-        self.height_center = (self.grid_canvas.height - self.token_square_size * self.game.grid_height) / 2.
-        self.width_center = (self.grid_canvas.width - self.token_square_size * self.game.grid_width) / 2.
+        self.height_center = (self.grid_canvas.winfo_height() - self.token_square_size * self.game.grid_height) / 2.
+        self.width_center = (self.grid_canvas.winfo_width() - self.token_square_size * self.game.grid_width) / 2.
 
         self.grid_canvas.delete("grid")
 
-        self.turn_text_id = self.grid_canvas.create_text(self.grid_canvas.width / 2, self.turn_text_height, tag="grid")
+        self.turn_text_id = self.grid_canvas.create_text(self.grid_canvas.winfo_width() / 2, self.turn_text_height,
+                                                         tag="grid")
 
         self.grid_canvas.create_rectangle(self.width_center, self.height_center + self.turn_text_height,
-                                          self.grid_canvas.width - self.width_center,
-                                          self.grid_canvas.height - self.height_center + self.turn_text_height,
+                                          self.grid_canvas.winfo_width() - self.width_center,
+                                          self.grid_canvas.winfo_height() - self.height_center +
+                                          self.turn_text_height,
                                           tag="grid", fill="#DDD")
 
         for i in range(1, self.game.grid_width):
             self.grid_canvas.create_line(self.token_square_size * i + self.width_center,
                                          self.height_center + self.turn_text_height,
                                          self.token_square_size * i + self.width_center,
-                                         self.grid_canvas.height - self.height_center + self.turn_text_height,
+                                         self.grid_canvas.winfo_height() - self.height_center +
+                                         self.turn_text_height,
                                          tag="grid")
 
         for i in range(1, self.game.grid_height):
             self.grid_canvas.create_line(self.width_center,
                                          self.token_square_size * i + self.height_center + self.turn_text_height,
-                                         self.grid_canvas.width - self.width_center,
+                                         self.grid_canvas.winfo_width() - self.width_center,
                                          self.token_square_size * i + self.height_center + self.turn_text_height,
                                          tag="grid")
 
@@ -194,7 +193,7 @@ class GamePanel(Panel.Panel):
                 if self.grid_image_create[x][y] != -1:
                     self.create_image(x, y, self.game.grid[x][y])
 
-    def on_resize(self):
+    def on_resize(self, event):
         """
         When the grid is resize
         :return: None
@@ -203,6 +202,8 @@ class GamePanel(Panel.Panel):
 
         if self.game.is_win():
             self.update_win()
+
+        super().on_resize(event)
 
     def redraw_animation(self):
         """
@@ -329,7 +330,7 @@ class GamePanel(Panel.Panel):
 
         if self.game.is_win() and self.game.winner != TokenState.TokenState.Blank:
             self.grid_canvas.itemconfigure(self.turn_text_id, text=self.win_text_format.format(
-                self.players[self.game.winner].name), fill="#016533")
+                self.players[self.game.winner].name), fill="green")
 
             if self.turn_image_id != -1:
                 self.grid_canvas.delete(self.turn_image_id)
@@ -344,7 +345,7 @@ class GamePanel(Panel.Panel):
         elif self.game.is_win():
             self.grid_canvas.itemconfigure(
                 self.turn_text_id,
-                text=self.ui.translation.get_translation("draw"), fill="#016533")
+                text=self.ui.translation.get_translation("draw"), fill="green")
             if self.turn_image_id != -1:
                 self.grid_canvas.delete(self.turn_image_id)
 
@@ -428,7 +429,7 @@ class GamePanel(Panel.Panel):
             if self.win_line_id != -1:
                 self.grid_canvas.delete(self.win_line_id)
             self.win_line_id = self.grid_canvas.create_line(
-                coord_1[0], coord_1[1], coord_2[0], coord_2[1], width=5, fill="#33cc80")
+                coord_1[0], coord_1[1], coord_2[0], coord_2[1], width=5, fill="green")
 
             if self.win_icon_id != -1:
                 self.grid_canvas.delete(self.win_icon_id)
@@ -437,23 +438,24 @@ class GamePanel(Panel.Panel):
                 self.grid_canvas.delete(self.win_icon_background_id)
 
             self.win_icon_background_id = self.grid_canvas.create_image(
-                self.grid_canvas.width / 2,
-                self.grid_canvas.height / 2 - self.token_square_size / 2 - 25,
+                self.grid_canvas.winfo_width() / 2,
+                self.grid_canvas.winfo_height() / 2 - self.token_square_size / 2 - 25,
                 image=self.ui.image_getter.win_token_background
             )
 
             self.win_icon_id = self.grid_canvas.create_image(
-                self.grid_canvas.width / 2,
-                self.grid_canvas.height / 2 - self.token_square_size / 2 - 25,
+                self.grid_canvas.winfo_width() / 2,
+                self.grid_canvas.winfo_height() / 2 - self.token_square_size / 2 - 25,
                 image=self.ui.image_getter.save_token_photos[self.game.winner][self.players[self.game.winner].token]
             )
 
             self.grid_canvas.disable = True
-            self.win_text_frame.place(relx=0.5, y=self.grid_canvas.height / 2 + 20, anchor=tkinter.tix.CENTER)
+            self.win_text_frame.place(relx=0.5, y=self.grid_canvas.winfo_height() / 2 + 20,
+                                      anchor=tkinter.tix.CENTER)
             self.win_text_label.configure(
-                text=self.ui.translation.get_translation("game_panel_win_format")
-                .format(self.players[self.game.winner].name),
-                fg="#016533", font=("Arial Bold", 20)
+                text=self.ui.translation.get_translation("game_panel_win_format").format(
+                    self.players[self.game.winner].name),
+                fg="green", font=("Arial Bold", 20)
             )
             self.update_idletasks()
             self.grid_canvas.disable = False
@@ -470,36 +472,37 @@ class GamePanel(Panel.Panel):
 
             self.win_icon_background_id = (
                 self.grid_canvas.create_image(
-                    self.grid_canvas.width / 2 - self.token_square_size / 2 - 20,
-                    self.grid_canvas.height / 2 - self.token_square_size / 2 - 25,
+                    self.grid_canvas.winfo_width() / 2 - self.token_square_size / 2 - 20,
+                    self.grid_canvas.winfo_height() / 2 - self.token_square_size / 2 - 25,
                     image=self.ui.image_getter.win_token_background
                 ),
                 self.grid_canvas.create_image(
-                    self.grid_canvas.width / 2 + self.token_square_size / 2 + 20,
-                    self.grid_canvas.height / 2 - self.token_square_size / 2 - 25,
+                    self.grid_canvas.winfo_width() / 2 + self.token_square_size / 2 + 20,
+                    self.grid_canvas.winfo_height() / 2 - self.token_square_size / 2 - 25,
                     image=self.ui.image_getter.win_token_background
                 )
             )
 
             self.win_icon_id = (
                 self.grid_canvas.create_image(
-                    self.grid_canvas.width / 2 - self.token_square_size / 2 - 20,
-                    self.grid_canvas.height / 2 - self.token_square_size / 2 - 30,
+                    self.grid_canvas.winfo_width() / 2 - self.token_square_size / 2 - 20,
+                    self.grid_canvas.winfo_height() / 2 - self.token_square_size / 2 - 30,
                     image=self.ui.image_getter.save_token_photos[TokenState.TokenState.Player_1]
                     [self.players[TokenState.TokenState.Player_1].token]
                 ),
                 self.grid_canvas.create_image(
-                    self.grid_canvas.width / 2 + self.token_square_size / 2 + 20,
-                    self.grid_canvas.height / 2 - self.token_square_size / 2 - 30,
+                    self.grid_canvas.winfo_width() / 2 + self.token_square_size / 2 + 20,
+                    self.grid_canvas.winfo_height() / 2 - self.token_square_size / 2 - 30,
                     image=self.ui.image_getter.save_token_photos[TokenState.TokenState.Player_2]
                     [self.players[TokenState.TokenState.Player_2].token]
                 )
             )
 
             self.grid_canvas.disable = True
-            self.win_text_frame.place(relx=0.5, y=self.grid_canvas.height / 2 + 30, anchor=tkinter.tix.CENTER)
+            self.win_text_frame.place(relx=0.5, y=self.grid_canvas.winfo_height() / 2 + 30,
+                                      anchor=tkinter.tix.CENTER)
             self.win_text_label.configure(text=self.ui.translation.get_translation("draw"),
-                                          fg="#016533", font=("Arial Bold", 30))
+                                          fg="green", font=("Arial Bold", 30))
             self.update_idletasks()
             self.grid_canvas.disable = False
 

@@ -2,6 +2,7 @@ import random
 import tkinter.tix
 import tkinter.messagebox
 
+import main.Preferences
 from UI import Panel, TokenStyle, ConfigureGamePanel, ServerGamePanel
 from main.TokenState import TokenState
 from main import Server, Player, Game
@@ -235,13 +236,13 @@ class ServerGameConfigurationPanel(Panel.Panel):
         Import the preferences set in the last game
         :return: None
         """
-        if self.ui.preference.temporary_preference_exist(ConfigureGamePanel.PLAYERS_NAMES_PREFERENCES):
+        if self.ui.preference.temporary_preference_exist(main.Preferences.TEMPORARY_PREFERENCES_PLAYERS_NAMES):
             self.players_entry_string_variable[self.player_id].set(
-                self.ui.preference.get_temporary_preference(ConfigureGamePanel.PLAYERS_NAMES_PREFERENCES)
+                self.ui.preference.get_temporary_preference(main.Preferences.TEMPORARY_PREFERENCES_PLAYERS_NAMES)
                 [0])
 
-        if self.ui.preference.temporary_preference_exist(ConfigureGamePanel.PLAYERS_TOKENS_PREFERENCES):
-            tokens = self.ui.preference.get_temporary_preference(ConfigureGamePanel.PLAYERS_TOKENS_PREFERENCES)
+        if self.ui.preference.temporary_preference_exist(main.Preferences.TEMPORARY_PREFERENCES_PLAYERS_TOKENS):
+            tokens = self.ui.preference.get_temporary_preference(main.Preferences.TEMPORARY_PREFERENCES_PLAYERS_TOKENS)
 
             self.players_tokens[self.player_id] = tokens[0]
 
@@ -261,14 +262,14 @@ class ServerGameConfigurationPanel(Panel.Panel):
             self.ui.translation.get_translation("default_player_name").format("2")
         ]
 
-        self.ui.preference.set_temporary_preference(ConfigureGamePanel.PLAYERS_NAMES_PREFERENCES, players_names)
+        self.ui.preference.set_temporary_preference(main.Preferences.TEMPORARY_PREFERENCES_PLAYERS_NAMES, players_names)
 
         tokens_player = [
             self.players_tokens[self.player_id],
             TokenStyle.TokenStyle(random.randint(0, TokenStyle.NUMBER_COLOR - 1))
         ]
 
-        self.ui.preference.set_temporary_preference(ConfigureGamePanel.PLAYERS_TOKENS_PREFERENCES, tokens_player)
+        self.ui.preference.set_temporary_preference(main.Preferences.TEMPORARY_PREFERENCES_PLAYERS_TOKENS, tokens_player)
 
     def server_start_stop_command(self):
         """

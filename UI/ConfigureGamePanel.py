@@ -4,13 +4,12 @@ import tkinter.tix
 
 from UI import Panel, GamePanel, MainMenuPanel, TokenStyle
 from main import Game, AIPlayer, Player
+from main.Preferences import TEMPORARY_PREFERENCES_PLAYERS_TOKENS, TEMPORARY_PREFERENCES_PLAYERS_AI, \
+    TEMPORARY_PREFERENCES_PLAYERS_NAMES, TEMPORARY_PREFERENCES_DIFFICULTY, \
+    PREFERENCE_DELAY, PREFERENCE_DIFFICULTY_LEVEl
 from main.TokenState import TokenState
 
-PLAYERS_NAMES_PREFERENCES = "last_game_player_names_game"
-PLAYERS_TOKENS_PREFERENCES = "last_game_player_tokens_game"
-PLAYERS_AI_PREFERENCES = "last_game_ai_game"
-DIFFICULTY_PREFERENCES = "last_game_difficulty"
-DIFFICULTY_LEVEL = [1, 2, 3, 5, 6, 7]
+DEFAULT_BUTTON_DIFFICULTY_SELECT = 2
 
 
 class ConfigureGamePanel(Panel.Panel):
@@ -65,26 +64,31 @@ class ConfigureGamePanel(Panel.Panel):
         self.players_entry[0].grid(row=0, column=1)
         self.players_entry[1].grid(row=0, column=1)
 
-        self.players_settings_frame = [tkinter.tix.Frame(self, relief=tkinter.tix.SUNKEN, borderwidth=3),
-                                       tkinter.tix.Frame(self, relief=tkinter.tix.SUNKEN, borderwidth=3)]
+        self.players_settings_scrolled_window = [
+            tkinter.tix.ScrolledWindow(self, relief=tkinter.tix.SUNKEN, borderwidth=3),
+            tkinter.tix.ScrolledWindow(self, relief=tkinter.tix.SUNKEN, borderwidth=3)
+        ]
 
-        self.players_settings_frame[0].grid(row=1, column=0, sticky=tkinter.tix.NSEW, pady=10, padx=5)
-        self.players_settings_frame[1].grid(row=1, column=1, sticky=tkinter.tix.NSEW, pady=10, padx=5)
+        self.players_settings_scrolled_window[0].grid(row=1, column=0, sticky=tkinter.tix.NSEW, pady=10, padx=5)
+        self.players_settings_scrolled_window[1].grid(row=1, column=1, sticky=tkinter.tix.NSEW, pady=10, padx=5)
+
+        self.players_settings_window = [self.players_settings_scrolled_window[0].window,
+                                        self.players_settings_scrolled_window[1].window]
 
         for i in range(0, 2):
-            self.players_settings_frame[i].grid_columnconfigure(1, weight=1)
+            self.players_settings_window[i].grid_columnconfigure(1, weight=1)
 
         self.player_ai_choose_var = [tkinter.tix.IntVar(),
                                      tkinter.tix.IntVar()]
 
         self.player_ai_choose = [
             tkinter.tix.Checkbutton(
-                self.players_settings_frame[0],
+                self.players_settings_window[0],
                 text=self.ui.translation.get_translation("configure_game_panel_artificial_intelligence"),
                 variable=self.player_ai_choose_var[0],
                 command=self.check_button_ai_command),
             tkinter.tix.Checkbutton(
-                self.players_settings_frame[1],
+                self.players_settings_window[1],
                 text=self.ui.translation.get_translation("configure_game_panel_artificial_intelligence"),
                 variable=self.player_ai_choose_var[1],
                 command=self.check_button_ai_command)
@@ -94,10 +98,10 @@ class ConfigureGamePanel(Panel.Panel):
 
         self.players_text_choose = [
             tkinter.tix.Label(
-                self.players_settings_frame[0],
+                self.players_settings_window[0],
                 text=self.ui.translation.get_translation("configure_game_panel_choose_tokens")),
             tkinter.tix.Label(
-                self.players_settings_frame[1],
+                self.players_settings_window[1],
                 text=self.ui.translation.get_translation("configure_game_panel_choose_tokens"))]
 
         self.players_text_choose[0].grid(row=1, column=0, sticky=tkinter.tix.W)
@@ -114,15 +118,15 @@ class ConfigureGamePanel(Panel.Panel):
         ]
 
         self.players_tokens_labels = [
-            tkinter.tix.Label(self.players_settings_frame[0], image=self.players_tokens_images[0]),
-            tkinter.tix.Label(self.players_settings_frame[1], image=self.players_tokens_images[1])
+            tkinter.tix.Label(self.players_settings_window[0], image=self.players_tokens_images[0]),
+            tkinter.tix.Label(self.players_settings_window[1], image=self.players_tokens_images[1])
         ]
 
         self.players_tokens_labels[0].grid(row=1, column=1, sticky=tkinter.tix.NSEW)
         self.players_tokens_labels[1].grid(row=1, column=1, sticky=tkinter.tix.NSEW)
 
-        self.token_choose_frame = [tkinter.tix.Frame(self.players_settings_frame[0]),
-                                   tkinter.tix.Frame(self.players_settings_frame[1])]
+        self.token_choose_frame = [tkinter.tix.Frame(self.players_settings_window[0]),
+                                   tkinter.tix.Frame(self.players_settings_window[1])]
 
         self.token_choose_frame[0].grid(row=2, column=0, columnspan=2, sticky=tkinter.tix.NSEW)
         self.token_choose_frame[1].grid(row=2, column=0, columnspan=2, sticky=tkinter.tix.NSEW)
@@ -148,61 +152,69 @@ class ConfigureGamePanel(Panel.Panel):
                                                                        _index, TokenState.Player_2)))
             self.token_choose_buttons[1][index].grid(row=0, column=index)
 
-        self.difficultly_choose_frame = tkinter.tix.Frame(self)
-        self.difficultly_choose_frame.grid(row=2, column=0, columnspan=2, sticky=tkinter.tix.SE + tkinter.W,
-                                           pady=10)
+        tkinter.tix.Label(self,
+                          text=self.ui.translation.get_translation("configure_game_panel_difficulty_text")
+                          ).grid(row=2, column=0, columnspan=2)
+
+        self.difficultly_choose_scrolled_window = tkinter.tix.ScrolledWindow(self)
+        self.difficultly_choose_scrolled_window.grid(row=3, column=0, columnspan=2, sticky=tkinter.tix.SE + tkinter.W,
+                                                     pady=5)
+
+        self.difficultly_choose_window = self.difficultly_choose_scrolled_window.window
 
         self.difficulty_selected_button = 0
 
         self.difficulty_buttons = [
             tkinter.tix.Button(
-                self.difficultly_choose_frame,
-                text=self.ui.translation.get_translation("configure_game_panel_difficulty_very_easy"),
+                self.difficultly_choose_window,
+                text=self.ui.translation.get_translation("configure_game_panel_difficulty_very_easy")
+                    .format(self.ui.preference.get_preference(PREFERENCE_DIFFICULTY_LEVEl)[0]),
                 command=lambda: self.button_difficulty_command(0)),
             tkinter.tix.Button(
-                self.difficultly_choose_frame,
-                text=self.ui.translation.get_translation("configure_game_panel_difficulty_easy"),
+                self.difficultly_choose_window,
+                text=self.ui.translation.get_translation("configure_game_panel_difficulty_easy")
+                    .format(self.ui.preference.get_preference(PREFERENCE_DIFFICULTY_LEVEl)[1]),
                 command=lambda: self.button_difficulty_command(1)),
             tkinter.tix.Button(
-                self.difficultly_choose_frame,
-                text=self.ui.translation.get_translation("configure_game_panel_difficulty_normal"),
+                self.difficultly_choose_window,
+                text=self.ui.translation.get_translation("configure_game_panel_difficulty_normal")
+                    .format(self.ui.preference.get_preference(PREFERENCE_DIFFICULTY_LEVEl)[2]),
                 command=lambda: self.button_difficulty_command(2)),
             tkinter.tix.Button(
-                self.difficultly_choose_frame,
-                text=self.ui.translation.get_translation("configure_game_panel_difficulty_little_hard"),
+                self.difficultly_choose_window,
+                text=self.ui.translation.get_translation("configure_game_panel_difficulty_little_hard")
+                    .format(self.ui.preference.get_preference(PREFERENCE_DIFFICULTY_LEVEl)[3]),
                 command=lambda: self.button_difficulty_command(3)),
             tkinter.tix.Button(
-                self.difficultly_choose_frame,
-                text=self.ui.translation.get_translation("configure_game_panel_difficulty_hard"),
+                self.difficultly_choose_window,
+                text=self.ui.translation.get_translation("configure_game_panel_difficulty_hard")
+                    .format(self.ui.preference.get_preference(PREFERENCE_DIFFICULTY_LEVEl)[4]),
                 command=lambda: self.button_difficulty_command(4)),
             tkinter.tix.Button(
-                self.difficultly_choose_frame,
-                text=self.ui.translation.get_translation("configure_game_panel_difficulty_very_hard"),
+                self.difficultly_choose_window,
+                text=self.ui.translation.get_translation("configure_game_panel_difficulty_very_hard")
+                    .format(self.ui.preference.get_preference(PREFERENCE_DIFFICULTY_LEVEl)[5]),
                 command=lambda: self.button_difficulty_command(5))
         ]
 
-        tkinter.tix.Label(self.difficultly_choose_frame,
-                          text=self.ui.translation.get_translation("configure_game_panel_difficulty_text")
-                          ).grid(
-            row=0, column=0, columnspan=len(self.difficulty_buttons))
-
         for i in range(0, len(self.difficulty_buttons)):
-            self.difficulty_buttons[i].grid(row=1, column=i, sticky=tkinter.tix.NSEW)
-            self.difficultly_choose_frame.columnconfigure(i, weight=1)
+            self.difficulty_buttons[i].configure(borderwidth=3, relief=tkinter.tix.RIDGE)
+            self.difficulty_buttons[i].grid(row=0, column=i, sticky=tkinter.tix.NSEW)
+            self.difficultly_choose_window.columnconfigure(i, weight=1)
 
-        self.button_difficulty_command(2)
+        self.button_difficulty_command(DEFAULT_BUTTON_DIFFICULTY_SELECT)
 
         self.button_main_menu = tkinter.tix.Button(
             self,
             text=self.ui.translation.get_translation("back"),
             command=self.button_main_menu_command)
-        self.button_main_menu.grid(row=3, column=0, sticky=tkinter.tix.NSEW)
+        self.button_main_menu.grid(row=4, column=0, sticky=tkinter.tix.NSEW)
 
         self.button_play = tkinter.tix.Button(
             self,
             text=self.ui.translation.get_translation("play"),
             command=self.button_play_command)
-        self.button_play.grid(row=3, column=1, sticky=tkinter.tix.NSEW)
+        self.button_play.grid(row=4, column=1, sticky=tkinter.tix.NSEW)
 
         self.import_last_game_setting()
         self.check_button_ai_command()
@@ -212,22 +224,22 @@ class ConfigureGamePanel(Panel.Panel):
         Import the preferences set in the last game
         :return: None
         """
-        if self.ui.preference.temporary_preference_exist(PLAYERS_NAMES_PREFERENCES):
+        if self.ui.preference.temporary_preference_exist(TEMPORARY_PREFERENCES_PLAYERS_NAMES):
             self.players_entry_string_variable[0].set(
-                self.ui.preference.get_temporary_preference(PLAYERS_NAMES_PREFERENCES)[0])
+                self.ui.preference.get_temporary_preference(TEMPORARY_PREFERENCES_PLAYERS_NAMES)[0])
 
             self.players_entry_string_variable[1].set(
-                self.ui.preference.get_temporary_preference(PLAYERS_NAMES_PREFERENCES)[1])
+                self.ui.preference.get_temporary_preference(TEMPORARY_PREFERENCES_PLAYERS_NAMES)[1])
 
-        if self.ui.preference.temporary_preference_exist(PLAYERS_AI_PREFERENCES):
+        if self.ui.preference.temporary_preference_exist(TEMPORARY_PREFERENCES_PLAYERS_AI):
             self.player_ai_choose_var[0].set(
-                self.ui.preference.get_temporary_preference(PLAYERS_AI_PREFERENCES)[0])
+                self.ui.preference.get_temporary_preference(TEMPORARY_PREFERENCES_PLAYERS_AI)[0])
 
             self.player_ai_choose_var[1].set(
-                self.ui.preference.get_temporary_preference(PLAYERS_AI_PREFERENCES)[1])
+                self.ui.preference.get_temporary_preference(TEMPORARY_PREFERENCES_PLAYERS_AI)[1])
 
-        if self.ui.preference.temporary_preference_exist(PLAYERS_TOKENS_PREFERENCES):
-            tokens = self.ui.preference.get_temporary_preference(PLAYERS_TOKENS_PREFERENCES)
+        if self.ui.preference.temporary_preference_exist(TEMPORARY_PREFERENCES_PLAYERS_TOKENS):
+            tokens = self.ui.preference.get_temporary_preference(TEMPORARY_PREFERENCES_PLAYERS_TOKENS)
 
             for i in range(0, 2):
                 self.players_tokens[i] = tokens[i]
@@ -237,8 +249,9 @@ class ConfigureGamePanel(Panel.Panel):
 
                 self.players_tokens_labels[i].config(image=self.players_tokens_images[i])
 
-        if self.ui.preference.temporary_preference_exist(DIFFICULTY_PREFERENCES):
-            self.difficulty_selected_button = self.ui.preference.get_temporary_preference(DIFFICULTY_PREFERENCES)
+        if self.ui.preference.temporary_preference_exist(TEMPORARY_PREFERENCES_DIFFICULTY):
+            self.difficulty_selected_button = self.ui.preference.get_temporary_preference(
+                TEMPORARY_PREFERENCES_DIFFICULTY)
 
     def export_last_game_settings(self):
         """
@@ -249,16 +262,16 @@ class ConfigureGamePanel(Panel.Panel):
         players_names = (self.players_entry_string_variable[0].get().strip(),
                          self.players_entry_string_variable[1].get().strip())
 
-        self.ui.preference.set_temporary_preference(PLAYERS_NAMES_PREFERENCES, players_names)
+        self.ui.preference.set_temporary_preference(TEMPORARY_PREFERENCES_PLAYERS_NAMES, players_names)
 
         players_ai = [self.player_ai_choose_var[0].get(),
                       self.player_ai_choose_var[1].get()]
 
-        self.ui.preference.set_temporary_preference(PLAYERS_AI_PREFERENCES, players_ai)
+        self.ui.preference.set_temporary_preference(TEMPORARY_PREFERENCES_PLAYERS_AI, players_ai)
 
-        self.ui.preference.set_temporary_preference(PLAYERS_TOKENS_PREFERENCES, self.players_tokens)
+        self.ui.preference.set_temporary_preference(TEMPORARY_PREFERENCES_PLAYERS_TOKENS, self.players_tokens)
 
-        self.ui.preference.set_temporary_preference(DIFFICULTY_PREFERENCES, self.difficulty_selected_button)
+        self.ui.preference.set_temporary_preference(TEMPORARY_PREFERENCES_DIFFICULTY, self.difficulty_selected_button)
 
     def button_play_command(self):
         """
@@ -298,14 +311,18 @@ class ConfigureGamePanel(Panel.Panel):
         game.current_turn = random.choice((TokenState.Player_1, TokenState.Player_2))
 
         if self.player_ai_choose_var[0].get():
-            player_1 = AIPlayer.AIPlayer(DIFFICULTY_LEVEL[self.difficulty_selected_button], game, TokenState.Player_1,
+            player_1 = AIPlayer.AIPlayer(self.ui.preference.get_preference(PREFERENCE_DIFFICULTY_LEVEl
+                                                                           )[self.difficulty_selected_button],
+                                         game, TokenState.Player_1,
                                          self.players_tokens[0], self.players_entry_string_variable[0].get().strip())
         else:
             player_1 = Player.Player(TokenState.Player_1, self.players_tokens[0],
                                      self.players_entry_string_variable[0].get().strip())
 
         if self.player_ai_choose_var[1].get():
-            player_2 = AIPlayer.AIPlayer(DIFFICULTY_LEVEL[self.difficulty_selected_button], game, TokenState.Player_2,
+            player_2 = AIPlayer.AIPlayer(self.ui.preference.get_preference(PREFERENCE_DIFFICULTY_LEVEl
+                                                                           )[self.difficulty_selected_button],
+                                         game, TokenState.Player_2,
                                          self.players_tokens[1], self.players_entry_string_variable[1].get().strip())
         else:
             player_2 = Player.Player(TokenState.Player_2, self.players_tokens[1],
@@ -314,7 +331,7 @@ class ConfigureGamePanel(Panel.Panel):
         self.ui.change_panel(GamePanel.GamePanel,
                              player_1=player_1,
                              player_2=player_2,
-                             game=game)
+                             game=game, delay=self.ui.preference.get_preference(PREFERENCE_DELAY))
 
     def name_string_var_trace_write(self):
         """
@@ -364,8 +381,8 @@ class ConfigureGamePanel(Panel.Panel):
         :return: None
         """
         self.difficulty_buttons[self.difficulty_selected_button].config(
-            relief=tkinter.tix.GROOVE, activebackground="#ebebeb", borderwidth=1,
-            background=self.cget("background"), pady=4)
+            relief=tkinter.tix.RIDGE, activebackground="#ebebeb", borderwidth=3,
+            background=self.cget("background"))
 
         self.difficulty_selected_button = index
 
@@ -386,8 +403,7 @@ class ConfigureGamePanel(Panel.Panel):
 
         if self.player_ai_choose_var[0].get() or self.player_ai_choose_var[1].get():
             self.difficulty_buttons[self.difficulty_selected_button].config(
-                relief=tkinter.tix.SUNKEN, activebackground=font_color, background=font_color, borderwidth=5, pady=0,
-                padx=0)
+                relief=tkinter.tix.RAISED, activebackground=font_color, background=font_color, borderwidth=3)
 
     def check_button_ai_command(self):
         """

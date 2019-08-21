@@ -1,8 +1,28 @@
 import os
 import pickle
 
-
 SAVING_FILE = "preferences.pkl"
+
+PREFERENCE_CURRENT_LANGUAGE = 0  # use int not str to save memory
+DEFAULT_LANGUAGE = "EN_en"
+PREFERENCE_DELAY = 1
+DEFAULT_DELAY = 500
+DELAY_MIN = 0
+DELAY_MAX = 5000
+PREFERENCE_DIFFICULTY_LEVEl = 2
+DEFAULT_DIFFICULTY_LEVEL = [1, 3, 4, 5, 6, 7]
+DIFFICULTY_LEVEL_MIN = 1
+DIFFICULTY_LEVEL_MAX = 15
+
+DEFAULT_PREFERENCES = {
+    PREFERENCE_DELAY: DEFAULT_DELAY,
+    PREFERENCE_DIFFICULTY_LEVEl: DEFAULT_DIFFICULTY_LEVEL
+}
+
+TEMPORARY_PREFERENCES_PLAYERS_TOKENS = 0
+TEMPORARY_PREFERENCES_PLAYERS_AI = 1
+TEMPORARY_PREFERENCES_PLAYERS_NAMES = 2
+TEMPORARY_PREFERENCES_DIFFICULTY = 3
 
 
 class Preferences(object):
@@ -10,14 +30,26 @@ class Preferences(object):
     A preferences class
     """
 
-    def __init__(self):
+    def __init__(self, default_preferences=None, default_temporary_preferences=None):
         """
         Constructor
         """
-        self.temporary_preferences = {}
+        if default_temporary_preferences is None:
+            default_temporary_preferences = {}
+        if default_preferences is None:
+            default_preferences = {}
+
+        self.temporary_preferences = default_temporary_preferences
         self.preferences = {}
 
+        self.default_preferences = default_preferences
+        self.default_temporary_preferences = default_temporary_preferences
+
         self.load_preferences()
+
+        for key in default_preferences:
+            if not self.preference_exist(key):
+                self.set_preference(key, self.default_preferences[key])
 
     def set_temporary_preference(self, key, value):
         """
@@ -61,6 +93,15 @@ class Preferences(object):
         :return: None
         """
         return key in self.temporary_preferences
+
+    def reset_default_values_temporary_preferences(self):
+        """
+        Reset the preference with default values
+        :return: None
+        """
+
+        for key in self.default_temporary_preferences:
+            self.set_temporary_preference(key, self.default_temporary_preferences[key])
 
     def load_preferences(self):
         """
@@ -129,3 +170,12 @@ class Preferences(object):
         :return: None
         """
         return key in self.preferences
+
+    def reset_default_values_preference(self):
+        """
+        Reset the preference with default values
+        :return: None
+        """
+
+        for key in self.default_preferences:
+            self.set_preference(key, self.default_preferences[key])

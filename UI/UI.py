@@ -4,6 +4,12 @@ from main import Preferences, Translation
 from UI import ImageGetter
 from main.Server import Server
 
+WIDTH = 720
+HEIGHT = 620
+
+MIN_WIDTH = 420
+MIN_HEIGHT = 300
+
 
 class UI(tkinter.tix.Tk):
     """
@@ -22,15 +28,15 @@ class UI(tkinter.tix.Tk):
         self.server = Server(max_clients_connected=1)
         self.client = None
 
-        self.preference = Preferences.Preferences()
+        self.preference = Preferences.Preferences(default_preferences=Preferences.DEFAULT_PREFERENCES)
         self.translation = Translation.Translation(self.preference)
         self.image_getter = ImageGetter.ImageGetter(self.translation)
         # Configure
         self.title(self.translation.get_translation("connect_four"))
         # noinspection SpellCheckingInspection
         self.iconphoto(True, self.image_getter.logo_image)  # set the logo
-        self.geometry("600x520")
-        self.minsize(560, 300)
+        self.geometry("{}x{}".format(WIDTH, HEIGHT))
+        self.minsize(MIN_WIDTH, MIN_HEIGHT)
         self.protocol("WM_DELETE_WINDOW", self.destroy)
 
     def change_panel(self, new_panel, **kwargs):

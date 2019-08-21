@@ -3,11 +3,12 @@ import tkinter.messagebox
 
 from PIL import Image, ImageTk
 
+import main.Preferences
 from UI import TokenStyle
-from main import TokenState, DirectoryManager, Translation
-
+from main import TokenState, DirectoryManager
 
 WIN_TOKEN_BACKGROUND_RAPPORT_TOKEN = 1.4  # fraction size background / size token
+ICON_SIZE = 30
 
 
 class ImageGetter:
@@ -37,7 +38,7 @@ class ImageGetter:
             self.default_token_icon = ImageTk.PhotoImage(image=self.get_default_token_image(
                 30, 30))
         except FileNotFoundError:
-            if translation.get_language(Translation.DEFAULT_LANGUAGE) != -1:
+            if translation.get_language(main.Preferences.DEFAULT_LANGUAGE) != -1:
                 tkinter.messagebox.showerror(
                     translation.get_translation("no_default_image_dialog_title"),
                     translation.get_translation("no_default_image_dialog_message")
@@ -80,6 +81,16 @@ class ImageGetter:
                               win_token_background_size,
                               win_token_background_size)
         )
+
+        try:
+            self.door_exit_icon = ImageTk.PhotoImage(
+                self.create_image(DirectoryManager.get_path((DirectoryManager.UI_RES_DIRECTORY, "door_exit_icon.png"),
+                                                            add_current_directory=True),
+                                  ICON_SIZE,
+                                  ICON_SIZE)
+            )
+        except FileNotFoundError:
+            print("The file door_exit_icon was not found")
 
     def resize_tokens_images(self, token_size):
         """
