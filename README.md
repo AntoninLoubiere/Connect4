@@ -1,4 +1,10 @@
-# Power4
+# Connect 4
+
+# Install
+To install the program you have just to install dependencies by running Install.bat on Windows and Install.sh on Linux and Max OS
+
+# Run
+To run the program you have to run Connect4.py, by double clicking on Starter.bat on Windows and Starter.sh on Linux and Mac OS
 
 ### Credits
 
