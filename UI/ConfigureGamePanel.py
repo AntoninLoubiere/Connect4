@@ -12,6 +12,8 @@ PLAYERS_AI_PREFERENCES = "last_game_ai_game"
 DIFFICULTY_PREFERENCES = "last_game_difficulty"
 DIFFICULTY_LEVEL = [1, 2, 3, 5, 6, 7]
 
+TOKEN_MARGIN = 10
+
 
 class ConfigureGamePanel(Panel.Panel):
     """
@@ -72,7 +74,7 @@ class ConfigureGamePanel(Panel.Panel):
         self.players_settings_frame[1].grid(row=1, column=1, sticky=tkinter.tix.NSEW, pady=10, padx=5)
 
         for i in range(0, 2):
-            self.players_settings_frame[i].grid_columnconfigure(1, weight=1)
+            self.players_settings_frame[i].grid_columnconfigure(0, weight=1)
 
         self.player_ai_choose_var = [tkinter.tix.IntVar(),
                                      tkinter.tix.IntVar()]
@@ -89,19 +91,8 @@ class ConfigureGamePanel(Panel.Panel):
                 variable=self.player_ai_choose_var[1],
                 command=self.check_button_ai_command)
         ]
-        self.player_ai_choose[0].grid(row=0, column=0, columnspan=2, sticky=tkinter.tix.W)
-        self.player_ai_choose[1].grid(row=0, column=0, columnspan=2, sticky=tkinter.tix.W)
-
-        self.players_text_choose = [
-            tkinter.tix.Label(
-                self.players_settings_frame[0],
-                text=self.ui.translation.get_translation("configure_game_panel_choose_tokens")),
-            tkinter.tix.Label(
-                self.players_settings_frame[1],
-                text=self.ui.translation.get_translation("configure_game_panel_choose_tokens"))]
-
-        self.players_text_choose[0].grid(row=1, column=0, sticky=tkinter.tix.W)
-        self.players_text_choose[1].grid(row=1, column=0, sticky=tkinter.tix.W)
+        self.player_ai_choose[0].grid(row=0, column=0, sticky=tkinter.tix.W)
+        self.player_ai_choose[1].grid(row=0, column=0, sticky=tkinter.tix.W)
 
         self.players_tokens = [
             TokenStyle.TokenStyle(random.randint(0, TokenStyle.NUMBER_COLOR - 1)),
@@ -118,19 +109,30 @@ class ConfigureGamePanel(Panel.Panel):
             tkinter.tix.Label(self.players_settings_frame[1], image=self.players_tokens_images[1])
         ]
 
-        self.players_tokens_labels[0].grid(row=1, column=1, sticky=tkinter.tix.NSEW)
-        self.players_tokens_labels[1].grid(row=1, column=1, sticky=tkinter.tix.NSEW)
+        self.players_tokens_labels[0].grid(row=1, column=0, sticky=tkinter.tix.NSEW)
+        self.players_tokens_labels[1].grid(row=1, column=0, sticky=tkinter.tix.NSEW)
+
+        self.players_text_choose = [
+            tkinter.tix.Label(
+                self.players_settings_frame[0],
+                text=self.ui.translation.get_translation("configure_game_panel_choose_tokens")),
+            tkinter.tix.Label(
+                self.players_settings_frame[1],
+                text=self.ui.translation.get_translation("configure_game_panel_choose_tokens"))]
+
+        self.players_text_choose[0].grid(row=2, column=0, sticky=tkinter.tix.W)
+        self.players_text_choose[1].grid(row=2, column=0, sticky=tkinter.tix.W)
 
         self.token_choose_frame = [tkinter.tix.Frame(self.players_settings_frame[0]),
                                    tkinter.tix.Frame(self.players_settings_frame[1])]
 
-        self.token_choose_frame[0].grid(row=2, column=0, columnspan=2, sticky=tkinter.tix.NSEW)
-        self.token_choose_frame[1].grid(row=2, column=0, columnspan=2, sticky=tkinter.tix.NSEW)
+        self.token_choose_frame[0].grid(row=3, column=0, sticky=tkinter.tix.NSEW)
+        self.token_choose_frame[1].grid(row=3, column=0, sticky=tkinter.tix.NSEW)
 
         self.button_token_choose_per_line = 0
+        self.button_token_choose_per_line_last = 0  # to remove column configure
 
         self.token_choose_buttons = [[], []]
-
         for index in range(0, TokenStyle.NUMBER_COLOR):
             self.token_choose_buttons[0].append(tkinter.tix.Button(self.token_choose_frame[0],
                                                                    image=self.ui.image_getter.save_token_icons[
@@ -139,7 +141,6 @@ class ConfigureGamePanel(Panel.Panel):
                                                                    command=lambda _index=index:
                                                                    self.button_change_token_command(
                                                                        _index, TokenState.Player_1)))
-            self.token_choose_buttons[0][index].grid(row=0, column=index)
 
             self.token_choose_buttons[1].append(tkinter.tix.Button(self.token_choose_frame[1],
                                                                    image=self.ui.image_getter.save_token_icons[
@@ -148,7 +149,6 @@ class ConfigureGamePanel(Panel.Panel):
                                                                    command=lambda _index=index:
                                                                    self.button_change_token_command(
                                                                        _index, TokenState.Player_2)))
-            self.token_choose_buttons[1][index].grid(row=0, column=index)
 
         self.difficultly_choose_frame = tkinter.tix.Frame(self)
         self.difficultly_choose_frame.grid(row=2, column=0, columnspan=2, sticky=tkinter.tix.SE + tkinter.W,
@@ -214,8 +214,49 @@ class ConfigureGamePanel(Panel.Panel):
         When the panel is pack (See panel class)
         :return: None
         """
-        self.button_token_choose_per_line = self.token_choose_frame[0].winfo_reqwidth() / ImageGetter.TOKEN_ICON_SIZE
-        # print(self.button_token_choose_per_line)
+        self.on_resize(None)
+
+    def on_resize(self, event):
+        """
+        When the panel is resize (see in panel class)
+        :param event: the tkinter event
+        :return: None
+        """
+        self.recreate_tokens_buttons()
+        super().on_resize(event)
+
+    def recreate_tokens_buttons(self):
+        """
+        Recreate tokens buttons
+        :return: None
+        """
+        self.button_token_choose_per_line_last = self.button_token_choose_per_line
+        self.button_token_choose_per_line = max(
+            min(
+                int(self.players_settings_frame[0].winfo_width() / (ImageGetter.TOKEN_ICON_SIZE + TOKEN_MARGIN)),
+                TokenStyle.NUMBER_COLOR,
+            ),
+            1
+        )
+
+        for i in range(0, max(self.button_token_choose_per_line, self.button_token_choose_per_line_last)):
+            if i < self.button_token_choose_per_line:
+                self.token_choose_frame[0].columnconfigure(i, weight=1)
+                self.token_choose_frame[1].columnconfigure(i, weight=1)
+            else:
+                self.token_choose_frame[0].columnconfigure(i, weight=0)
+                self.token_choose_frame[1].columnconfigure(i, weight=0)
+
+        for index in range(0, TokenStyle.NUMBER_COLOR):
+            if index % self.button_token_choose_per_line == 0:
+                self.token_choose_frame[0].rowconfigure(int(index / self.button_token_choose_per_line), pad=3)
+                self.token_choose_frame[1].rowconfigure(int(index / self.button_token_choose_per_line), pad=3)
+
+            self.token_choose_buttons[0][index].grid(row=int(index / self.button_token_choose_per_line),
+                                                     column=index % self.button_token_choose_per_line)
+
+            self.token_choose_buttons[1][index].grid(row=int(index / self.button_token_choose_per_line),
+                                                     column=index % self.button_token_choose_per_line)
 
     def import_last_game_setting(self):
         """

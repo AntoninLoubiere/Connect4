@@ -4,7 +4,8 @@
     <list default="true" id="bd1cde12-7a76-43ca-890e-fa01120f398b" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/UI/ConfigureGamePanel.py" beforeDir="false" afterPath="$PROJECT_DIR$/UI/ConfigureGamePanel.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UI/ImageGetter.py" beforeDir="false" afterPath="$PROJECT_DIR$/UI/ImageGetter.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UI/Panel.py" beforeDir="false" afterPath="$PROJECT_DIR$/UI/Panel.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UI/UI.py" beforeDir="false" afterPath="$PROJECT_DIR$/UI/UI.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />

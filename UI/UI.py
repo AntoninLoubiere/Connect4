@@ -30,7 +30,7 @@ class UI(tkinter.tix.Tk):
         # noinspection SpellCheckingInspection
         self.iconphoto(True, self.image_getter.logo_image)  # set the logo
         self.geometry("600x520")
-        self.minsize(560, 300)
+        self.minsize(0, 300)
         self.protocol("WM_DELETE_WINDOW", self.destroy)
 
     def change_panel(self, new_panel, **kwargs):
