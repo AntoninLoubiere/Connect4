@@ -29,6 +29,7 @@ class Panel(tkinter.tix.Frame):
         :return: None
         """
         self.ui.unbind("<Configure>")
+        self.disable = True
         super().destroy()
 
     def _resize_event(self, event):
@@ -65,7 +66,7 @@ class Panel(tkinter.tix.Frame):
         When the window is resize
         :return: None
         """
-        if self.last_event is None:
+        if self.last_event is None or self.disable:
             self.resize_in_progress = False
 
         else:
