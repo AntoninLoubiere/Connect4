@@ -2,23 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="bd1cde12-7a76-43ca-890e-fa01120f398b" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/UI/PreferencePanel.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/UI/res/door_exit_icon.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UI/ConfigureGamePanel.py" beforeDir="false" afterPath="$PROJECT_DIR$/UI/ConfigureGamePanel.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UI/GamePanel.py" beforeDir="false" afterPath="$PROJECT_DIR$/UI/GamePanel.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UI/ImageGetter.py" beforeDir="false" afterPath="$PROJECT_DIR$/UI/ImageGetter.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UI/MainMenuPanel.py" beforeDir="false" afterPath="$PROJECT_DIR$/UI/MainMenuPanel.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UI/Panel.py" beforeDir="false" afterPath="$PROJECT_DIR$/UI/Panel.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/UI/ServerGameConfigurationPanel.py" beforeDir="false" afterPath="$PROJECT_DIR$/UI/ServerGameConfigurationPanel.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UI/ServerGamePanel.py" beforeDir="false" afterPath="$PROJECT_DIR$/UI/ServerGamePanel.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/UI/ServerListPanel.py" beforeDir="false" afterPath="$PROJECT_DIR$/UI/ServerListPanel.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UI/UI.py" beforeDir="false" afterPath="$PROJECT_DIR$/UI/UI.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main/Preferences.py" beforeDir="false" afterPath="$PROJECT_DIR$/main/Preferences.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main/Translation.py" beforeDir="false" afterPath="$PROJECT_DIR$/main/Translation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/preferences.pkl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/translations/EN_en.xml" beforeDir="false" afterPath="$PROJECT_DIR$/translations/EN_en.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/translations/FR_fr.xml" beforeDir="false" afterPath="$PROJECT_DIR$/translations/FR_fr.xml" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />

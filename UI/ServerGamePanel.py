@@ -23,29 +23,24 @@ class ServerGamePanel(GamePanel.GamePanel):
         """
         super().__init__(master, ui, player_1, player_2, game, disable_end_button=not is_server)
 
-        self.button_main_menu.configure(
-            text=self.ui.translation.get_translation("quit")
-        )
-
-        self.button_main_menu_end.configure(
-            text=self.ui.translation.get_translation("quit")
-        )
-
-        if not is_server:
-            tkinter.tix.Label(
-                self.win_text_frame,
-                text=self.ui.translation.get_translation("server_game_wait_host")
-            ).grid(row=1, column=0)
-
         self.is_server = is_server
 
         if self.is_server:
+            self.button_main_menu.configure(
+                text=self.ui.translation.get_translation("quit")
+            )
+
             # Set server functions
             self.ui.server.on_message_function = self.server_on_message
             self.ui.server.on_client_connect_function = self.server_on_client_connect_function
             self.ui.server.on_client_disconnect_function = self.server_on_client_disconnect_function
 
         else:
+            tkinter.tix.Label(
+                self.win_text_frame,
+                text=self.ui.translation.get_translation("server_game_wait_host")
+            ).grid(row=1, column=0)
+
             # Set client functions
             self.ui.client.on_message_function = self.client_on_message
             self.ui.client.on_connection_function = self.client_on_connection_function
@@ -100,9 +95,6 @@ class ServerGamePanel(GamePanel.GamePanel):
             self.ui.client.on_message_function = lambda message: None
             self.ui.client.on_connection_function = lambda: None
             self.ui.client.on_disconnection_function = lambda: None
-
-        self.remove_all_token_animation()
-        self.grid_canvas.remove_resizing()
 
         super().destroy()
 
