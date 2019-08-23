@@ -91,6 +91,12 @@ class ServerListPanel(Panel.Panel):
         self.create_game_button.grid(row=4, column=1, sticky=tkinter.tix.NSEW)
 
         self.server_scanner = ServerScanner.ServerScanner(list_update_function=self.server_scanner_server_detection)
+
+    def on_create_finish(self):
+        """
+        When the windows in pack see in panel class
+        :return: None
+        """
         self.server_scanner.start()
 
     def server_scanner_server_detection(self, add_remove, host_port):

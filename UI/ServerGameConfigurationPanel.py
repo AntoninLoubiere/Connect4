@@ -1,11 +1,12 @@
 import random
-import tkinter.tix
 import tkinter.messagebox
+import tkinter.tix
 
 import main.Preferences
-from UI import Panel, TokenStyle, ConfigureGamePanel, ServerGamePanel
-from main.TokenState import TokenState
+from UI import Panel, TokenStyle, ServerGamePanel, ImageGetter
+from UI.ConfigureGamePanel import TOKEN_MARGIN
 from main import Server, Player, Game
+from main.TokenState import TokenState
 
 MESSAGE_NEED_STATE = "need-state"
 MESSAGE_SEND_TOKEN_SELECTED = "token-selected"
@@ -26,6 +27,9 @@ class ServerGameConfigurationPanel(Panel.Panel):
         """
         super().__init__(master, ui)
         self.create_game = create_game
+
+        self.player_2_is_ready = False
+        self.player_2_is_connected = False
 
         for r in range(2, 3):
             self.rowconfigure(r, weight=1)
@@ -121,11 +125,6 @@ class ServerGameConfigurationPanel(Panel.Panel):
             tkinter.tix.StringVar()
         ]
 
-        if create_game:
-            self.players_entry_string_variable[0].trace_add("write", lambda x, y, z: self.server_send_player_name())
-        else:
-            self.players_entry_string_variable[1].trace_add("write", lambda x, y, z: self.client_send_player_name())
-
         for i in range(0, 2):
             if i == self.opponent_id:
                 self.players_entry_string_variable[i].set(
@@ -141,17 +140,27 @@ class ServerGameConfigurationPanel(Panel.Panel):
                               tkinter.tix.Entry(self.players_name_frame[1],
                                                 textvariable=self.players_entry_string_variable[1],
                                                 state=("normal", "readonly")[create_game])]
+
+        if create_game:
+            self.players_entry_string_variable[0].trace_add("write", lambda x, y, z: self.name_string_var_trace_write())
+        else:
+            self.players_entry_string_variable[1].trace_add("write", lambda x, y, z: self.name_string_var_trace_write())
+
         self.players_entry[0].grid(row=0, column=1)
         self.players_entry[1].grid(row=0, column=1)
 
-        self.players_settings_frame = [tkinter.tix.Frame(self, relief=tkinter.tix.SUNKEN, borderwidth=3),
-                                       tkinter.tix.Frame(self, relief=tkinter.tix.SUNKEN, borderwidth=3)]
+        self.players_settings_scrolled_window = [tkinter.tix.ScrolledWindow(self, relief=tkinter.tix.SUNKEN,
+                                                                            borderwidth=3),
+                                                 tkinter.tix.ScrolledWindow(self, relief=tkinter.tix.SUNKEN,
+                                                                            borderwidth=3)]
+        self.players_settings_scrolled_window[0].grid(row=2, column=0, sticky=tkinter.tix.NSEW, pady=10, padx=5)
+        self.players_settings_scrolled_window[1].grid(row=2, column=1, sticky=tkinter.tix.NSEW, pady=10, padx=5)
 
-        self.players_settings_frame[0].grid(row=2, column=0, sticky=tkinter.tix.NSEW, pady=10, padx=5)
-        self.players_settings_frame[1].grid(row=2, column=1, sticky=tkinter.tix.NSEW, pady=10, padx=5)
+        self.players_settings_window = [self.players_settings_scrolled_window[0].window,
+                                        self.players_settings_scrolled_window[1].window]
 
         for i in range(0, 2):
-            self.players_settings_frame[i].grid_columnconfigure(1, weight=1)
+            self.players_settings_window[i].grid_columnconfigure(0, weight=1)
 
         self.players_tokens = [
             TokenStyle.TokenStyle(random.randint(0, TokenStyle.NUMBER_COLOR - 1)),
@@ -165,27 +174,30 @@ class ServerGameConfigurationPanel(Panel.Panel):
         ]
 
         self.players_tokens_labels = [
-            tkinter.tix.Label(self.players_settings_frame[0], image=self.players_tokens_images[0]),
-            tkinter.tix.Label(self.players_settings_frame[1], image=self.players_tokens_images[1])
+            tkinter.tix.Label(self.players_settings_window[0], image=self.players_tokens_images[0]),
+            tkinter.tix.Label(self.players_settings_window[1], image=self.players_tokens_images[1])
         ]
 
-        self.players_tokens_labels[0].grid(row=1, column=1, sticky=tkinter.tix.NSEW)
-        self.players_tokens_labels[1].grid(row=1, column=1, sticky=tkinter.tix.NSEW)
+        self.players_tokens_labels[0].grid(row=1, column=0, sticky=tkinter.tix.NSEW)
+        self.players_tokens_labels[1].grid(row=1, column=0, sticky=tkinter.tix.NSEW)
 
         self.player_1_label = tkinter.tix.Label(
-            self.players_settings_frame[0], fg="white", text="", wraplength=250
+            self.players_settings_window[0], fg="white", text="", wraplength=250
         )
-        self.player_1_label.grid(row=2, column=0, columnspan=2)
+        self.player_1_label.grid(row=2, column=0)
 
         self.player_2_ready_label = tkinter.tix.Label(
-            self.players_settings_frame[1], fg="#ee2e31",
+            self.players_settings_window[1], fg="#ee2e31",
             text=self.ui.translation.get_translation("server_configuration_player_2_not_ready")
         )
-        self.player_2_ready_label.grid(row=2, column=0, columnspan=2)
+        self.player_2_ready_label.grid(row=2, column=0)
 
-        self.token_choose_frame = tkinter.tix.Frame(self.players_settings_frame[self.player_id])
+        self.button_token_choose_per_line_last = 0
+        self.button_token_choose_per_line = 0
 
-        self.token_choose_frame.grid(row=3, column=0, columnspan=2, sticky=tkinter.tix.NSEW)
+        self.token_choose_frame = tkinter.tix.Frame(self.players_settings_window[self.player_id])
+
+        self.token_choose_frame.grid(row=3, column=0, sticky=tkinter.tix.NSEW)
 
         self.token_choose_buttons = []
 
@@ -196,7 +208,6 @@ class ServerGameConfigurationPanel(Panel.Panel):
                                                                 command=lambda _index=index:
                                                                 self.button_change_token_command(
                                                                     _index)))
-            self.token_choose_buttons[index].grid(row=0, column=index)
 
         self.button_main_menu = tkinter.tix.Button(
             self,
@@ -214,9 +225,6 @@ class ServerGameConfigurationPanel(Panel.Panel):
 
         self.import_last_game_setting()
 
-        self.player_2_is_ready = False
-        self.player_2_is_connected = False
-
         if create_game:
             # Set server functions
             self.ui.server.on_message_function = self.server_on_message
@@ -230,6 +238,53 @@ class ServerGameConfigurationPanel(Panel.Panel):
             self.ui.client.on_disconnection_function = self.client_on_disconnection_function
 
             self.client_on_connection_function()  # because it is already connected
+
+    def on_create_finish(self):
+        """
+        When the panel is pack (See panel class)
+        :return: None
+        """
+        self.on_resize(None)
+
+    def on_resize(self, event):
+        """
+        When the panel is resize (see in panel class)
+        :param event: the tkinter event
+        :return: None
+        """
+        self.recreate_tokens_buttons()
+        self.columnconfigure(0, minsize=self.winfo_width() / 2)
+        self.columnconfigure(1, minsize=self.winfo_width() / 2)
+        self.player_1_label.configure(wraplength=self.players_settings_window[0].winfo_width() - 10)
+        super().on_resize(event)
+
+    def recreate_tokens_buttons(self):
+        """
+        Recreate tokens buttons
+        :return: None
+        """
+        self.button_token_choose_per_line_last = self.button_token_choose_per_line
+        self.button_token_choose_per_line = max(
+            min(
+                int(self.players_settings_window[self.player_id].winfo_width()
+                    / (ImageGetter.TOKEN_ICON_SIZE + TOKEN_MARGIN)),
+                TokenStyle.NUMBER_COLOR,
+            ),
+            1
+        )
+
+        for i in range(0, max(self.button_token_choose_per_line, self.button_token_choose_per_line_last)):
+            if i < self.button_token_choose_per_line:
+                self.token_choose_frame.columnconfigure(i, weight=1)
+            else:
+                self.token_choose_frame.columnconfigure(i, weight=0)
+
+        for index in range(0, TokenStyle.NUMBER_COLOR):
+            if index % self.button_token_choose_per_line == 0:
+                self.token_choose_frame.rowconfigure(int(index / self.button_token_choose_per_line), pad=3)
+
+            self.token_choose_buttons[index].grid(row=int(index / self.button_token_choose_per_line),
+                                                  column=index % self.button_token_choose_per_line)
 
     def import_last_game_setting(self):
         """
@@ -269,7 +324,8 @@ class ServerGameConfigurationPanel(Panel.Panel):
             TokenStyle.TokenStyle(random.randint(0, TokenStyle.NUMBER_COLOR - 1))
         ]
 
-        self.ui.preference.set_temporary_preference(main.Preferences.TEMPORARY_PREFERENCES_PLAYERS_TOKENS, tokens_player)
+        self.ui.preference.set_temporary_preference(main.Preferences.TEMPORARY_PREFERENCES_PLAYERS_TOKENS,
+                                                    tokens_player)
 
     def server_start_stop_command(self):
         """
@@ -432,19 +488,43 @@ class ServerGameConfigurationPanel(Panel.Panel):
             self.player_2_ready_label.configure(
                 text=self.ui.translation.get_translation("server_configuration_player_2_not_ready"), fg="#ee2e31"
             )
-            
+
         if not self.create_game:
             if self.player_2_is_ready:
                 self.button_play.configure(
                     text=self.ui.translation.get_translation("not_ready"), fg="#78bc61", activeforeground="#78bc61"
                 )
-                
+
             else:
                 self.button_play.configure(
                     text=self.ui.translation.get_translation("ready"), fg="#ee2e31", activeforeground="#ee2e31"
                 )
 
         self.player_1_label.configure(text="", bg=self.cget("bg"))
+
+    def name_string_var_trace_write(self, send_update=True):
+        """
+        The trace function of names strings vars
+        :return: None
+        """
+        self.players_entry[0].configure(
+            fg=("black", "#ee2e31")[len(self.players_entry_string_variable[0].get().strip()) < 3]
+        )
+        self.players_entry[1].configure(
+            fg=("black", "#ee2e31")[len(self.players_entry_string_variable[1].get().strip()) < 3]
+        )
+        if self.player_2_is_connected:
+            if len(self.players_entry_string_variable[0].get().strip()) >= 3 and \
+                    self.players_entry_string_variable[0].get().strip() == \
+                    self.players_entry_string_variable[1].get().strip():
+                self.players_entry[0].configure(fg="#ee8f2f")
+                self.players_entry[1].configure(fg="#ee8f2f")
+
+        if send_update:
+            if self.create_game:
+                self.server_send_player_name()
+            else:
+                self.client_send_player_name()
 
     def server_on_message(self, message):
         """
@@ -463,6 +543,7 @@ class ServerGameConfigurationPanel(Panel.Panel):
 
             elif message[0] == MESSAGE_SEND_NAME_SELECTED:
                 self.players_entry_string_variable[1].set(message[1])
+                self.name_string_var_trace_write(False)
 
             elif message[0] == MESSAGE_SEND_TOKEN_SELECTED:
                 try:
@@ -496,18 +577,19 @@ class ServerGameConfigurationPanel(Panel.Panel):
         """
         self.set_player_2_ready(False)
         self.player_2_is_connected = self.ui.server.get_number_client() >= 1
-        self.player_1_label.configure(bg=self.cget("bg"), text="")
+        if not self.player_2_is_connected:
+            self.player_1_label.configure(bg=self.cget("bg"), text="")
 
-        self.players_entry_string_variable[self.opponent_id].set(
-            self.ui.translation.get_translation("server_configuration_waiting")
-        )
+            self.players_entry_string_variable[self.opponent_id].set(
+                self.ui.translation.get_translation("server_configuration_waiting")
+            )
 
-        self.players_tokens[self.opponent_id] = TokenStyle.TokenStyle.Not_Connected
+            self.players_tokens[self.opponent_id] = TokenStyle.TokenStyle.Not_Connected
 
-        self.players_tokens_images[self.opponent_id] = \
-            self.ui.image_getter.save_token_photos[self.opponent][self.players_tokens[self.opponent_id]]
+            self.players_tokens_images[self.opponent_id] = \
+                self.ui.image_getter.save_token_photos[self.opponent][self.players_tokens[self.opponent_id]]
 
-        self.players_tokens_labels[self.opponent_id].config(image=self.players_tokens_images[self.opponent_id])
+            self.players_tokens_labels[self.opponent_id].config(image=self.players_tokens_images[self.opponent_id])
 
     def server_send_player_name(self):
         """
@@ -544,6 +626,7 @@ class ServerGameConfigurationPanel(Panel.Panel):
 
             elif message[0] == MESSAGE_SEND_NAME_SELECTED:
                 self.players_entry_string_variable[0].set(message[1])
+                self.name_string_var_trace_write(False)
 
             elif message[0] == MESSAGE_SEND_TOKEN_SELECTED:
                 try:
