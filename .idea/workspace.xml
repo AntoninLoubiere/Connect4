@@ -3,17 +3,15 @@
   <component name="ChangeListManager">
     <list default="true" id="bd1cde12-7a76-43ca-890e-fa01120f398b" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UI/ServerGameConfigurationPanel.py" beforeDir="false" afterPath="$PROJECT_DIR$/UI/ServerGameConfigurationPanel.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main/Server/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/main/Server/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main/Translation.py" beforeDir="false" afterPath="$PROJECT_DIR$/main/Translation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/translations/EN_en.xml" beforeDir="false" afterPath="$PROJECT_DIR$/translations/EN_en.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/translations/FR_fr.xml" beforeDir="false" afterPath="$PROJECT_DIR$/translations/FR_fr.xml" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FavoritesManager">
+    <favorites_list name="Connect4" />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">

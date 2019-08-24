@@ -473,12 +473,12 @@ class GamePanel(Panel.Panel):
             self.win_icon_background_id = (
                 self.grid_canvas.create_image(
                     self.grid_canvas.winfo_width() / 2 - self.token_square_size / 2 - 20,
-                    self.grid_canvas.winfo_height() / 2 - self.token_square_size / 2 - 25,
+                    self.grid_canvas.winfo_height() / 2 - self.token_square_size / 2 - 30,
                     image=self.ui.image_getter.win_token_background
                 ),
                 self.grid_canvas.create_image(
                     self.grid_canvas.winfo_width() / 2 + self.token_square_size / 2 + 20,
-                    self.grid_canvas.winfo_height() / 2 - self.token_square_size / 2 - 25,
+                    self.grid_canvas.winfo_height() / 2 - self.token_square_size / 2 - 30,
                     image=self.ui.image_getter.win_token_background
                 )
             )
