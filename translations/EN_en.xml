@@ -45,7 +45,6 @@
 
         <string name="game_panel_turn_format">It's the turn of: {}</string>
         <string name="game_panel_win_format">{} won this game !</string>
-        <string name="game_panel_main_menu_button">&lt;- Main menu</string>
 
         <string name="server_list_server_detected">Servers detected: </string>
         <string name="server_list_server_frame_text">Server: on "{2}" ({0}), port: {1}</string>
@@ -86,7 +85,7 @@
 
         <string name="server_start_error_dialog_title">Error n°{}</string>
         <string name="server_start_error_EADDRINUSE_dialog_message">The server can't start, this address in already in use. You can change the port to fix this problem.</string>
-        <string name="server_start_error_unknown_dialog_message">The server can't start, a unknown error has occurred. It is the error n°{}, named "{}" which his is message "{}".</string>
+        <string name="server_start_error_unknown_dialog_message">The server can't start, a unknown error has occurred . It is the error n°{}, named "{}" which his is message "{}".</string>
 
         <string name="default_player_name">Player {}</string>
 

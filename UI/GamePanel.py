@@ -1,9 +1,15 @@
 import threading
 import time
 import tkinter.tix
+import tkinter.ttk
 
 from UI import Panel, TokenStyle, TokenFallAnimation
 from main import TokenState, Game, AIPlayer, Player, Preferences
+
+UPDATE_AI_PROGRESS_BAR_RATE = 10
+
+MARGIN_GRID_CANVAS_HEIGHT = 71
+MARGIN_GRID_CANVAS_WIDTH = 30
 
 
 class GamePanel(Panel.Panel):
@@ -46,7 +52,6 @@ class GamePanel(Panel.Panel):
 
         self.height_center = 0
         self.width_center = 0
-        self.turn_text_height = 15
 
         self.button_main_menu = tkinter.tix.Button(
             self,
@@ -107,6 +112,12 @@ class GamePanel(Panel.Panel):
         self.delay = delay / 1000.  # convert in second
         self.last_click_time = time.time()
 
+        self.ai_turn_start_time = time.time()
+
+        self.ai_progress_bar = tkinter.ttk.Progressbar(self.grid_canvas, orient=tkinter.tix.HORIZONTAL,
+                                                       mode='determinate')
+        self.ai_progress_bar_show = False
+
     def destroy(self):
         """
         When the panel is destroy, force the AI turn to stop
@@ -121,6 +132,8 @@ class GamePanel(Panel.Panel):
             self.players[TokenState.TokenState.Player_2].stop_turn()
 
         self.remove_all_token_animation()
+
+        self.ai_progress_bar_show = False
 
         super().destroy()
 
@@ -141,8 +154,8 @@ class GamePanel(Panel.Panel):
         :return: None
         """
 
-        space_between_column_line = (self.grid_canvas.winfo_width() - 10) / float(self.game.grid_width)
-        space_between_row_line = (self.grid_canvas.winfo_height() - 20 - self.turn_text_height
+        space_between_column_line = (self.grid_canvas.winfo_width() - MARGIN_GRID_CANVAS_WIDTH) / self.game.grid_width
+        space_between_row_line = (self.grid_canvas.winfo_height() - MARGIN_GRID_CANVAS_HEIGHT
                                   ) / float(self.game.grid_height)
         self.token_square_size = min(space_between_column_line, space_between_row_line)
 
@@ -153,28 +166,26 @@ class GamePanel(Panel.Panel):
 
         self.grid_canvas.delete("grid")
 
-        self.turn_text_id = self.grid_canvas.create_text(self.grid_canvas.winfo_width() / 2, self.turn_text_height,
+        self.turn_text_id = self.grid_canvas.create_text(self.grid_canvas.winfo_width() / 2, 15,
                                                          tag="grid")
 
-        self.grid_canvas.create_rectangle(self.width_center, self.height_center + self.turn_text_height,
+        self.grid_canvas.create_rectangle(self.width_center, self.height_center,
                                           self.grid_canvas.winfo_width() - self.width_center,
-                                          self.grid_canvas.winfo_height() - self.height_center +
-                                          self.turn_text_height,
+                                          self.grid_canvas.winfo_height() - self.height_center,
                                           tag="grid", fill="#DDD")
 
         for i in range(1, self.game.grid_width):
             self.grid_canvas.create_line(self.token_square_size * i + self.width_center,
-                                         self.height_center + self.turn_text_height,
+                                         self.height_center,
                                          self.token_square_size * i + self.width_center,
-                                         self.grid_canvas.winfo_height() - self.height_center +
-                                         self.turn_text_height,
+                                         self.grid_canvas.winfo_height() - self.height_center,
                                          tag="grid")
 
         for i in range(1, self.game.grid_height):
             self.grid_canvas.create_line(self.width_center,
-                                         self.token_square_size * i + self.height_center + self.turn_text_height,
+                                         self.token_square_size * i + self.height_center,
                                          self.grid_canvas.winfo_width() - self.width_center,
-                                         self.token_square_size * i + self.height_center + self.turn_text_height,
+                                         self.token_square_size * i + self.height_center,
                                          tag="grid")
 
         self.recreate_images()
@@ -202,6 +213,12 @@ class GamePanel(Panel.Panel):
 
         if self.game.is_win():
             self.update_win()
+
+        if self.ai_progress_bar_show:
+            self.disable_resize_event = True
+            self.ai_progress_bar.place(x=0, y=self.winfo_height(), width=self.winfo_width(),
+                                       anchor=tkinter.tix.SW)
+            self.disable_resize_event = False
 
         super().on_resize(event)
 
@@ -314,11 +331,11 @@ class GamePanel(Panel.Panel):
         return [
             [
                 x * self.token_square_size + self.width_center,
-                y * self.token_square_size + self.height_center + self.turn_text_height
+                y * self.token_square_size + self.height_center
             ],
             [
                 (x + 1) * self.token_square_size + self.width_center,
-                (y + 1) * self.token_square_size + self.height_center + self.turn_text_height
+                (y + 1) * self.token_square_size + self.height_center
             ]
         ]
 
@@ -546,14 +563,16 @@ class GamePanel(Panel.Panel):
         if isinstance(self.players[self.game.current_turn], AIPlayer.AIPlayer) \
                 and not self.players[self.game.current_turn].get_thinking() \
                 and not self.game.is_win():
+            self.players[self.game.current_turn].progress = 0  # pre reset the progress
+            self.show_ai_progress_bar()
             try:
                 self.config(cursor="watch")
-                start_time = time.time()
                 self.add_token_column(self.players[self.game.current_turn].run_turn())
-                print("AI turn run in: {:.2f} second(s)".format(time.time() - start_time))
+                # print("AI turn run in: {:.2f} second(s)".format(time.time() - start_time))
                 self.config(cursor="")
             except tkinter.tix.TclError:
                 pass
+            self.hide_ai_progress_bar()
 
     def button_main_menu_command(self):
         """
@@ -596,3 +615,36 @@ class GamePanel(Panel.Panel):
 
         if self.game.is_win():
             self.update_win()
+
+    def show_ai_progress_bar(self):
+        """
+        Show the ai progress bar
+        :return: None
+        """
+        self.ai_progress_bar_show = True
+        self.ai_progress_bar.configure(value=0)
+        self.ai_progress_bar.place(x=0, y=self.winfo_height(), anchor=tkinter.tix.SW)
+        self.update_ai_progress_bar()
+
+    def hide_ai_progress_bar(self):
+        """
+        Show the ai progress bar
+        :return: None
+        """
+        self.ai_progress_bar_show = False
+        self.ai_progress_bar.place_forget()
+
+    def update_ai_progress_bar(self):
+        """
+        Update the ai progress bar
+        :return: None
+        """
+        if self.ai_progress_bar_show:
+            progress = self.players[self.game.current_turn].progress
+            progress_maximum = self.players[self.game.current_turn].progress_max
+
+            self.ai_progress_bar.configure(maximum=progress_maximum,
+                                           value=progress)
+            self.ai_progress_bar.update_idletasks()
+
+            self.ai_progress_bar.after(10, self.update_ai_progress_bar)

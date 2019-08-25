@@ -35,7 +35,7 @@ class AIPlayer(Player.Player):
     A ai player
     """
 
-    def __init__(self, min_max_deep, game, player_enum, token, name=None):
+    def __init__(self, min_max_deep, game, player_enum, token, name=None, on_progress=lambda value, maximum: None):
         """
         Constructor
         :param min_max_deep: the deep
@@ -54,23 +54,35 @@ class AIPlayer(Player.Player):
         self.game = game
         self.thinking = False
 
+        self.list_column_fill = [False for _ in range(0, self.game.grid_width)]
+        self.number_column_fill = 0
+
+        self.on_progress = on_progress
+        self.progress = 0
+        self.progress_max = self.game.grid_width ** (self.min_max_deep + 1)
+
     def run_turn(self):
         """
         Run his turn
         :return: the column to do
         """
         self.thinking = True
+        self.progress = 0
 
         score = -math.inf
         column_max_score_possibility = []
 
         print(self.get_evaluation(self.game.grid))
 
+        column_check = 0
+
         for column in range(0, self.game.grid_width):
             if self.force_stop:
                 break
 
             if can_place_token(self.game.grid, column):
+
+                column_check += 1
 
                 # print("Column: " + str(column))
 
@@ -94,7 +106,7 @@ class AIPlayer(Player.Player):
                 current_score = self.get_turn_min_max(current_grid, self.min_max_deep,
                                                       (TokenState.Player_1, TokenState.Player_2)[
                                                           self.player_enum == TokenState.Player_1],
-                                                      +math.inf, -math.inf)
+                                                      +math.inf, -math.inf, self.progress)
                 # print(current_score)
                 # print("Score choose:", current_score)
 
@@ -105,6 +117,19 @@ class AIPlayer(Player.Player):
                 elif current_score == score:
                     score = max(current_score, score)
                     column_max_score_possibility.append(column)
+
+                self.progress = (self.game.grid_width - self.number_column_fill) ** self.min_max_deep * column_check
+                self.send_progress()
+
+            else:
+                if not self.list_column_fill[column]:
+                    self.list_column_fill[column] = True
+                    self.number_column_fill += 1
+                    print(self.number_column_fill)
+
+                    self.progress_max = (self.game.grid_width - self.number_column_fill) ** (self.min_max_deep + 1)
+                    self.progress = (self.game.grid_width - self.number_column_fill) ** self.min_max_deep * (column + 1)
+                    self.send_progress()
 
         self.thinking = False
         self.force_stop = False
@@ -122,9 +147,10 @@ class AIPlayer(Player.Player):
             print(self.get_evaluation(current_grid))
             return column_choose
 
-    def get_turn_min_max(self, grid, deep, player_turn, alpha, beta):
+    def get_turn_min_max(self, grid, deep, player_turn, alpha, beta, progress_start):
         """
         Recursive method to get turn min max
+        :param progress_start: the current progress of the program
         :param alpha: The alpha of the algorithm. alpha > beta
         :param beta: The beta of the algorithm. beta < alpha
         :param grid: the current grid
@@ -137,11 +163,18 @@ class AIPlayer(Player.Player):
 
         score = (math.inf, -math.inf)[player_turn == self.player_enum]
 
+        column_check = 0
+
         for column in range(0, self.game.grid_width):
             if self.force_stop:
                 return 0
 
+            current_progress = (self.game.grid_width - self.number_column_fill) ** (deep - 1) \
+                * column_check + progress_start
+
             if can_place_token(grid, column):
+
+                column_check += 1
 
                 y_coord_new_token = self.get_coord_add_token_grid(grid, column)
                 current_grid = copy.deepcopy(grid)
@@ -164,7 +197,7 @@ class AIPlayer(Player.Player):
                         current_score = self.get_turn_min_max(
                             current_grid, deep - 1,
                             (TokenState.Player_1, TokenState.Player_2)[player_turn == TokenState.Player_1], alpha,
-                            beta)
+                            beta, current_progress)
 
                     else:
                         current_score = self.get_evaluation(current_grid)
@@ -183,19 +216,19 @@ class AIPlayer(Player.Player):
                         current_score = self.get_turn_min_max(
                             current_grid, deep - 1,
                             (TokenState.Player_1, TokenState.Player_2)[player_turn == TokenState.Player_1], alpha,
-                            beta)
+                            beta, current_progress)
 
                     else:
                         current_score = self.get_evaluation(current_grid)
-
-                    if deep == self.min_max_deep:
-                        # print(current_score)
-                        pass
 
                     score = min(current_score, score)
                     if beta >= score:  # beta cut
                         return score
                     alpha = min(alpha, score)
+
+            self.progress = (self.game.grid_width - self.number_column_fill) ** (deep - 1) \
+                * column_check + progress_start
+            self.send_progress()
 
         return score
 
@@ -355,3 +388,10 @@ class AIPlayer(Player.Player):
         :return: None
         """
         self.force_stop = True
+
+    def send_progress(self):
+        """
+        Send the progress to the function var
+        :return: None
+        """
+        self.on_progress(self.progress, self.progress_max)
