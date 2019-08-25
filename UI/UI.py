@@ -55,15 +55,6 @@ class UI(tkinter.tix.Tk):
         self.update()
         self.current_panel.on_create_finish()
 
-    def tick_update(self):
-        """
-        Tick update to current panel see panel class
-        :return: None
-        """
-
-        if self.current_panel is not None:
-            self.current_panel.tick_update()
-
     def mainloop(self, n=0):
         self.is_alive = True
         super().mainloop(n)

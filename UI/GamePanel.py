@@ -506,21 +506,6 @@ class GamePanel(Panel.Panel):
             self.update_idletasks()
             self.grid_canvas.disable = False
 
-    def tick_update(self):
-        """
-        See panel class
-        :return: See panel class
-        """
-
-        i = 0
-        while i < len(self.token_animation_list):
-            try:
-                self.token_animation_list[i].tick_update()
-            except tkinter.tix.TclError:
-                pass
-
-            i += 1
-
     def add_token_animation(self, token_animation):
         """
         Add a token animation
