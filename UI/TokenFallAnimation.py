@@ -1,7 +1,6 @@
 import tkinter.tix
 
-from main import TickUpdater
-
+NUMBER_UPDATE_PER_SECOND = 100
 TIME_ANIMATION = 0.75
 
 
@@ -32,15 +31,15 @@ class TokenFallAnimation(object):
             self.final_coord[0][0], self.current_height, image=self.game_panel.ui.image_getter.save_token_photos[player]
             [self.game_panel.players[player].token], anchor=tkinter.tix.NW
         )
+        self.animation_update()
 
-    def tick_update(self):
+    def animation_update(self):
         """
         On tick update
         :return: None
         """
-
         y_speed = self.game_panel.get_square_coord(
-            0, self.game_panel.game.grid_height)[0][1] / (TickUpdater.NUMBER_UPDATE_PER_SECOND * TIME_ANIMATION)
+            0, self.game_panel.game.grid_height)[0][1] / (NUMBER_UPDATE_PER_SECOND * TIME_ANIMATION)
         # second
 
         if self.final_coord[0][1] > self.current_height + y_speed:
@@ -51,6 +50,9 @@ class TokenFallAnimation(object):
             self.game_panel.create_image(self.final_x, self.final_y, self.player)
             self.game_panel.on_end_animation(self.player)
             self.game_panel.remove_token_animation(self)
+            return None
+
+        self.game_panel.after(int(1000 / NUMBER_UPDATE_PER_SECOND * TIME_ANIMATION), self.animation_update)
 
     def on_remove(self):
         """

@@ -85,6 +85,11 @@
 
         <string name="server_game_wait_host">En attende du Joueur 1...</string>
 
+         <string name="server_start_error_dialog_title">Erreur n°{}</string>
+        <string name="server_start_error_EADDRINUSE_dialog_message">Le serveur ne peut pas démarrer, l'adresse est déja utilisé. Vous pouvez changer le port pour résoudre ce problème.</string>
+        <string name="server_start_error_unknown_dialog_message">Le serveur ne peut pas démarrer, une erreur inconnue est survenue. C'est l'erreur n°{}, nommée "{}" dont le message est "{}".</string>
+
+
         <string name="default_player_name">Joueur {}</string>
 
         <string name="preference_settings_column">Préférence:</string>

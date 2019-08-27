@@ -54,7 +54,7 @@ class Server(threading.Thread):
     def start_server(self):
         """
         Start the server
-        :return: If is do
+        :return: (If is do, error number, error if there is)
         """
         if not self.server_is_on:
             try:
@@ -62,10 +62,11 @@ class Server(threading.Thread):
                 self.log("Start the server", "Server")
                 self.server_is_on = True
                 self.start()
-                return True
+                return True, 0
             except socket.error as e:
                 self.error("Can't start the server. Error n°" + str(e.errno) + " (" + e.strerror + ")", "Server")
-        return False
+                return False, e.errno, e
+        return False, 0
 
     def run(self):
         """

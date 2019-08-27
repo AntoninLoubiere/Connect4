@@ -1,3 +1,4 @@
+import errno
 import random
 import tkinter.messagebox
 import tkinter.tix
@@ -14,6 +15,8 @@ MESSAGE_SEND_NAME_SELECTED = "player-name"
 MESSAGE_SEND_READY = "player-2-is-ready"
 MESSAGE_PLAYER_1_WANT_START = "player-1-want-start"
 MESSAGE_PLAY = "play"
+
+SERVER_ERROR_DIALOG_KEY_FORMAT = "server_start_error_{}_dialog_message"  # {} is error name
 
 
 class ServerGameConfigurationPanel(Panel.Panel):
@@ -364,8 +367,8 @@ class ServerGameConfigurationPanel(Panel.Panel):
                         on_client_connect_function=self.server_on_client_connect_function,
                         on_client_disconnect_function=self.server_on_client_disconnect_function
                     )
-
-                    if self.ui.server.start_server():
+                    result = self.ui.server.start_server()
+                    if result[0]:
                         self.server_port_spin_box.configure(state="readonly", increment=0)
                         self.server_start_stop.configure(
                             text=self.ui.translation.get_translation("server_configuration_stop")
@@ -374,6 +377,22 @@ class ServerGameConfigurationPanel(Panel.Panel):
                         self.server_state_label.configure(
                             text=self.ui.translation.get_translation("server_state_started"), fg="#78bc61"
                         )
+                    else:
+                        error_name = errno.errorcode[result[1]]
+                        if self.ui.translation.translation_exist(SERVER_ERROR_DIALOG_KEY_FORMAT.format(error_name)):
+                            tkinter.messagebox.showerror(
+                                self.ui.translation.get_translation("server_start_error_dialog_title")
+                                    .format(result[1]),
+                                self.ui.translation.get_translation(SERVER_ERROR_DIALOG_KEY_FORMAT.format(error_name))
+                            )
+                        else:
+                            tkinter.messagebox.showerror(
+                                self.ui.translation.get_translation("server_start_error_dialog_title")
+                                    .format(result[1]),
+                                self.ui.translation.get_translation("server_start_error_unknown_dialog_message")
+                                    .format(result[1], error_name, result[2].strerror)
+                            )
+
                 else:
                     tkinter.messagebox.showerror(
                         self.ui.translation.get_translation("server_configuration_dialog_port_error_title"),

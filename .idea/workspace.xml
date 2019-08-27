@@ -3,15 +3,21 @@
   <component name="ChangeListManager">
     <list default="true" id="bd1cde12-7a76-43ca-890e-fa01120f398b" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UI/ServerGameConfigurationPanel.py" beforeDir="false" afterPath="$PROJECT_DIR$/UI/ServerGameConfigurationPanel.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UI/ServerGamePanel.py" beforeDir="false" afterPath="$PROJECT_DIR$/UI/ServerGamePanel.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UI/ServerListPanel.py" beforeDir="false" afterPath="$PROJECT_DIR$/UI/ServerListPanel.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UI/GamePanel.py" beforeDir="false" afterPath="$PROJECT_DIR$/UI/GamePanel.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UI/Panel.py" beforeDir="false" afterPath="$PROJECT_DIR$/UI/Panel.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/AIPlayer.py" beforeDir="false" afterPath="$PROJECT_DIR$/main/AIPlayer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/Player.py" beforeDir="false" afterPath="$PROJECT_DIR$/main/Player.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/preferences.pkl" beforeDir="false" afterPath="$PROJECT_DIR$/preferences.pkl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/translations/EN_en.xml" beforeDir="false" afterPath="$PROJECT_DIR$/translations/EN_en.xml" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FavoritesManager">
+    <favorites_list name="Connect4" />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">

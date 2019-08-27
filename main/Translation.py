@@ -116,6 +116,47 @@ class Translation:
 
             return self.get_translation(key, DEFAULT_LANGUAGE)
 
+    def translation_exist(self, key, language_id=None) -> bool:
+        """
+        Get if a transtalion exist
+        :param key: the key of the translation
+        :param language_id: the anguage id
+        :return: boolean if exist
+        """
+        if language_id is None:
+            language_id = self.get_language(DEFAULT_LANGUAGE)
+
+        try:
+            translation_file_path = TRANSLATION_FILES_PATH_FORMAT.format(self.list_translations[language_id][0])
+
+            doc = xml.dom.minidom.parse(translation_file_path)
+
+            translations_list = doc.getElementsByTagName("language")[0].getElementsByTagName('translations')[0]. \
+                getElementsByTagName("string")
+
+            for translation in translations_list:
+                if key == translation.getAttribute("name"):
+                    return True
+            else:
+                return False
+
+        except FileNotFoundError:
+            if language_id == self.get_language(DEFAULT_LANGUAGE):
+                print("ERROR: The default file doesn't exist !")
+
+                return False
+
+            print("WARNING: The file of this language doesn't exist")
+
+            return False
+
+        except IndexError:
+            if language_id == self.get_language(DEFAULT_LANGUAGE):
+                print("ERROR: The default file haven't a good format !")
+                return False
+
+            print("WARNING: The file of this language haven't a good format")
+
     def set_current_language(self, new_current_language, save_preferences=True) -> None:
         """
         Set the current language

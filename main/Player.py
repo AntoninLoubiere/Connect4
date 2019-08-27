@@ -22,6 +22,11 @@ class Player(object):
         else:
             self.name = name
 
+        # variables need in AI player
+        self.on_progress = None
+        self.progress = 0
+        self.progress_max = 0
+
     def get_thinking(self):
         """
         Function for AI class (see AI class)
