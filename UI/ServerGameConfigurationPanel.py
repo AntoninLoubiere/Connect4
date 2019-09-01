@@ -191,7 +191,10 @@ class ServerGameConfigurationPanel(Panel.Panel):
 
         self.player_2_ready_label = tkinter.tix.Label(
             self.players_settings_window[1], fg="#ee2e31",
-            text=self.ui.translation.get_translation("server_configuration_player_2_not_ready")
+            text=self.ui.translation.get_translation(
+                ("server_configuration_player_2_not_ready",
+                 "server_configuration_player_2_not_connected")
+                [self.create_game])
         )
         self.player_2_ready_label.grid(row=2, column=0)
 
@@ -504,9 +507,15 @@ class ServerGameConfigurationPanel(Panel.Panel):
                 text=self.ui.translation.get_translation("server_configuration_player_2_ready"), fg="#78bc61"
             )
         else:
-            self.player_2_ready_label.configure(
-                text=self.ui.translation.get_translation("server_configuration_player_2_not_ready"), fg="#ee2e31"
-            )
+            if not self.player_2_is_connected and self.create_game:
+                self.player_2_ready_label.configure(
+                    text=self.ui.translation.get_translation("server_configuration_player_2_not_connected"),
+                    fg="#ee2e31"
+                )
+            else:
+                self.player_2_ready_label.configure(
+                    text=self.ui.translation.get_translation("server_configuration_player_2_not_ready"), fg="#ee2e31"
+                )
 
         if not self.create_game:
             if self.player_2_is_ready:
@@ -566,6 +575,9 @@ class ServerGameConfigurationPanel(Panel.Panel):
             if message[0] == MESSAGE_NEED_STATE:
                 self.server_send_player_name()
                 self.server_send_token()
+                self.player_2_ready_label.configure(
+                    text=self.ui.translation.get_translation("server_configuration_player_2_not_ready")
+                )
                 self.player_2_is_connected = True
 
             elif message[0] == MESSAGE_SEND_NAME_SELECTED:
@@ -606,6 +618,11 @@ class ServerGameConfigurationPanel(Panel.Panel):
         self.player_2_is_connected = self.ui.server.get_number_client() >= 1
         if not self.player_2_is_connected:
             self.player_1_label.configure(bg=self.cget("bg"), text="")
+
+            self.player_2_ready_label.configure(
+                text=self.ui.translation.get_translation("server_configuration_player_2_not_connected"),
+                fg="#ee2e31"
+            )
 
             self.players_entry_string_variable[self.opponent_id].set(
                 self.ui.translation.get_translation("server_configuration_waiting")

@@ -72,6 +72,7 @@
         <string name="server_configuration_player_1_want_start">Le joueur 1 veut commencer à jouer, vérifier si vous êtes prêt</string>
         <string name="server_configuration_player_2_not_ready">Le joueur 2 n'est pas prêt</string>
         <string name="server_configuration_player_2_ready">Le joueur 2 est prêt</string>
+        <string name="server_configuration_player_2_not_connected">Le joueur 2 n'est pas connecté</string>
 
         <string name="server_dialog_quit_title">Quitter ?</string>
         <string name="server_dialog_quit_message">Vous ếtes sur le point de partir. Êtes vous sûr de vouloir quitter ?</string>
