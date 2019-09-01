@@ -137,6 +137,37 @@ class PreferencePanel(Panel.Panel):
         )
         self.delay_default_text.grid(row=current_row, column=2, sticky=tkinter.tix.NSEW)
 
+        # Delay win
+        current_row += 1
+
+        self.delay_win_text = tkinter.tix.Label(
+            self.window_settings, text=self.ui.translation.get_translation("preference_delay_win"),
+            justify=tkinter.tix.RIGHT
+        )
+        self.delay_win_text.grid(row=current_row, column=0, sticky=tkinter.tix.E)
+        self.list_text_settings.append(self.delay_win_text)
+
+        self.delay_win_spin_box_variable = tkinter.tix.StringVar()
+        self.delay_win_spin_box_variable.set(str(self.ui.preference.get_preference(Preferences.PREFERENCE_WIN_DELAY)))
+
+        self.delay_win_spin_box = tkinter.tix.Spinbox(
+            self.window_settings, textvariable=self.delay_win_spin_box_variable,
+            from_=Preferences.DELAY_WIN_MIN, to=Preferences.DELAY_WIN_MAX, increment=100
+        )
+        self.delay_win_spin_box.grid(row=current_row, column=1, sticky=tkinter.tix.NSEW)
+
+        self.delay_win_spin_box_variable.trace_add(
+            "write",
+            lambda x, y, z: self.on_spin_box_change(self.delay_win_spin_box)
+        )
+
+        self.delay_win_default_text = tkinter.tix.Button(
+            self.window_settings, text=Preferences.DEFAULT_WIN_DELAY,
+            command=lambda: self.set_default_preference_on_button_click(Preferences.PREFERENCE_WIN_DELAY,
+                                                                        Preferences.DEFAULT_WIN_DELAY)
+        )
+        self.delay_win_default_text.grid(row=current_row, column=2, sticky=tkinter.tix.NSEW)
+
         # !!! Section: Difficulty !!!
 
         current_row += 1
@@ -294,6 +325,21 @@ class PreferencePanel(Panel.Panel):
             )
             return None
 
+        try:
+            delay = int(self.delay_win_spin_box_variable.get())
+            if Preferences.DELAY_WIN_MIN <= delay <= Preferences.DELAY_WIN_MAX:
+                self.ui.preference.set_preference(Preferences.PREFERENCE_WIN_DELAY, delay)
+            else:
+                raise ValueError  # show the dialog
+        except ValueError:
+            tkinter.messagebox.showerror(
+                self.ui.translation.get_translation("preference_error_input_title"),
+                self.ui.translation.get_translation("preference_error_input_win_delay").format(
+                    self.delay_win_spin_box_variable.get(), Preferences.DELAY_WIN_MIN, Preferences.DELAY_WIN_MAX
+                )
+            )
+            return None
+
         for i in range(0, NUMBER_DIFFICULTY_BUTTONS):
             try:
                 difficulty_level = int(self.difficulty_variable_spin_box_list[i].get())
@@ -326,6 +372,7 @@ class PreferencePanel(Panel.Panel):
         self.language_combo_box.current(self.ui.translation.current_language)
 
         self.delay_spin_box_variable.set(self.ui.preference.get_preference(Preferences.PREFERENCE_DELAY))
+        self.delay_win_spin_box_variable.set(self.ui.preference.get_preference(Preferences.PREFERENCE_WIN_DELAY))
 
         for i, variable in enumerate(self.difficulty_variable_spin_box_list):
             variable.set(self.ui.preference.get_preference(Preferences.PREFERENCE_DIFFICULTY_LEVEl)[i])
@@ -346,6 +393,7 @@ class PreferencePanel(Panel.Panel):
         self.language_text.configure(text=self.ui.translation.get_translation("preference_language"))
 
         self.delay_text.configure(text=self.ui.translation.get_translation("preference_delay"))
+        self.delay_win_text.configure(text=self.ui.translation.get_translation("preference_delay_win"))
 
         self.section_difficulty_label.configure(text=self.ui.translation.get_translation(
             "preference_section_difficulty"))

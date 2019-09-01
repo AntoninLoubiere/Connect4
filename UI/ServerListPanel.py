@@ -41,13 +41,13 @@ class ServerListPanel(Panel.Panel):
         self.manual_connexion_frame = tkinter.tix.Frame(self)
         self.manual_connexion_frame.grid(row=2, column=0, columnspan=2, sticky=tkinter.tix.NSEW)
 
-        for c in range(0, 5):
+        for c in range(0, 3):
             self.manual_connexion_frame.columnconfigure(c, weight=1)
 
         tkinter.tix.Label(
             self.manual_connexion_frame,
             text=self.ui.translation.get_translation("server_list_manual_connexion_frame_text")
-        ).grid(row=0, column=0, sticky=tkinter.tix.NSEW)
+        ).grid(row=0, column=0, rowspan=2, sticky=tkinter.tix.NSEW)
 
         tkinter.tix.Label(
             self.manual_connexion_frame,
@@ -63,10 +63,10 @@ class ServerListPanel(Panel.Panel):
         tkinter.tix.Label(
             self.manual_connexion_frame,
             text=self.ui.translation.get_translation("server_list_manual_connexion_frame_port")
-        ).grid(row=0, column=3, sticky=tkinter.tix.E)
+        ).grid(row=1, column=1, sticky=tkinter.tix.E)
 
         self.manual_connexion_port = tkinter.tix.Spinbox(self.manual_connexion_frame, from_=3000, to=3020, wrap=True)
-        self.manual_connexion_port.grid(row=0, column=4, sticky=tkinter.tix.NSEW)
+        self.manual_connexion_port.grid(row=1, column=2, sticky=tkinter.tix.NSEW)
 
         self.play_button = tkinter.tix.Button(
             self, text=self.ui.translation.get_translation("play"), state=tkinter.tix.DISABLED

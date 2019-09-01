@@ -61,6 +61,17 @@ class AIPlayer(Player.Player):
         self.progress = 0
         self.progress_max = self.game.grid_width ** (self.min_max_deep + 1)
 
+    def reset(self):
+        """
+        When the game is finish, reset the player
+        :return: None
+        """
+        self.list_column_fill = [False for _ in range(0, self.game.grid_width)]
+        self.number_column_fill = 0
+
+        self.progress = 0
+        self.progress_max = self.game.grid_width ** (self.min_max_deep + 1)
+
     def run_turn(self):
         """
         Run his turn
@@ -72,7 +83,7 @@ class AIPlayer(Player.Player):
         score = -math.inf
         column_max_score_possibility = []
 
-        print(self.get_evaluation(self.game.grid))
+        # print(self.get_evaluation(self.game.grid))
 
         column_check = 0
 
@@ -125,7 +136,6 @@ class AIPlayer(Player.Player):
                 if not self.list_column_fill[column]:
                     self.list_column_fill[column] = True
                     self.number_column_fill += 1
-                    print(self.number_column_fill)
 
                     self.progress_max = (self.game.grid_width - self.number_column_fill) ** (self.min_max_deep + 1)
                     self.progress = (self.game.grid_width - self.number_column_fill) ** self.min_max_deep * (column + 1)
@@ -144,7 +154,7 @@ class AIPlayer(Player.Player):
             current_grid = copy.deepcopy(self.game.grid)
             current_grid[column_choose][y_coord_new_token] = self.player_enum
 
-            print(self.get_evaluation(current_grid))
+            # print(self.get_evaluation(current_grid))
             return column_choose
 
     def get_turn_min_max(self, grid, deep, player_turn, alpha, beta, progress_start):

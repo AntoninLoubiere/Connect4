@@ -74,6 +74,7 @@ class Server(threading.Thread):
         :return: None
         """
         self.socket.listen(self.max_clients_connected)
+
         while self.server_is_on:
             try:
                 readable, writable, exceptional = select.select(self.input_list, self.output_list, self.input_list,
@@ -85,8 +86,9 @@ class Server(threading.Thread):
 
                 if s is self.socket:
                     try:
-                        client_socket, address = self.socket.accept()
-                        self.try_connect(client_socket)
+                        if self.get_number_client() < self.max_clients_connected:
+                            client_socket, address = self.socket.accept()
+                            self.try_connect(client_socket)
                     except OSError:
                         break
                 else:

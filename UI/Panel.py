@@ -55,12 +55,6 @@ class Panel(tkinter.tix.Frame):
         """
         pass
 
-    def tick_update(self):
-        """
-        When the program is update (especially for animation)
-        :return: None
-        """
-
     def on_resize(self, event):
         """
         When the window is resize
@@ -70,6 +64,7 @@ class Panel(tkinter.tix.Frame):
             self.resize_in_progress = False
 
         else:
+            self.update_idletasks()
             new_event = self.last_event
             self.last_event = None
             self.on_resize(new_event)

@@ -10,6 +10,8 @@ HEIGHT = 620
 MIN_WIDTH = 420
 MIN_HEIGHT = 300
 
+UPDATE_RATE = 10
+
 
 class UI(tkinter.tix.Tk):
     """

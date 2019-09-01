@@ -10,8 +10,8 @@ from main.Preferences import TEMPORARY_PREFERENCES_PLAYERS_TOKENS, TEMPORARY_PRE
 from main.TokenState import TokenState
 
 DEFAULT_BUTTON_DIFFICULTY_SELECT = 2
-
 TOKEN_MARGIN = 10
+NAME_MAX_VALUE = 20
 
 
 class ConfigureGamePanel(Panel.Panel):
@@ -99,8 +99,8 @@ class ConfigureGamePanel(Panel.Panel):
         self.player_ai_choose[1].grid(row=0, column=0, sticky=tkinter.tix.W)
 
         self.players_tokens = [
-            TokenStyle.TokenStyle(random.randint(0, TokenStyle.NUMBER_COLOR - 1)),
-            TokenStyle.TokenStyle(random.randint(0, TokenStyle.NUMBER_COLOR - 1))
+            TokenStyle.TokenStyle(random.randint(0, TokenStyle.NUMBER_STYLE - 1)),
+            TokenStyle.TokenStyle(random.randint(0, TokenStyle.NUMBER_STYLE - 1))
         ]
 
         self.players_tokens_images = [
@@ -137,7 +137,7 @@ class ConfigureGamePanel(Panel.Panel):
         self.button_token_choose_per_line_last = 0  # to remove column configure
 
         self.token_choose_buttons = [[], []]
-        for index in range(0, TokenStyle.NUMBER_COLOR):
+        for index in range(0, TokenStyle.NUMBER_STYLE):
             self.token_choose_buttons[0].append(tkinter.tix.Button(self.token_choose_frame[0],
                                                                    image=self.ui.image_getter.save_token_icons[
                                                                        TokenState.Player_1]
@@ -246,7 +246,7 @@ class ConfigureGamePanel(Panel.Panel):
         self.button_token_choose_per_line = max(
             min(
                 int(self.players_settings_window[0].winfo_width() / (ImageGetter.TOKEN_ICON_SIZE + TOKEN_MARGIN)),
-                TokenStyle.NUMBER_COLOR,
+                TokenStyle.NUMBER_STYLE,
             ),
             1
         )
@@ -259,7 +259,7 @@ class ConfigureGamePanel(Panel.Panel):
                 self.token_choose_frame[0].columnconfigure(i, weight=0)
                 self.token_choose_frame[1].columnconfigure(i, weight=0)
 
-        for index in range(0, TokenStyle.NUMBER_COLOR):
+        for index in range(0, TokenStyle.NUMBER_STYLE):
             if index % self.button_token_choose_per_line == 0:
                 self.token_choose_frame[0].rowconfigure(int(index / self.button_token_choose_per_line), pad=3)
                 self.token_choose_frame[1].rowconfigure(int(index / self.button_token_choose_per_line), pad=3)
@@ -400,6 +400,12 @@ class ConfigureGamePanel(Panel.Panel):
                 self.players_entry_string_variable[1].get().strip():
             self.players_entry[0].configure(fg="#ee8f2f")
             self.players_entry[1].configure(fg="#ee8f2f")
+
+        if len(self.players_entry_string_variable[0].get()) > NAME_MAX_VALUE:
+            self.players_entry_string_variable[0].set(self.players_entry_string_variable[0].get()[:NAME_MAX_VALUE])
+            
+        if len(self.players_entry_string_variable[1].get()) > NAME_MAX_VALUE:
+            self.players_entry_string_variable[1].set(self.players_entry_string_variable[1].get()[:NAME_MAX_VALUE])
 
     def button_main_menu_command(self):
         """

@@ -27,6 +27,12 @@ class Player(object):
         self.progress = 0
         self.progress_max = 0
 
+    def reset(self):
+        """
+        When the game is finish, reset the player
+        :return: None
+        """
+
     def get_thinking(self):
         """
         Function for AI class (see AI class)

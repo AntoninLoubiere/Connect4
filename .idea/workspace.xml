@@ -1,7 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="bd1cde12-7a76-43ca-890e-fa01120f398b" name="Default Changelist" comment="" />
+    <list default="true" id="bd1cde12-7a76-43ca-890e-fa01120f398b" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/UI/NumberColor.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UI/ConfigureGamePanel.py" beforeDir="false" afterPath="$PROJECT_DIR$/UI/ConfigureGamePanel.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UI/GamePanel.py" beforeDir="false" afterPath="$PROJECT_DIR$/UI/GamePanel.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UI/ImageGetter.py" beforeDir="false" afterPath="$PROJECT_DIR$/UI/ImageGetter.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UI/Panel.py" beforeDir="false" afterPath="$PROJECT_DIR$/UI/Panel.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UI/PreferencePanel.py" beforeDir="false" afterPath="$PROJECT_DIR$/UI/PreferencePanel.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UI/ServerGameConfigurationPanel.py" beforeDir="false" afterPath="$PROJECT_DIR$/UI/ServerGameConfigurationPanel.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UI/ServerListPanel.py" beforeDir="false" afterPath="$PROJECT_DIR$/UI/ServerListPanel.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UI/TokenStyle.py" beforeDir="false" afterPath="$PROJECT_DIR$/UI/TokenStyle.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UI/UI.py" beforeDir="false" afterPath="$PROJECT_DIR$/UI/UI.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/AIPlayer.py" beforeDir="false" afterPath="$PROJECT_DIR$/main/AIPlayer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/Game.py" beforeDir="false" afterPath="$PROJECT_DIR$/main/Game.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/Player.py" beforeDir="false" afterPath="$PROJECT_DIR$/main/Player.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/Preferences.py" beforeDir="false" afterPath="$PROJECT_DIR$/main/Preferences.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/Server/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/main/Server/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/translations/EN_en.xml" beforeDir="false" afterPath="$PROJECT_DIR$/translations/EN_en.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/translations/FR_fr.xml" beforeDir="false" afterPath="$PROJECT_DIR$/translations/FR_fr.xml" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -29,7 +48,7 @@
   <component name="PropertiesComponent">
     <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/main/Preferences.py" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/UI" />
     <property name="restartRequiresConfirmation" value="false" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
@@ -43,15 +62,15 @@
     </option>
   </component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$" />
-      <recent name="$PROJECT_DIR$/UI/res/Token" />
-      <recent name="$PROJECT_DIR$/UI/res" />
-      <recent name="$PROJECT_DIR$/UI" />
-    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/main" />
       <recent name="$PROJECT_DIR$/UI" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/UI" />
+      <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/UI/res/Token" />
+      <recent name="$PROJECT_DIR$/UI/res" />
     </key>
   </component>
   <component name="RunDashboard">

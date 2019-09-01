@@ -31,6 +31,8 @@ class Game(object):
         self.winner = TokenState.Blank
         self.win_tokens_coord = [[-1, -1], [-1, -1]]
 
+        self.score = [0, 0]
+
     def add_token(self, column):
         """
         Add the token of the current player in a column
@@ -107,9 +109,8 @@ class Game(object):
             temp_coord[1] = [x, current_y]
 
         if number_align >= 4:
-            self.winner = self.grid[x][y]
+            self.set_winner(self.grid[x][y])
             self.win_tokens_coord = temp_coord
-            self.game_win = True
             return True
 
         number_align = 1 
@@ -134,9 +135,8 @@ class Game(object):
             temp_coord[1] = [current_x, y]
 
         if number_align >= 4:
-            self.winner = self.grid[x][y]
+            self.set_winner(self.grid[x][y])
             self.win_tokens_coord = temp_coord
-            self.game_win = True
             return True
 
         number_align = 1 
@@ -171,9 +171,8 @@ class Game(object):
             number_align += 1
 
         if number_align >= 4:
-            self.winner = self.grid[x][y]
+            self.set_winner(self.grid[x][y])
             self.win_tokens_coord = temp_coord
-            self.game_win = True
             return True
 
         # #Test diagonal top right - bottom left#
@@ -208,9 +207,8 @@ class Game(object):
             number_align += 1
 
         if number_align >= 4:
-            self.winner = self.grid[x][y]
+            self.set_winner(self.grid[x][y])
             self.win_tokens_coord = temp_coord
-            self.game_win = True
             return True
         else:
             for x in range(0, self.grid_width):
@@ -311,3 +309,18 @@ class Game(object):
         self.game_win = False
         self.winner = TokenState.Blank
         self.win_tokens_coord = [[-1, -1], [-1, -1]]
+
+    def set_winner(self, winner):
+        """
+        Set the winner
+        :param winner: the winner
+        :return: None
+        """
+        if not self.game_win:
+            self.game_win = True
+            self.winner = winner
+
+            if winner == TokenState.Player_1:
+                self.score[0] += 1
+            elif winner == TokenState.Player_2:
+                self.score[1] += 1

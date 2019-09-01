@@ -4,7 +4,7 @@ import tkinter.messagebox
 import tkinter.tix
 
 import main.Preferences
-from UI import Panel, TokenStyle, ServerGamePanel, ImageGetter
+from UI import Panel, TokenStyle, ServerGamePanel, ImageGetter, ConfigureGamePanel
 from UI.ConfigureGamePanel import TOKEN_MARGIN
 from main import Server, Player, Game
 from main.TokenState import TokenState
@@ -166,8 +166,8 @@ class ServerGameConfigurationPanel(Panel.Panel):
             self.players_settings_window[i].grid_columnconfigure(0, weight=1)
 
         self.players_tokens = [
-            TokenStyle.TokenStyle(random.randint(0, TokenStyle.NUMBER_COLOR - 1)),
-            TokenStyle.TokenStyle(random.randint(0, TokenStyle.NUMBER_COLOR - 1))
+            TokenStyle.TokenStyle(random.randint(0, TokenStyle.NUMBER_STYLE - 1)),
+            TokenStyle.TokenStyle(random.randint(0, TokenStyle.NUMBER_STYLE - 1))
         ]
         self.players_tokens[self.opponent_id] = TokenStyle.TokenStyle.Not_Connected
 
@@ -204,7 +204,7 @@ class ServerGameConfigurationPanel(Panel.Panel):
 
         self.token_choose_buttons = []
 
-        for index in range(0, TokenStyle.NUMBER_COLOR):
+        for index in range(0, TokenStyle.NUMBER_STYLE):
             self.token_choose_buttons.append(tkinter.tix.Button(self.token_choose_frame,
                                                                 image=self.ui.image_getter.save_token_icons[self.player]
                                                                 [TokenStyle.TokenStyle(index)],
@@ -271,7 +271,7 @@ class ServerGameConfigurationPanel(Panel.Panel):
             min(
                 int(self.players_settings_window[self.player_id].winfo_width()
                     / (ImageGetter.TOKEN_ICON_SIZE + TOKEN_MARGIN)),
-                TokenStyle.NUMBER_COLOR,
+                TokenStyle.NUMBER_STYLE,
             ),
             1
         )
@@ -282,7 +282,7 @@ class ServerGameConfigurationPanel(Panel.Panel):
             else:
                 self.token_choose_frame.columnconfigure(i, weight=0)
 
-        for index in range(0, TokenStyle.NUMBER_COLOR):
+        for index in range(0, TokenStyle.NUMBER_STYLE):
             if index % self.button_token_choose_per_line == 0:
                 self.token_choose_frame.rowconfigure(int(index / self.button_token_choose_per_line), pad=3)
 
@@ -324,7 +324,7 @@ class ServerGameConfigurationPanel(Panel.Panel):
 
         tokens_player = [
             self.players_tokens[self.player_id],
-            TokenStyle.TokenStyle(random.randint(0, TokenStyle.NUMBER_COLOR - 1))
+            TokenStyle.TokenStyle(random.randint(0, TokenStyle.NUMBER_STYLE - 1))
         ]
 
         self.ui.preference.set_temporary_preference(main.Preferences.TEMPORARY_PREFERENCES_PLAYERS_TOKENS,
@@ -544,6 +544,14 @@ class ServerGameConfigurationPanel(Panel.Panel):
                 self.server_send_player_name()
             else:
                 self.client_send_player_name()
+
+        if len(self.players_entry_string_variable[0].get()) > ConfigureGamePanel.NAME_MAX_VALUE:
+            self.players_entry_string_variable[0].set(self.players_entry_string_variable[0].get()
+                                                      [:ConfigureGamePanel.NAME_MAX_VALUE])
+
+        if len(self.players_entry_string_variable[1].get()) > ConfigureGamePanel.NAME_MAX_VALUE:
+            self.players_entry_string_variable[1].set(self.players_entry_string_variable[1].get()
+                                                      [:ConfigureGamePanel.NAME_MAX_VALUE])
 
     def server_on_message(self, message):
         """

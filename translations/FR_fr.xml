@@ -8,6 +8,7 @@
         <string name="play">Jouer</string>
         <string name="quit">Quitter</string>
         <string name="back">Retour</string>
+        <string name="continue">Continuer</string>
         <string name="restart">Recommencer</string>
         <string name="cancel">Annuler</string>
         <string name="valid">Valider</string>
