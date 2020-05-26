@@ -3,9 +3,12 @@ import socket
 import threading
 from queue import Queue
 
-import netifaces
+try:
+    import netifaces
+except ImportError:
+    netifaces = None
 
-from main.Server import Server
+from main.Server import Server, GAME_PORT_MIN, GAME_PORT_MAX
 
 TIMEOUT = 2
 SERVER_ADD = 'add'
@@ -19,7 +22,7 @@ class ServerScanner(threading.Thread):
     A scanner of servers
     """
 
-    def __init__(self, port_min=3000, port_max=3020, max_thread=100,
+    def __init__(self, port_min=GAME_PORT_MIN, port_max=GAME_PORT_MAX, max_thread=100,
                  list_update_function=lambda add_remove, host_port: None):
         """
         Constructor
@@ -52,6 +55,9 @@ class ServerScanner(threading.Thread):
         Start the scan
         :return: None
         """
+        if netifaces is None:
+            return
+
         while not self.stop_scan:
             # verify if server not close
             if SERVER_TEST_REMOVE not in self.list_in_queue and len(self.server_detected_list) >= 1:

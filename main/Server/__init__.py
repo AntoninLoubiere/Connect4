@@ -9,6 +9,9 @@ TIMEOUT = 0.01
 ENCODING = "UTF-8"
 MESSAGE_SEPARATOR = '\x00'
 
+GAME_PORT_MIN = 30000
+GAME_PORT_MAX = 30020
+
 
 class Server(threading.Thread):
     """

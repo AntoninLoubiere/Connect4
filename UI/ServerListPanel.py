@@ -4,7 +4,7 @@ import tkinter.tix
 
 from UI import Panel, ServerGameConfigurationPanel
 from main.Client import Client
-from main.Server import Server, ServerScanner
+from main.Server import Server, ServerScanner, GAME_PORT_MIN, GAME_PORT_MAX
 
 
 class ServerListPanel(Panel.Panel):
@@ -65,7 +65,9 @@ class ServerListPanel(Panel.Panel):
             text=self.ui.translation.get_translation("server_list_manual_connexion_frame_port")
         ).grid(row=1, column=1, sticky=tkinter.tix.E)
 
-        self.manual_connexion_port = tkinter.tix.Spinbox(self.manual_connexion_frame, from_=3000, to=3020, wrap=True)
+        self.manual_connexion_port = tkinter.tix.Spinbox(self.manual_connexion_frame, from_=1, to=65535, increment=1)
+        self.manual_connexion_port.delete(0, 1)
+        self.manual_connexion_port.insert(0, GAME_PORT_MIN)
         self.manual_connexion_port.grid(row=1, column=2, sticky=tkinter.tix.NSEW)
 
         self.play_button = tkinter.tix.Button(
@@ -186,6 +188,8 @@ class ServerListPanel(Panel.Panel):
 
         try:
             port = int(port)
+            if port < 1 or port > 65535:
+                raise ValueError
         except ValueError:
             tkinter.messagebox.showerror(
                 self.ui.translation.get_translation("server_configuration_dialog_port_error_title"),
@@ -193,18 +197,18 @@ class ServerListPanel(Panel.Panel):
             )
             return None
 
-        if not (3000 <= port <= 3020):
-            tkinter.messagebox.showerror(
-                self.ui.translation.get_translation("server_configuration_dialog_port_error_title"),
-                self.ui.translation.get_translation("server_configuration_dialog_port_error_message")
-            )
-            return None
+        if not (GAME_PORT_MIN <= port <= GAME_PORT_MAX):
+            if not tkinter.messagebox.askokcancel(
+                self.ui.translation.get_translation("server_configuration_dialog_port_warning_title"),
+                self.ui.translation.get_translation("server_configuration_dialog_port_warning_message")
+            ):
+                return None
 
-        if Server.exist(host, port):
-            self.ui.client = Client(host, port)
-            if self.ui.client.connect():
-                self.ui.change_panel(ServerGameConfigurationPanel.ServerGameConfigurationPanel, create_game=False)
+        self.ui.client = Client(host, port)
+        if self.ui.client.connect():
+            self.ui.change_panel(ServerGameConfigurationPanel.ServerGameConfigurationPanel, create_game=False)
         else:
+            self.ui.client = None
             tkinter.messagebox.showerror(
                 self.ui.translation.get_translation("server_list_dialog_unreachable_title"),
                 self.ui.translation.get_translation("server_list_dialog_unreachable_message")

@@ -86,7 +86,10 @@ class ServerGameConfigurationPanel(Panel.Panel):
             )
             self.server_port_label.grid(row=0, column=0, sticky=tkinter.tix.E)
 
-            self.server_port_spin_box = tkinter.tix.Spinbox(self.server_port_frame, from_=3000, to=3020, wrap=True)
+            self.server_port_spin_box = tkinter.tix.Spinbox(self.server_port_frame, from_=1, to=65535, increment=1)
+            self.server_port_spin_box.delete(0, 1)
+            self.server_port_spin_box.insert(0, Server.GAME_PORT_MIN)
+
             self.server_port_spin_box.grid(row=0, column=1, sticky=tkinter.tix.W)
 
             self.server_action_frame = tkinter.tix.Frame(self.server_configure_frame)
@@ -356,6 +359,8 @@ class ServerGameConfigurationPanel(Panel.Panel):
         else:
             try:
                 port = int(self.server_port_spin_box.get())
+                if port < 1 or port > 65535:
+                    raise ValueError
             except ValueError:
                 tkinter.messagebox.showerror(
                     self.ui.translation.get_translation("server_configuration_dialog_port_error_title"),
@@ -363,44 +368,43 @@ class ServerGameConfigurationPanel(Panel.Panel):
                 )
 
             else:
-                if 3000 <= port <= 3020:
-                    self.ui.server = Server.Server(
-                        port=port, max_clients_connected=1,
-                        on_message_function=self.server_on_message,
-                        on_client_connect_function=self.server_on_client_connect_function,
-                        on_client_disconnect_function=self.server_on_client_disconnect_function
+                if port < Server.GAME_PORT_MIN or port > Server.GAME_PORT_MAX:
+                    if not tkinter.messagebox.askokcancel(
+                        self.ui.translation.get_translation("server_configuration_dialog_port_warning_title"),
+                        self.ui.translation.get_translation("server_configuration_dialog_port_warning_message")
+                    ):
+                        return
+                self.ui.server = Server.Server(
+                    port=port, max_clients_connected=1,
+                    on_message_function=self.server_on_message,
+                    on_client_connect_function=self.server_on_client_connect_function,
+                    on_client_disconnect_function=self.server_on_client_disconnect_function
+                )
+                result = self.ui.server.start_server()
+                if result[0]:
+                    self.server_port_spin_box.configure(state="readonly", increment=0)
+                    self.server_start_stop.configure(
+                        text=self.ui.translation.get_translation("server_configuration_stop")
                     )
-                    result = self.ui.server.start_server()
-                    if result[0]:
-                        self.server_port_spin_box.configure(state="readonly", increment=0)
-                        self.server_start_stop.configure(
-                            text=self.ui.translation.get_translation("server_configuration_stop")
-                        )
 
-                        self.server_state_label.configure(
-                            text=self.ui.translation.get_translation("server_state_started"), fg="#78bc61"
+                    self.server_state_label.configure(
+                        text=self.ui.translation.get_translation("server_state_started"), fg="#78bc61"
+                    )
+                else:
+                    error_name = errno.errorcode[result[1]]
+                    if self.ui.translation.translation_exist(SERVER_ERROR_DIALOG_KEY_FORMAT.format(error_name)):
+                        tkinter.messagebox.showerror(
+                            self.ui.translation.get_translation("server_start_error_dialog_title")
+                                .format(result[1]),
+                            self.ui.translation.get_translation(SERVER_ERROR_DIALOG_KEY_FORMAT.format(error_name))
                         )
                     else:
-                        error_name = errno.errorcode[result[1]]
-                        if self.ui.translation.translation_exist(SERVER_ERROR_DIALOG_KEY_FORMAT.format(error_name)):
-                            tkinter.messagebox.showerror(
-                                self.ui.translation.get_translation("server_start_error_dialog_title")
-                                    .format(result[1]),
-                                self.ui.translation.get_translation(SERVER_ERROR_DIALOG_KEY_FORMAT.format(error_name))
-                            )
-                        else:
-                            tkinter.messagebox.showerror(
-                                self.ui.translation.get_translation("server_start_error_dialog_title")
-                                    .format(result[1]),
-                                self.ui.translation.get_translation("server_start_error_unknown_dialog_message")
-                                    .format(result[1], error_name, result[2].strerror)
-                            )
-
-                else:
-                    tkinter.messagebox.showerror(
-                        self.ui.translation.get_translation("server_configuration_dialog_port_error_title"),
-                        self.ui.translation.get_translation("server_configuration_dialog_port_error_message")
-                    )
+                        tkinter.messagebox.showerror(
+                            self.ui.translation.get_translation("server_start_error_dialog_title")
+                                .format(result[1]),
+                            self.ui.translation.get_translation("server_start_error_unknown_dialog_message")
+                                .format(result[1], error_name, result[2].strerror)
+                        )
 
     def button_main_menu_command(self):
         """

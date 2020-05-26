@@ -78,7 +78,9 @@
         <string name="server_dialog_server_stop_message">You are going to stop the server. The second player will be kick. Are you sure to stop this server ?</string>
 
         <string name="server_configuration_dialog_port_error_title">Port incorrect</string>
-        <string name="server_configuration_dialog_port_error_message">The port is incorrect, it must be a number between 3000 and 3020.</string>
+        <string name="server_configuration_dialog_port_error_message">The port is incorrect, it must be a number (official between 30000 and 30020).</string>
+        <string name="server_configuration_dialog_port_warning_title">Port not official</string>
+        <string name="server_configuration_dialog_port_warning_message">This port isn't official (30000-30020), and it isn't detected automatically. Do you want to continue ?</string>
 
         <string name="server_state_stopped">The server is stopped</string>
         <string name="server_state_started">The server is started</string>
