@@ -102,7 +102,8 @@
         <string name="preference_delay">Minimum delay between two token place (ms, 0,001s):</string>
         <string name="preference_delay_win">The time in ms (0,001s) to show the win panel: </string>
         <string name="preference_section_difficulty">Computer difficulty</string>
-        <string name="preference_difficulty">Set the difficulty by setting the number of turns that the computer looks to play (minimum: 1). Longer the computer looks turns longer he is slow.</string>
+        <string name="preference_difficulty_depth">Set the difficulty by setting the number of turns that the computer looks to play (minimum: 1). Longer the computer looks turns longer he is slow.</string>
+        <string name="preference_difficulty_round">Set the difficulty by setting the precision of the computer. Higher the number is, higher the computer will play randomly.</string>
         <string name="preference_difficulty_very_easy">Very easy:</string>
         <string name="preference_difficulty_easy">Easy:</string>
         <string name="preference_difficulty_normal">Normal:</string>

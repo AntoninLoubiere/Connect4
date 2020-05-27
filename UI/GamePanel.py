@@ -211,8 +211,7 @@ class GamePanel(Panel.Panel):
 
         for x in range(0, self.game.grid_width):
             for y in range(0, self.game.grid_height):
-                if self.grid_image_create[x][y] != -1:
-                    self.create_image(x, y, self.game.grid[x][y])
+                self.update_image(x, y)
 
     def on_resize(self, event):
         """
@@ -259,10 +258,9 @@ class GamePanel(Panel.Panel):
 
                 i += 1
 
-    def create_image(self, x, y, player):
+    def update_image(self, x, y):
         """
-        Create a image at the 
-        :param player: the player which place the token
+        Create a image at the coord
         :param x: the x coord of the image
         :param y: the y coord of the image
         :return: None
@@ -273,13 +271,15 @@ class GamePanel(Panel.Panel):
         if self.grid_image_create[x][y] != -1:
             self.grid_canvas.delete(self.grid_image_create[x][y])
             # noinspection PyTypeChecker
-            self.grid_image_create[x][y] = 0
+            self.grid_image_create[x][y] = -1
 
-        self.grid_image_create[x][y] = self.grid_canvas.create_image(
-            coord[0][0], coord[0][1],
-            image=self.ui.image_getter.save_token_photos[player][self.players[player].token],
-            anchor=tkinter.tix.NW
-        )
+        player = self.game.grid[x][y]
+        if player != TokenState.TokenState.Blank:
+            self.grid_image_create[x][y] = self.grid_canvas.create_image(
+                coord[0][0], coord[0][1],
+                image=self.ui.image_getter.save_token_photos[player][self.players[player].token],
+                anchor=tkinter.tix.NW
+            )
 
     def grid_canvas_on_click(self, event):
         """

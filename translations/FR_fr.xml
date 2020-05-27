@@ -104,8 +104,10 @@
         <string name="preference_reset_preferences">Restaurer les valeurs par défault</string>
         <string name="preference_language">Language: </string>
         <string name="preference_delay">Délai minimum entre deux poses de jetons (ms, 0,001s):</string>
+        <string name="preference_delay_win">Le temps minimum avant de montrer la page de victoire (ms, 0,001s)</string>
         <string name="preference_section_difficulty">Difficulté de l'ordinateur</string>
-        <string name="preference_difficulty">Configurer la difficulté de l'ordinateur en mettant le nombre de tour que l'ordinateur va observer (minimum 1). Plus l'ordinateur va regarder de coups plus il va être long à jouer.</string>
+        <string name="preference_difficulty_depth">Configurer la difficulté de l'ordinateur en mettant le nombre de tour que l'ordinateur va observer (minimum 1). Plus l'ordinateur va regarder de coups plus il va être long à jouer.</string>
+        <string name="preference_difficulty_round">Configurer la difficulté de l'ordinateur en mettant la précision de l'ordinateur. Plus le nombre seras grand plus l'ordinateur jouras de façon aléatoire.</string>
         <string name="preference_difficulty_very_easy">Très facile:</string>
         <string name="preference_difficulty_easy">Facile:</string>
         <string name="preference_difficulty_normal">Normale:</string>
@@ -114,7 +116,8 @@
         <string name="preference_difficulty_very_hard">Très difficile:</string>
 
         <string name="preference_error_input_title">Erreur de saisie !</string>
-        <string name="preference_error_input_delay">Le texte saisi dans "delai" ({}), est incorrecte. Il doit être un entier entre {} et {}. Merci de corriger ça, ou de mettre la valeur par default en appuyant sur le bouton à la droite de la saisie; pour sauvegarder les préférences.</string>
-        <string name="preference_error_input_difficulty">Le texte  saisi dans "{}" ({}), est incorrecte. Il doit être un entier entre {} et {}. Merci de corriger ça, ou de mettre la valeur par default en appuyant sur le bouton à la droite de la saisie; pour sauvegarder les préférences.</string>
+        <string name="preference_error_input_delay">Le texte saisi dans "délai" ({}), est incorrecte. Il doit être un entier entre {} et {}. Merci de corriger ça, ou de mettre la valeur par default en appuyant sur le bouton à la droite de la saisie; pour sauvegarder les préférences.</string>
+        <string name="preference_error_input_win_delay">Le texte saisi dans "délai de victoire" ({}), est incorrecte. Il doit être un entier entre {} et {}. Merci de corriger ça, ou de mettre la valeur par default en appuyant sur le bouton à la droite de la saisie; pour sauvegarder les préférences.</string>
+        <string name="preference_error_input_difficulty">Le texte saisi dans "{}" ({}), est incorrecte. Il doit être un entier entre {} et {}. Merci de corriger ça, ou de mettre la valeur par default en appuyant sur le bouton à la droite de la saisie; pour sauvegarder les préférences.</string>
     </translations>
 </language>

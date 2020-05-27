@@ -180,63 +180,126 @@ class PreferencePanel(Panel.Panel):
         self.list_text_fill_line.append(self.section_difficulty_label)
 
         current_row += 1
-        self.difficulty_text = tkinter.tix.Label(
-            self.window_settings, text=self.ui.translation.get_translation("preference_difficulty"),
+        self.difficulty_depth_text = tkinter.tix.Label(
+            self.window_settings, text=self.ui.translation.get_translation("preference_difficulty_depth"),
             justify=tkinter.tix.LEFT
         )
-        self.difficulty_text.grid(row=current_row, column=0, columnspan=3, sticky=tkinter.tix.W)
+        self.difficulty_depth_text.grid(row=current_row, column=0, columnspan=3, sticky=tkinter.tix.W)
 
-        self.list_text_fill_line.append(self.difficulty_text)
+        self.list_text_fill_line.append(self.difficulty_depth_text)
 
-        self.difficulty_settings_text_list = []
-        self.difficulty_variable_spin_box_list = []
-        self.difficulty_spin_box_list = []
-        self.difficulty_default_buttons_list = []
+        self.difficulty_depth_settings_text_list = []
+        self.difficulty_depth_variable_spin_box_list = []
+        self.difficulty_depth_spin_box_list = []
+        self.difficulty_depth_default_buttons_list = []
 
         for i in range(0, NUMBER_DIFFICULTY_BUTTONS):
             current_row += 1
             # Settings text
-            self.difficulty_settings_text_list.append(
+            self.difficulty_depth_settings_text_list.append(
                 tkinter.tix.Label(
                     self.window_settings,
                     text=self.ui.translation.get_translation(DIFFICULTY_BUTTONS_TEXT_KEY[i]),
                     justify=tkinter.tix.RIGHT
                 )
             )
-            self.difficulty_settings_text_list[i].grid(row=current_row, column=0, sticky=tkinter.tix.E)
-            self.list_text_settings.append(self.difficulty_settings_text_list[i])
+            self.difficulty_depth_settings_text_list[i].grid(row=current_row, column=0, sticky=tkinter.tix.E)
+            self.list_text_settings.append(self.difficulty_depth_settings_text_list[i])
 
             # Spin box
 
-            self.difficulty_variable_spin_box_list.append(tkinter.tix.StringVar())
-            self.difficulty_variable_spin_box_list[i].set(
-                self.ui.preference.get_preference(Preferences.PREFERENCE_DIFFICULTY_LEVEl)[i]
+            self.difficulty_depth_variable_spin_box_list.append(tkinter.tix.StringVar())
+            self.difficulty_depth_variable_spin_box_list[i].set(
+                self.ui.preference.get_preference(Preferences.PREFERENCE_DIFFICULTY_DEPTH_LEVEL)[i]
             )
 
-            self.difficulty_spin_box_list.append(
-                tkinter.tix.Spinbox(self.window_settings, textvariable=self.difficulty_variable_spin_box_list[i],
-                                    from_=Preferences.DIFFICULTY_LEVEL_MIN, to=Preferences.DIFFICULTY_LEVEL_MAX)
+            self.difficulty_depth_spin_box_list.append(
+                tkinter.tix.Spinbox(self.window_settings, textvariable=self.difficulty_depth_variable_spin_box_list[i],
+                                    from_=Preferences.DIFFICULTY_LEVEL_DEPTH_MIN,
+                                    to=Preferences.DIFFICULTY_LEVEL_DEPTH_MAX)
             )
-            self.difficulty_spin_box_list[i].grid(row=current_row, column=1, sticky=tkinter.tix.NSEW)
+            self.difficulty_depth_spin_box_list[i].grid(row=current_row, column=1, sticky=tkinter.tix.NSEW)
 
-            self.difficulty_variable_spin_box_list[i].trace_add(
+            self.difficulty_depth_variable_spin_box_list[i].trace_add(
                 "write",
-                lambda x, y, z, button_index=i: self.on_spin_box_change(self.difficulty_spin_box_list[button_index])
+                lambda x, y, z, button_index=i: self.on_spin_box_change(
+                    self.difficulty_depth_spin_box_list[button_index])
             )
 
             # Default value
 
-            self.difficulty_default_buttons_list.append(
+            self.difficulty_depth_default_buttons_list.append(
                 tkinter.tix.Button(
-                    self.window_settings, text=str(Preferences.DEFAULT_DIFFICULTY_LEVEL[i]),
+                    self.window_settings, text=str(Preferences.DEFAULT_DIFFICULTY_DEPTH_LEVEL[i]),
                     command=lambda button_id=i: self.set_default_preference_on_button_click(
-                        Preferences.PREFERENCE_DIFFICULTY_LEVEl,
-                        Preferences.DEFAULT_DIFFICULTY_LEVEL[button_id],
+                        Preferences.PREFERENCE_DIFFICULTY_DEPTH_LEVEL,
+                        Preferences.DEFAULT_DIFFICULTY_DEPTH_LEVEL[button_id],
                         button_id
                     )
                 )
             )
-            self.difficulty_default_buttons_list[i].grid(row=current_row, column=2, sticky=tkinter.tix.NSEW)
+            self.difficulty_depth_default_buttons_list[i].grid(row=current_row, column=2, sticky=tkinter.tix.NSEW)
+
+        current_row += 1
+        self.difficulty_round_text = tkinter.tix.Label(
+            self.window_settings, text=self.ui.translation.get_translation("preference_difficulty_round"),
+            justify=tkinter.tix.LEFT
+        )
+        self.difficulty_round_text.grid(row=current_row, column=0, columnspan=3, sticky=tkinter.tix.W)
+
+        self.list_text_fill_line.append(self.difficulty_round_text)
+
+        self.difficulty_round_settings_text_list = []
+        self.difficulty_round_variable_spin_box_list = []
+        self.difficulty_round_spin_box_list = []
+        self.difficulty_round_default_buttons_list = []
+
+        for i in range(0, NUMBER_DIFFICULTY_BUTTONS):
+            current_row += 1
+            # Settings text
+            self.difficulty_round_settings_text_list.append(
+                tkinter.tix.Label(
+                    self.window_settings,
+                    text=self.ui.translation.get_translation(DIFFICULTY_BUTTONS_TEXT_KEY[i]),
+                    justify=tkinter.tix.RIGHT
+                )
+            )
+            self.difficulty_round_settings_text_list[i].grid(row=current_row, column=0, sticky=tkinter.tix.E)
+            self.list_text_settings.append(self.difficulty_round_settings_text_list[i])
+
+            # Spin box
+
+            self.difficulty_round_variable_spin_box_list.append(tkinter.tix.StringVar())
+            self.difficulty_round_variable_spin_box_list[i].set(
+                self.ui.preference.get_preference(Preferences.PREFERENCE_DIFFICULTY_ROUND_LEVEL)[i]
+            )
+
+            self.difficulty_round_spin_box_list.append(
+                tkinter.tix.Spinbox(self.window_settings, textvariable=self.difficulty_round_variable_spin_box_list[i],
+                                    from_=Preferences.DIFFICULTY_LEVEL_ROUND_MIN,
+                                    to=Preferences.DIFFICULTY_LEVEL_ROUND_MAX)
+            )
+            self.difficulty_round_spin_box_list[i].grid(row=current_row, column=1, sticky=tkinter.tix.NSEW)
+
+            self.difficulty_round_variable_spin_box_list[i].trace_add(
+                "write",
+                lambda x, y, z, button_index=i: self.on_spin_box_change(
+                    self.difficulty_round_spin_box_list[button_index])
+            )
+
+            # Default value
+
+            self.difficulty_round_default_buttons_list.append(
+                tkinter.tix.Button(
+                    self.window_settings, text=str(Preferences.DEFAULT_DIFFICULTY_ROUND_LEVEL[i]),
+                    command=lambda button_id=i: self.set_default_preference_on_button_click(
+                        Preferences.PREFERENCE_DIFFICULTY_ROUND_LEVEL,
+                        Preferences.DEFAULT_DIFFICULTY_ROUND_LEVEL[button_id],
+                        button_id
+                    )
+                )
+            )
+            self.difficulty_round_default_buttons_list[i].grid(row=current_row, column=2, sticky=tkinter.tix.NSEW)
 
         # BUTTONS
 
@@ -342,9 +405,10 @@ class PreferencePanel(Panel.Panel):
 
         for i in range(0, NUMBER_DIFFICULTY_BUTTONS):
             try:
-                difficulty_level = int(self.difficulty_variable_spin_box_list[i].get())
-                if Preferences.DIFFICULTY_LEVEL_MIN <= difficulty_level <= Preferences.DIFFICULTY_LEVEL_MAX:
-                    self.ui.preference.get_preference(Preferences.PREFERENCE_DIFFICULTY_LEVEl)[i] = difficulty_level
+                difficulty_level = int(self.difficulty_depth_variable_spin_box_list[i].get())
+                if Preferences.DIFFICULTY_LEVEL_DEPTH_MIN <= difficulty_level <= Preferences.DIFFICULTY_LEVEL_DEPTH_MAX:
+                    self.ui.preference.get_preference(Preferences.PREFERENCE_DIFFICULTY_DEPTH_LEVEL)[i] \
+                        = difficulty_level
                 else:
                     raise ValueError  # show the dialog
             except ValueError:
@@ -352,8 +416,27 @@ class PreferencePanel(Panel.Panel):
                     self.ui.translation.get_translation("preference_error_input_title"),
                     self.ui.translation.get_translation("preference_error_input_difficulty").format(
                         self.ui.translation.get_translation(DIFFICULTY_BUTTONS_TEXT_KEY[i]),
-                        self.difficulty_variable_spin_box_list[i].get(),
-                        Preferences.DIFFICULTY_LEVEL_MIN, Preferences.DIFFICULTY_LEVEL_MAX
+                        self.difficulty_depth_variable_spin_box_list[i].get(),
+                        Preferences.DIFFICULTY_LEVEL_DEPTH_MIN, Preferences.DIFFICULTY_LEVEL_DEPTH_MAX
+                    )
+                )
+                return None
+            
+        for i in range(0, NUMBER_DIFFICULTY_BUTTONS):
+            try:
+                difficulty_level = int(self.difficulty_round_variable_spin_box_list[i].get())
+                if Preferences.DIFFICULTY_LEVEL_ROUND_MIN <= difficulty_level <= Preferences.DIFFICULTY_LEVEL_ROUND_MAX:
+                    self.ui.preference.get_preference(Preferences.PREFERENCE_DIFFICULTY_ROUND_LEVEL)[i] \
+                        = difficulty_level
+                else:
+                    raise ValueError  # show the dialog
+            except ValueError:
+                tkinter.messagebox.showerror(
+                    self.ui.translation.get_translation("preference_error_input_title"),
+                    self.ui.translation.get_translation("preference_error_input_difficulty").format(
+                        self.ui.translation.get_translation(DIFFICULTY_BUTTONS_TEXT_KEY[i]),
+                        self.difficulty_round_variable_spin_box_list[i].get(),
+                        Preferences.DIFFICULTY_LEVEL_ROUND_MIN, Preferences.DIFFICULTY_LEVEL_ROUND_MAX
                     )
                 )
                 return None
@@ -363,19 +446,35 @@ class PreferencePanel(Panel.Panel):
         from UI.MainMenuPanel import MainMenuPanel
         self.ui.change_panel(MainMenuPanel)
 
-    def reload_preference(self):
+    def reload_preference(self, preference_id=None, list_id=None):
         """
         Reload preference because there is a change
         :return: None
         """
-        self.ui.translation.reload_current_language()
-        self.language_combo_box.current(self.ui.translation.current_language)
+        if preference_id is None or preference_id == Preferences.PREFERENCE_CURRENT_LANGUAGE:
+            self.ui.translation.reload_current_language()
+            self.language_combo_box.current(self.ui.translation.current_language)
 
-        self.delay_spin_box_variable.set(self.ui.preference.get_preference(Preferences.PREFERENCE_DELAY))
-        self.delay_win_spin_box_variable.set(self.ui.preference.get_preference(Preferences.PREFERENCE_WIN_DELAY))
+        if preference_id is None or preference_id == Preferences.PREFERENCE_DELAY:
+            self.delay_spin_box_variable.set(self.ui.preference.get_preference(Preferences.PREFERENCE_DELAY))
+        if preference_id is None or preference_id == Preferences.PREFERENCE_WIN_DELAY:
+            self.delay_win_spin_box_variable.set(self.ui.preference.get_preference(Preferences.PREFERENCE_WIN_DELAY))
 
-        for i, variable in enumerate(self.difficulty_variable_spin_box_list):
-            variable.set(self.ui.preference.get_preference(Preferences.PREFERENCE_DIFFICULTY_LEVEl)[i])
+        if preference_id is None or preference_id == Preferences.PREFERENCE_DIFFICULTY_DEPTH_LEVEL:
+            if list_id is None:
+                for i, variable in enumerate(self.difficulty_depth_variable_spin_box_list):
+                    variable.set(self.ui.preference.get_preference(Preferences.PREFERENCE_DIFFICULTY_DEPTH_LEVEL)[i])
+            else:
+                self.difficulty_depth_variable_spin_box_list[list_id]\
+                    .set(self.ui.preference.get_preference(Preferences.PREFERENCE_DIFFICULTY_DEPTH_LEVEL)[list_id])
+
+        if preference_id is None or preference_id == Preferences.PREFERENCE_DIFFICULTY_ROUND_LEVEL:
+            if list_id is None:
+                for i, variable in enumerate(self.difficulty_round_variable_spin_box_list):
+                    variable.set(self.ui.preference.get_preference(Preferences.PREFERENCE_DIFFICULTY_ROUND_LEVEL)[i])
+            else:
+                self.difficulty_round_variable_spin_box_list[list_id]\
+                    .set(self.ui.preference.get_preference(Preferences.PREFERENCE_DIFFICULTY_ROUND_LEVEL)[list_id])
 
     def reload_text(self):
         """
@@ -397,10 +496,15 @@ class PreferencePanel(Panel.Panel):
 
         self.section_difficulty_label.configure(text=self.ui.translation.get_translation(
             "preference_section_difficulty"))
-        self.difficulty_text.configure(text=self.ui.translation.get_translation(
-            "preference_difficulty"))
+        self.difficulty_depth_text.configure(text=self.ui.translation.get_translation(
+            "preference_difficulty_depth"))
+        self.difficulty_round_text.configure(text=self.ui.translation.get_translation(
+            "preference_difficulty_round"))
 
-        for i, text in enumerate(self.difficulty_settings_text_list):
+        for i, text in enumerate(self.difficulty_depth_settings_text_list):
+            text.configure(text=self.ui.translation.get_translation(DIFFICULTY_BUTTONS_TEXT_KEY[i]))
+
+        for i, text in enumerate(self.difficulty_round_settings_text_list):
             text.configure(text=self.ui.translation.get_translation(DIFFICULTY_BUTTONS_TEXT_KEY[i]))
 
     def language_combobox_on_selected(self):
@@ -427,7 +531,7 @@ class PreferencePanel(Panel.Panel):
         else:
             self.ui.preference.get_preference(preference_id)[list_id] = preference_value
 
-        self.reload_preference()
+        self.reload_preference(preference_id, list_id)
 
         if preference_id == Preferences.PREFERENCE_CURRENT_LANGUAGE:
             self.reload_text()

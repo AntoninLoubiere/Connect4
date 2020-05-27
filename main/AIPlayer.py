@@ -35,7 +35,8 @@ class AIPlayer(Player.Player):
     A ai player
     """
 
-    def __init__(self, min_max_deep, game, player_enum, token, name=None, on_progress=lambda value, maximum: None):
+    def __init__(self, min_max_deep, round_difficulty, game, player_enum, token, name=None,
+                 on_progress=lambda value, maximum: None):
         """
         Constructor
         :param min_max_deep: the deep
@@ -61,6 +62,8 @@ class AIPlayer(Player.Player):
         self.progress = 0
         self.progress_max = self.game.grid_width ** (self.min_max_deep + 1)
 
+        self.round_difficulty = round_difficulty
+
     def reset(self):
         """
         When the game is finish, reset the player
@@ -83,8 +86,6 @@ class AIPlayer(Player.Player):
         score = -math.inf
         column_max_score_possibility = []
 
-        # print(self.get_evaluation(self.game.grid))
-
         column_check = 0
 
         for column in range(0, self.game.grid_width):
@@ -94,8 +95,6 @@ class AIPlayer(Player.Player):
             if can_place_token(self.game.grid, column):
 
                 column_check += 1
-
-                # print("Column: " + str(column))
 
                 y_coord_new_token = self.get_coord_add_token_grid(self.game.grid, column)
                 current_grid = copy.deepcopy(self.game.grid)
@@ -108,8 +107,6 @@ class AIPlayer(Player.Player):
                     self.get_alignment_two_side(current_grid, column, y_coord_new_token, 1, -1)
                 ]  # list of all alignment of the new token
 
-                # print(align)
-
                 if align[0][0] >= 4 or align[1][0] >= 4 or align[2][0] >= 4 or align[3][0] >= 4:
                     column_max_score_possibility = [column]
                     break
@@ -118,15 +115,14 @@ class AIPlayer(Player.Player):
                                                       (TokenState.Player_1, TokenState.Player_2)[
                                                           self.player_enum == TokenState.Player_1],
                                                       +math.inf, -math.inf, self.progress)
-                # print(current_score)
-                # print("Score choose:", current_score)
+                if abs(current_score) < ALIGNMENT_COEFFICIENT[-1] - 100:
+                    current_score -= current_score % self.round_difficulty
 
                 if current_score > score:
-                    score = max(current_score, score)
+                    score = current_score
                     column_max_score_possibility = [column]
 
                 elif current_score == score:
-                    score = max(current_score, score)
                     column_max_score_possibility.append(column)
 
                 self.progress = (self.game.grid_width - self.number_column_fill) ** self.min_max_deep * column_check
@@ -154,7 +150,6 @@ class AIPlayer(Player.Player):
             current_grid = copy.deepcopy(self.game.grid)
             current_grid[column_choose][y_coord_new_token] = self.player_enum
 
-            # print(self.get_evaluation(current_grid))
             return column_choose
 
     def get_turn_min_max(self, grid, deep, player_turn, alpha, beta, progress_start):
@@ -261,7 +256,6 @@ class AIPlayer(Player.Player):
         :return: The score of the grid
         """
         score = 0
-        opponent = TokenState.get_opponent(self.player_enum)
 
         visited = []
         for x in range(0, self.game.grid_width):
@@ -285,17 +279,21 @@ class AIPlayer(Player.Player):
                         for alignment in alignments:
                             if alignment[1] >= 4:
                                 align_number = alignment[0]
-                                if alignment[0] > len(ALIGNMENT_COEFFICIENT):
-                                    align_number = len(ALIGNMENT_COEFFICIENT)
+                                if alignment[0] >= len(ALIGNMENT_COEFFICIENT):
+                                    if grid[x][y] == self.player_enum:
+                                        return ALIGNMENT_COEFFICIENT[-1]
+                                    else:
+                                        return -ALIGNMENT_COEFFICIENT[-1]
+
                                 if grid[x][y] == self.player_enum:
-                                    score += ALIGNMENT_COEFFICIENT[align_number - 1]
+                                    score += ALIGNMENT_COEFFICIENT[align_number - 1] - self.min_max_deep
                                 else:
-                                    score -= ALIGNMENT_COEFFICIENT[align_number - 1]
+                                    score -= ALIGNMENT_COEFFICIENT[align_number - 1] + self.min_max_deep
 
                     # position evaluation point
                     if grid[x][y] == self.player_enum:
                         score += POSITION_EVALUATION_TABLE[y][x]
-                    elif grid[x][y] == opponent:
+                    else:
                         score -= POSITION_EVALUATION_TABLE[y][x]
 
         return max(min(score, MAX_SCORE), MIN_SCORE)
