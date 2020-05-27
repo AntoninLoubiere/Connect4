@@ -1,7 +1,7 @@
 import enum
 
 
-NUMBER_COLOR = 7
+NUMBER_STYLE = 8
 
 
 class TokenStyle(enum.Enum):
@@ -16,4 +16,5 @@ class TokenStyle(enum.Enum):
     Purple = 4
     Dragon = 5
     Robot = 6
-    Not_Connected = 7
+    Nuclear = 7
+    Not_Connected = 8

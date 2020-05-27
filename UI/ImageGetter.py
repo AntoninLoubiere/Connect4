@@ -4,14 +4,16 @@ import tkinter.messagebox
 from PIL import Image, ImageTk
 
 import main.Preferences
-from UI import TokenStyle
+from UI import TokenStyle, NumberColor
 from main import TokenState, DirectoryManager
 
-WIN_TOKEN_BACKGROUND_RAPPORT_TOKEN = 1.4  # fraction size background / size token
+WIN_TOKEN_BACKGROUND_RAPPORT_TOKEN = 1.3  # fraction size background / size token
 ICON_SIZE = 30
 
-
 TOKEN_ICON_SIZE = 30
+
+NUMBER_SIZE_COEFFICIENT = 0.6
+HEIGHT_NUMBER_COEFFICIENT = 1.5
 
 
 class ImageGetter:
@@ -65,7 +67,8 @@ class ImageGetter:
                                                                                (player, color, token_size, token_size))
 
                     self.save_token_icons[player][color] = ImageTk.PhotoImage(self.create_player_token_image
-                                                                              (player, color, TOKEN_ICON_SIZE, TOKEN_ICON_SIZE))
+                                                                              (player, color, TOKEN_ICON_SIZE,
+                                                                               TOKEN_ICON_SIZE))
                 except FileNotFoundError:
                     print("The token of the player {}, {}, isn't found !".format(player.value, color))
                     self.save_token_photos[player][color] = self.default_token_image
@@ -94,6 +97,29 @@ class ImageGetter:
             )
         except FileNotFoundError:
             print("The file door_exit_icon was not found")
+            
+        try:
+            self.syn_icon = ImageTk.PhotoImage(
+                self.create_image(DirectoryManager.get_path((DirectoryManager.UI_RES_DIRECTORY, "syn_icon.png"),
+                                                            add_current_directory=True),
+                                  ICON_SIZE,
+                                  ICON_SIZE)
+            )
+        except FileNotFoundError:
+            print("The file syn_icon was not found")
+
+        self.numbers_list = {}
+        number_width = None
+        number_height = None
+        if token_size is not None:
+            number_width = token_size * NUMBER_SIZE_COEFFICIENT
+            number_height = number_width * HEIGHT_NUMBER_COEFFICIENT
+
+        for color in NumberColor.NumberColor:
+            self.numbers_list[color] = {}
+            for i in range(0, 10):
+                self.numbers_list[color][i] = ImageTk.PhotoImage(self.create_number(color, i, number_width,
+                                                                                    number_height))
 
     def resize_tokens_images(self, token_size):
         """
@@ -124,6 +150,26 @@ class ImageGetter:
                               win_token_background_size)
         )
 
+        number_width = None
+        number_height = None
+        if token_size is not None:
+            number_width = token_size * NUMBER_SIZE_COEFFICIENT
+            number_height = number_width * HEIGHT_NUMBER_COEFFICIENT
+
+        for color in NumberColor.NumberColor:
+            self.numbers_list[color] = {}
+            for i in range(0, 10):
+                self.numbers_list[color][i] = ImageTk.PhotoImage(self.create_number(color, i, number_width,
+                                                                                    number_height))
+
+    def get_number_size(self):
+        """
+        Get number height
+        :return: None
+        """
+        return self.token_size * NUMBER_SIZE_COEFFICIENT, self.token_size * NUMBER_SIZE_COEFFICIENT \
+            * HEIGHT_NUMBER_COEFFICIENT
+
     @staticmethod
     def create_player_token_image(player, color, size_x=None, size_y=None):
         """
@@ -137,6 +183,23 @@ class ImageGetter:
 
         file_path = DirectoryManager.get_path((DirectoryManager.UI_RES_DIRECTORY, "Token", player.name,
                                                color.name.lower() + ".png"), add_current_directory=True)
+
+        return ImageGetter.create_image(file_path, size_x, size_y)
+
+    @staticmethod
+    def create_number(color, number, size_x=None, size_y=None):
+        """
+        The player of the token
+        :param number: The number of the number
+        :param color: The color which he want
+        :param size_x: the x resize
+        :param size_y: the y resize
+        :return: Return image
+        """
+
+        file_path = DirectoryManager.get_path((DirectoryManager.UI_RES_DIRECTORY, "Numbers",
+                                               "{}_{}.png".format(color.name.lower(), number)),
+                                              add_current_directory=True)
 
         return ImageGetter.create_image(file_path, size_x, size_y)
 

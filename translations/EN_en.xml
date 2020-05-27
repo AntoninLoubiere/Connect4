@@ -11,6 +11,7 @@
         <string name="cancel">Cancel</string>
         <string name="valid">Valid</string>
         <string name="main_menu">Main menu</string>
+        <string name="continue">Continue</string>
         <string name="restart">Restart</string>
         <string name="ready">Ready</string>
         <string name="not_ready">Not ready</string>
@@ -69,14 +70,19 @@
         <string name="server_configuration_player_1_want_start">The player 1 want to play, check if you are ready to start the game</string>
         <string name="server_configuration_player_2_not_ready">The player 2 isn't ready</string>
         <string name="server_configuration_player_2_ready">The player 2 is ready</string>
+        <string name="server_configuration_player_2_not_connected">The player 2 isn't connected</string>
 
         <string name="server_dialog_quit_title">Quit ?</string>
         <string name="server_dialog_quit_message">You are going to quit. Are you sure to quit ?</string>
+        <string name="server_dialog_back_title">Back ?</string>
+        <string name="server_dialog_back_message">You are going to back on the main menu, the game will end. Are you sure ?</string>
         <string name="server_dialog_server_stop_title">Stop the server ?</string>
         <string name="server_dialog_server_stop_message">You are going to stop the server. The second player will be kick. Are you sure to stop this server ?</string>
 
         <string name="server_configuration_dialog_port_error_title">Port incorrect</string>
-        <string name="server_configuration_dialog_port_error_message">The port is incorrect, it must be a number between 3000 and 3020.</string>
+        <string name="server_configuration_dialog_port_error_message">The port is incorrect, it must be a number (official between 30000 and 30020).</string>
+        <string name="server_configuration_dialog_port_warning_title">Port not official</string>
+        <string name="server_configuration_dialog_port_warning_message">This port isn't official (30000-30020), and it isn't detected automatically. Do you want to continue ?</string>
 
         <string name="server_state_stopped">The server is stopped</string>
         <string name="server_state_started">The server is started</string>
@@ -96,8 +102,10 @@
         <string name="preference_reset_preferences">Restore default values</string>
         <string name="preference_language">Language: </string>
         <string name="preference_delay">Minimum delay between two token place (ms, 0,001s):</string>
+        <string name="preference_delay_win">The time in ms (0,001s) to show the win panel: </string>
         <string name="preference_section_difficulty">Computer difficulty</string>
-        <string name="preference_difficulty">Set the difficulty by setting the number of turns that the computer looks to play (minimum: 1). Longer the computer looks turns longer he is slow.</string>
+        <string name="preference_difficulty_depth">Set the difficulty by setting the number of turns that the computer looks to play (minimum: 1). Longer the computer looks turns longer he is slow.</string>
+        <string name="preference_difficulty_round">Set the difficulty by setting the precision of the computer. Higher the number is, higher the computer will play randomly.</string>
         <string name="preference_difficulty_very_easy">Very easy:</string>
         <string name="preference_difficulty_easy">Easy:</string>
         <string name="preference_difficulty_normal">Normal:</string>
@@ -106,7 +114,8 @@
         <string name="preference_difficulty_very_hard">Very hard:</string>
 
         <string name="preference_error_input_title">Input error !</string>
-        <string name="preference_error_input_delay">The text input in "delay" ({}), is incorrect. It must be an integer between {} and {}. Please change that, or set the default preference by clicking on the button on the right of the input; to save preferences.</string>
+        <string name="preference_error_input_delay">The text input for "delay" ({}), is incorrect. It must be an integer between {} and {}. Please change that, or set the default preference by clicking on the button on the right of the input; to save preferences.</string>
+        <string name="preference_error_input_win_delay">The text input for "the win delay" ({}), is incorrect. It must be an integer between {} and {}. Please change that, or set the default preference by clicking on the button on the right of the input; to save preferences.</string>
         <string name="preference_error_input_difficulty">The text input in "{}" ({}), is incorrect. It must be an integer between {} and {}. Please change that, or set the default preference by clicking on the button on the right of the input; to save preferences.</string>
     </translations>
 </language>

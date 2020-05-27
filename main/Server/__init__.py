@@ -8,6 +8,10 @@ import time
 TIMEOUT = 0.01
 ENCODING = "UTF-8"
 MESSAGE_SEPARATOR = '\x00'
+PARAMETER_SEPARATOR = '\x01'
+
+GAME_PORT_MIN = 30000
+GAME_PORT_MAX = 30020
 
 
 class Server(threading.Thread):
@@ -74,6 +78,7 @@ class Server(threading.Thread):
         :return: None
         """
         self.socket.listen(self.max_clients_connected)
+
         while self.server_is_on:
             try:
                 readable, writable, exceptional = select.select(self.input_list, self.output_list, self.input_list,
@@ -85,14 +90,18 @@ class Server(threading.Thread):
 
                 if s is self.socket:
                     try:
-                        client_socket, address = self.socket.accept()
-                        self.try_connect(client_socket)
+                        if self.get_number_client() < self.max_clients_connected:
+                            client_socket, address = self.socket.accept()
+                            self.try_connect(client_socket)
                     except OSError:
                         break
                 else:
                     message = s.recv(2048)
                     if message:
-                        self.on_message_function(message)
+                        messages = self.decode_message(message)
+                        for msg in messages:
+                            print(msg)
+                            self.on_message_function(msg)
                     else:
                         self.disconnect(s)
                         break
@@ -198,7 +207,7 @@ class Server(threading.Thread):
         Get the number of clients connected
         :return: Int: number client connected
         """
-        return len(self.input_list) - 1 # remove the server input
+        return len(self.input_list) - 1  # remove the server input
 
     @staticmethod
     def log(msg, thread_name=threading.current_thread().getName()):

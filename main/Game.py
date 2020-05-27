@@ -10,7 +10,7 @@ class Game(object):
     """
 
     def __init__(self, grid_width=7, grid_height=6,
-                 first_player=random.choice((TokenState.Player_1, TokenState.Player_2))):
+                 first_player=None):
         """
         Constructor
         """
@@ -25,11 +25,16 @@ class Game(object):
             for y in range(self.grid_height):
                 self.grid[x].append(TokenState.Blank)
 
-        self.current_turn = first_player
+        if first_player is None:
+            self.current_turn = (TokenState.Player_1, TokenState.Player_2)[random.randint(0, 1)]
+        else:
+            self.current_turn = first_player
 
         self.game_win = False
         self.winner = TokenState.Blank
         self.win_tokens_coord = [[-1, -1], [-1, -1]]
+
+        self.score = [0, 0]
 
     def add_token(self, column):
         """
@@ -59,8 +64,9 @@ class Game(object):
         """
         if self.is_win():
             return [False, [-1, -1]]
-
-        if self.grid[x][y] == TokenState.Blank:
+        print(x,y)
+        if self.grid[x][y] == TokenState.Blank and (y == self.grid_height - 1 or self.grid[x][y + 1] !=
+                                                    TokenState.Blank):
             #  add token
             self.grid[x][y] = self.current_turn
             self.swap_turn()
@@ -107,9 +113,8 @@ class Game(object):
             temp_coord[1] = [x, current_y]
 
         if number_align >= 4:
-            self.winner = self.grid[x][y]
+            self.set_winner(self.grid[x][y])
             self.win_tokens_coord = temp_coord
-            self.game_win = True
             return True
 
         number_align = 1 
@@ -134,9 +139,8 @@ class Game(object):
             temp_coord[1] = [current_x, y]
 
         if number_align >= 4:
-            self.winner = self.grid[x][y]
+            self.set_winner(self.grid[x][y])
             self.win_tokens_coord = temp_coord
-            self.game_win = True
             return True
 
         number_align = 1 
@@ -171,9 +175,8 @@ class Game(object):
             number_align += 1
 
         if number_align >= 4:
-            self.winner = self.grid[x][y]
+            self.set_winner(self.grid[x][y])
             self.win_tokens_coord = temp_coord
-            self.game_win = True
             return True
 
         # #Test diagonal top right - bottom left#
@@ -208,9 +211,8 @@ class Game(object):
             number_align += 1
 
         if number_align >= 4:
-            self.winner = self.grid[x][y]
+            self.set_winner(self.grid[x][y])
             self.win_tokens_coord = temp_coord
-            self.game_win = True
             return True
         else:
             for x in range(0, self.grid_width):
@@ -311,3 +313,18 @@ class Game(object):
         self.game_win = False
         self.winner = TokenState.Blank
         self.win_tokens_coord = [[-1, -1], [-1, -1]]
+
+    def set_winner(self, winner):
+        """
+        Set the winner
+        :param winner: the winner
+        :return: None
+        """
+        if not self.game_win:
+            self.game_win = True
+            self.winner = winner
+
+            if winner == TokenState.Player_1:
+                self.score[0] += 1
+            elif winner == TokenState.Player_2:
+                self.score[1] += 1

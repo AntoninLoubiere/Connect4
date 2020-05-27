@@ -2,11 +2,16 @@ import tkinter.messagebox
 import tkinter.tix
 
 from UI import GamePanel, TokenStyle
-from main import Player, TokenState, Game, Server
+from main import Player, TokenState
+from main.Server import Server, PARAMETER_SEPARATOR
 
+MESSAGE_SET_TURN = "set-turn"
 MESSAGE_NEW_TOKEN = "new-token"
 MESSAGE_BACK_MENU = "back-to-main-menu"
 MESSAGE_RESTART_GAME = "restart"
+MESSAGE_SYN = "syn"
+
+LINE_SEPARATOR = '\x02'
 
 
 class ServerGamePanel(GamePanel.GamePanel):
@@ -17,7 +22,7 @@ class ServerGamePanel(GamePanel.GamePanel):
     def __init__(self, master, ui, is_server=False,
                  player_1=Player.Player(TokenState.TokenState.Player_1, TokenStyle.TokenStyle.Blue),
                  player_2=Player.Player(TokenState.TokenState.Player_2, TokenStyle.TokenStyle.Green),
-                 game=Game.Game()):
+                 game=None):
         """
         Constructor
         """
@@ -25,9 +30,16 @@ class ServerGamePanel(GamePanel.GamePanel):
 
         self.is_server = is_server
 
+        self.button_syn = tkinter.tix.Button(
+            self, image=self.ui.image_getter.syn_icon, command=self.button_syn_command)
+        self.button_syn.place(relx=1., rely=0., x=0, y=0, anchor=tkinter.N + tkinter.E)
+        self.button_syn_lock = False
+
         if self.is_server:
+            self.after(100, lambda: self.ui.server.send_message_to_all(Server.encode_message(
+                PARAMETER_SEPARATOR.join((MESSAGE_SET_TURN, str(self.game.current_turn.value))))))
             self.button_main_menu.configure(
-                text=self.ui.translation.get_translation("quit")
+                text=self.ui.translation.get_translation("quit"), command=self.button_back_dialog_command
             )
 
             # Set server functions
@@ -79,12 +91,28 @@ class ServerGamePanel(GamePanel.GamePanel):
         """
         if self.is_server:
             self.ui.server.send_message_to_all(
-                Server.Server.encode_message('_'.join((MESSAGE_NEW_TOKEN, str(x), str(y))))
+                Server.encode_message(PARAMETER_SEPARATOR.join((MESSAGE_NEW_TOKEN, str(x), str(y))))
             )
         else:
-            self.ui.client.send_message(Server.Server.encode_message(
-                '_'.join((MESSAGE_NEW_TOKEN, str(x), str(y))))
+            self.ui.client.send_message(Server.encode_message(
+                PARAMETER_SEPARATOR.join((MESSAGE_NEW_TOKEN, str(x), str(y))))
             )
+
+    def syn_client(self):
+        """
+        Synchronise the client
+        :return: None
+        """
+        if self.is_server:
+            grid_state = ''
+            for line in self.game.grid:
+                for e in line:
+                    grid_state += str(e.value)
+                grid_state += LINE_SEPARATOR
+            self.ui.server.send_message_to_all(Server.encode_message(PARAMETER_SEPARATOR.join((
+                MESSAGE_SYN, str(self.game.current_turn.value), grid_state))))
+        else:
+            self.ui.client.send_message(Server.encode_message(MESSAGE_SYN))
 
     def destroy(self):
         if self.is_server:
@@ -104,27 +132,31 @@ class ServerGamePanel(GamePanel.GamePanel):
         :param message: The message receive
         :return: None
         """
-        messages = Server.Server.decode_message(message)
+        message = message.split(PARAMETER_SEPARATOR)
 
-        for message in messages:
-            message = message.split('_')
+        if message[0] == MESSAGE_NEW_TOKEN and len(message) == 3:
+            if self.game.current_turn == TokenState.TokenState.Player_1:
+                self.syn_client()
 
-            if message[0] == MESSAGE_NEW_TOKEN and \
-                    not ((self.game.current_turn == TokenState.TokenState.Player_1) == self.is_server):
+            try:
+                x = int(message[1])
+                y = int(message[2])
 
-                try:
-                    x = int(message[1])
-                    y = int(message[2])
+                if 0 <= x < self.game.grid_width and \
+                        0 <= y < self.game.grid_height:
 
-                    if 0 <= x < self.game.grid_width and \
-                            0 <= y < self.game.grid_height:
+                    if not self.add_token_with_coord(x, y)[0]:
+                        Server.warn("Can't place a token at this coord", "GamePanel")
+                        self.syn_client()
+                else:
+                    Server.warn("X or y is not valid", "GamePanel")
+                    self.syn_client()
+            except ValueError:
+                Server.warn("X or y coord NaN", "GamePanel")
+                self.syn_client()
 
-                        if not self.add_token_with_coord(x, y)[0]:
-                            Server.Server.warn("Can't place a token at this coord", "GamePanel")
-                    else:
-                        Server.Server.warn("X or y is not valid", "GamePanel")
-                except ValueError:
-                    Server.Server.warn("X or y coord NaN", "GamePanel")
+        elif message[0] == MESSAGE_SYN:
+            self.syn_client()
 
     def button_main_menu_command(self):
         """
@@ -149,7 +181,7 @@ class ServerGamePanel(GamePanel.GamePanel):
         :return: None
         """
         if self.is_server:
-            self.ui.server.send_message_to_all(Server.Server.encode_message(MESSAGE_RESTART_GAME))
+            self.ui.server.send_message_to_all(Server.encode_message(MESSAGE_RESTART_GAME))
         self.game.reset()
         self.ui.change_panel(ServerGamePanel,
                              player_1=self.players[TokenState.TokenState.Player_1],
@@ -163,8 +195,8 @@ class ServerGamePanel(GamePanel.GamePanel):
         """
         if self.is_server:
             from UI.ServerGameConfigurationPanel import ServerGameConfigurationPanel
-            self.ui.change_panel(ServerGameConfigurationPanel, create_game=self.is_server)
-            self.ui.server.send_message_to_all(Server.Server.encode_message(MESSAGE_BACK_MENU))
+            self.ui.change_panel(ServerGameConfigurationPanel, is_server=self.is_server)
+            self.ui.server.send_message_to_all(Server.encode_message(MESSAGE_BACK_MENU))
         else:
             if tkinter.messagebox.askquestion(
                     self.ui.translation.get_translation("server_dialog_quit_title"),
@@ -173,6 +205,34 @@ class ServerGamePanel(GamePanel.GamePanel):
                 from UI.ServerListPanel import ServerListPanel
                 self.ui.client.close_connection()
                 self.ui.change_panel(ServerListPanel)
+
+    def button_back_dialog_command(self):
+        """
+        The command of the button main menu (top left corner)
+        :return: None
+        """
+        if self.is_server and tkinter.messagebox.askquestion(
+                self.ui.translation.get_translation("server_dialog_back_title"),
+                self.ui.translation.get_translation("server_dialog_back_message")
+        ) == tkinter.messagebox.YES:
+            self.button_back_command()
+
+    def button_syn_command(self):
+        """
+        Synchronise the client button
+        :return: None
+        """
+        if not self.button_syn_lock:
+            self.button_syn_lock = True
+            self.syn_client()
+            self.after(1000, self.button_syn_unlock)
+
+    def button_syn_unlock(self):
+        """
+        Unlock lock
+        :return: None
+        """
+        self.button_syn_lock = False
 
     def server_on_client_connect_function(self, client):
         """
@@ -189,7 +249,7 @@ class ServerGamePanel(GamePanel.GamePanel):
         :return: None
         """
         from UI.ServerGameConfigurationPanel import ServerGameConfigurationPanel
-        self.ui.change_panel(ServerGameConfigurationPanel, create_game=self.is_server)
+        self.ui.change_panel(ServerGameConfigurationPanel, is_server=True)
 
     def client_on_message(self, message):
         """
@@ -197,34 +257,53 @@ class ServerGamePanel(GamePanel.GamePanel):
         :param message: The message receive
         :return: None
         """
-        messages = Server.Server.decode_message(message)
+        message = message.split(PARAMETER_SEPARATOR)
 
-        for message in messages:
-            message = message.split('_')
+        if message[0] == MESSAGE_SET_TURN and len(message) == 2:
+            self.game.current_turn = TokenState.TokenState(int(message[1]))
+            self.update_turn_label()
 
-            if message[0] == MESSAGE_NEW_TOKEN and \
-                    not ((self.game.current_turn == TokenState.TokenState.Player_1) == self.is_server):
+        elif message[0] == MESSAGE_NEW_TOKEN and len(message) == 3:
+            if self.game.current_turn == TokenState.TokenState.Player_2:
+                self.syn_client()
+                return
 
-                try:
-                    x = int(message[1])
-                    y = int(message[2])
+            try:
+                x = int(message[1])
+                y = int(message[2])
 
-                    if 0 <= x < self.game.grid_width and \
-                            0 <= y < self.game.grid_height:
+                if 0 <= x < self.game.grid_width and \
+                        0 <= y < self.game.grid_height:
 
-                        if not self.add_token_with_coord(x, y)[0]:
-                            Server.Server.warn("Can't place a token at this coord", "GamePanel")
-                    else:
-                        Server.Server.warn("X or y is not valid", "GamePanel")
-                except ValueError:
-                    Server.Server.warn("X or y coord NaN", "GamePanel")
+                    if not self.add_token_with_coord(x, y)[0]:
+                        Server.warn("Can't place a token at this coord", "GamePanel")
+                        self.syn_client()
+                else:
+                    Server.warn("X or y is not valid", "GamePanel")
+                    self.syn_client()
+            except ValueError:
+                Server.warn("X or y coord NaN", "GamePanel")
+                self.syn_client()
 
-            elif message[0] == MESSAGE_BACK_MENU:
-                from UI.ServerGameConfigurationPanel import ServerGameConfigurationPanel
-                self.ui.change_panel(ServerGameConfigurationPanel, create_game=self.is_server)
+        elif message[0] == MESSAGE_BACK_MENU:
+            from UI.ServerGameConfigurationPanel import ServerGameConfigurationPanel
+            self.ui.change_panel(ServerGameConfigurationPanel, is_server=False)
 
-            elif message[0] == MESSAGE_RESTART_GAME:
-                self.button_restart_command()
+        elif message[0] == MESSAGE_RESTART_GAME:
+            self.button_restart_command()
+
+        elif message[0] == MESSAGE_SYN and len(message) == 3:
+            current_token = TokenState.TokenState(int(message[1]))
+            if self.game.current_turn != current_token:
+                self.game.current_turn = current_token
+                self.update_turn_label()
+
+            for x, line in enumerate(message[2].split(LINE_SEPARATOR)):
+                for y, e in enumerate(line):
+                    token = TokenState.TokenState(int(e))
+                    if self.game.grid[x][y] != token:
+                        self.game.grid[x][y] = token
+                        self.update_image(x, y)
 
     def client_on_connection_function(self):
         """

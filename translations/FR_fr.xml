@@ -8,6 +8,7 @@
         <string name="play">Jouer</string>
         <string name="quit">Quitter</string>
         <string name="back">Retour</string>
+        <string name="continue">Continuer</string>
         <string name="restart">Recommencer</string>
         <string name="cancel">Annuler</string>
         <string name="valid">Valider</string>
@@ -71,14 +72,20 @@
         <string name="server_configuration_player_1_want_start">Le joueur 1 veut commencer à jouer, vérifier si vous êtes prêt</string>
         <string name="server_configuration_player_2_not_ready">Le joueur 2 n'est pas prêt</string>
         <string name="server_configuration_player_2_ready">Le joueur 2 est prêt</string>
+        <string name="server_configuration_player_2_not_connected">Le joueur 2 n'est pas connecté</string>
 
         <string name="server_dialog_quit_title">Quitter ?</string>
         <string name="server_dialog_quit_message">Vous ếtes sur le point de partir. Êtes vous sûr de vouloir quitter ?</string>
+        <string name="server_dialog_back_title">Retourner ?</string>
+        <string name="server_dialog_back_message">Vous ếtes sur le point de retourner sur le menu principale, cela va terminer la partie. Êtes vous sûr de vouloir revenir sur le menu principale ?</string>
         <string name="server_dialog_server_stop_title">Arrêter le serveur ?</string>
         <string name="server_dialog_server_stop_message">Vous allez arrêter le serveur. Le second joueur va être expulser. Êtes vous sûr de vouloir arrêter le serveur ?</string>
 
 	    <string name="server_configuration_dialog_port_error_title">Port incorrect</string>
         <string name="server_configuration_dialog_port_error_message">Le port est incorect, ce doit être un nombre compris entre 3000 et 3020.</string>
+        <string name="server_configuration_dialog_port_warning_title">Port non officiel</string>
+        <string name="server_configuration_dialog_port_warning_message">Ce port n'est pas officiel (30000-30020), et n'est pas détecter automatiquement. Voullez vous continuer ?</string>
+
 
         <string name="server_state_stopped">Le serveur est arrêté</string>
         <string name="server_state_started">Le serveur est en route</string>
@@ -99,8 +106,10 @@
         <string name="preference_reset_preferences">Restaurer les valeurs par défault</string>
         <string name="preference_language">Language: </string>
         <string name="preference_delay">Délai minimum entre deux poses de jetons (ms, 0,001s):</string>
+        <string name="preference_delay_win">Le temps minimum avant de montrer la page de victoire (ms, 0,001s)</string>
         <string name="preference_section_difficulty">Difficulté de l'ordinateur</string>
-        <string name="preference_difficulty">Configurer la difficulté de l'ordinateur en mettant le nombre de tour que l'ordinateur va observer (minimum 1). Plus l'ordinateur va regarder de coups plus il va être long à jouer.</string>
+        <string name="preference_difficulty_depth">Configurer la difficulté de l'ordinateur en mettant le nombre de tour que l'ordinateur va observer (minimum 1). Plus l'ordinateur va regarder de coups plus il va être long à jouer.</string>
+        <string name="preference_difficulty_round">Configurer la difficulté de l'ordinateur en mettant la précision de l'ordinateur. Plus le nombre seras grand plus l'ordinateur jouras de façon aléatoire.</string>
         <string name="preference_difficulty_very_easy">Très facile:</string>
         <string name="preference_difficulty_easy">Facile:</string>
         <string name="preference_difficulty_normal">Normale:</string>
@@ -109,7 +118,8 @@
         <string name="preference_difficulty_very_hard">Très difficile:</string>
 
         <string name="preference_error_input_title">Erreur de saisie !</string>
-        <string name="preference_error_input_delay">Le texte saisi dans "delai" ({}), est incorrecte. Il doit être un entier entre {} et {}. Merci de corriger ça, ou de mettre la valeur par default en appuyant sur le bouton à la droite de la saisie; pour sauvegarder les préférences.</string>
-        <string name="preference_error_input_difficulty">Le texte  saisi dans "{}" ({}), est incorrecte. Il doit être un entier entre {} et {}. Merci de corriger ça, ou de mettre la valeur par default en appuyant sur le bouton à la droite de la saisie; pour sauvegarder les préférences.</string>
+        <string name="preference_error_input_delay">Le texte saisi dans "délai" ({}), est incorrecte. Il doit être un entier entre {} et {}. Merci de corriger ça, ou de mettre la valeur par default en appuyant sur le bouton à la droite de la saisie; pour sauvegarder les préférences.</string>
+        <string name="preference_error_input_win_delay">Le texte saisi dans "délai de victoire" ({}), est incorrecte. Il doit être un entier entre {} et {}. Merci de corriger ça, ou de mettre la valeur par default en appuyant sur le bouton à la droite de la saisie; pour sauvegarder les préférences.</string>
+        <string name="preference_error_input_difficulty">Le texte saisi dans "{}" ({}), est incorrecte. Il doit être un entier entre {} et {}. Merci de corriger ça, ou de mettre la valeur par default en appuyant sur le bouton à la droite de la saisie; pour sauvegarder les préférences.</string>
     </translations>
 </language>

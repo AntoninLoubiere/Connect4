@@ -47,7 +47,7 @@ class TokenFallAnimation(object):
             self.current_height = self.game_panel.grid_canvas.coords(self.id)[1]
 
         else:
-            self.game_panel.create_image(self.final_x, self.final_y, self.player)
+            self.game_panel.update_image(self.final_x, self.final_y)
             self.game_panel.on_end_animation(self.player)
             self.game_panel.remove_token_animation(self)
             return None
