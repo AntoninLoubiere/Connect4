@@ -32,7 +32,7 @@ class GamePanel(Panel.Panel):
     def __init__(self, master, ui,
                  player_1=Player.Player(TokenState.TokenState.Player_1, TokenStyle.TokenStyle.Blue),
                  player_2=Player.Player(TokenState.TokenState.Player_2, TokenStyle.TokenStyle.Green),
-                 game=Game.Game(), disable_end_button=False, delay=Preferences.DEFAULT_DELAY):
+                 game=None, disable_end_button=False, delay=Preferences.DEFAULT_DELAY):
         """
         Constructor
         :param player_1: the player 1
@@ -53,7 +53,10 @@ class GamePanel(Panel.Panel):
 
         self.after(500, lambda: self.grid_canvas.bind("<Button>", self.grid_canvas_on_click))
 
-        self.game = game
+        if game is None:
+            self.game = Game.Game()
+        else:
+            self.game = game
 
         self.players = {
             TokenState.TokenState.Player_1: player_1,
@@ -66,9 +69,7 @@ class GamePanel(Panel.Panel):
         self.width_center = 0
 
         self.button_main_menu = tkinter.tix.Button(
-            self,
-            # text=self.ui.translation.get_translation("game_panel_main_menu_button"),
-            command=self.button_main_menu_command, image=self.ui.image_getter.door_exit_icon)
+            self, command=self.button_main_menu_command, image=self.ui.image_getter.door_exit_icon)
         self.button_main_menu.place(x=0, y=0)
 
         self.grid_image_create = []

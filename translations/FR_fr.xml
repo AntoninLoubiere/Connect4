@@ -76,6 +76,8 @@
 
         <string name="server_dialog_quit_title">Quitter ?</string>
         <string name="server_dialog_quit_message">Vous ếtes sur le point de partir. Êtes vous sûr de vouloir quitter ?</string>
+        <string name="server_dialog_back_title">Retourner ?</string>
+        <string name="server_dialog_back_message">Vous ếtes sur le point de retourner sur le menu principale, cela va terminer la partie. Êtes vous sûr de vouloir revenir sur le menu principale ?</string>
         <string name="server_dialog_server_stop_title">Arrêter le serveur ?</string>
         <string name="server_dialog_server_stop_message">Vous allez arrêter le serveur. Le second joueur va être expulser. Êtes vous sûr de vouloir arrêter le serveur ?</string>
 

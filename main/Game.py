@@ -10,7 +10,7 @@ class Game(object):
     """
 
     def __init__(self, grid_width=7, grid_height=6,
-                 first_player=random.choice((TokenState.Player_1, TokenState.Player_2))):
+                 first_player=None):
         """
         Constructor
         """
@@ -25,7 +25,10 @@ class Game(object):
             for y in range(self.grid_height):
                 self.grid[x].append(TokenState.Blank)
 
-        self.current_turn = first_player
+        if first_player is None:
+            self.current_turn = (TokenState.Player_1, TokenState.Player_2)[random.randint(0, 1)]
+        else:
+            self.current_turn = first_player
 
         self.game_win = False
         self.winner = TokenState.Blank
@@ -61,8 +64,9 @@ class Game(object):
         """
         if self.is_win():
             return [False, [-1, -1]]
-
-        if self.grid[x][y] == TokenState.Blank:
+        print(x,y)
+        if self.grid[x][y] == TokenState.Blank and (y == self.grid_height - 1 or self.grid[x][y + 1] !=
+                                                    TokenState.Blank):
             #  add token
             self.grid[x][y] = self.current_turn
             self.swap_turn()

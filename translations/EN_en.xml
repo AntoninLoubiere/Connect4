@@ -74,6 +74,8 @@
 
         <string name="server_dialog_quit_title">Quit ?</string>
         <string name="server_dialog_quit_message">You are going to quit. Are you sure to quit ?</string>
+        <string name="server_dialog_back_title">Back ?</string>
+        <string name="server_dialog_back_message">You are going to back on the main menu, the game will end. Are you sure ?</string>
         <string name="server_dialog_server_stop_title">Stop the server ?</string>
         <string name="server_dialog_server_stop_message">You are going to stop the server. The second player will be kick. Are you sure to stop this server ?</string>
 

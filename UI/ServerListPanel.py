@@ -151,7 +151,7 @@ class ServerListPanel(Panel.Panel):
         if Server.exist(host_port[0], host_port[1]):
             self.ui.client = Client(host_port[0], host_port[1])
             if self.ui.client.connect():
-                self.ui.change_panel(ServerGameConfigurationPanel.ServerGameConfigurationPanel, create_game=False)
+                self.ui.change_panel(ServerGameConfigurationPanel.ServerGameConfigurationPanel, is_server=False)
         else:
             self.server_scanner_server_detection(ServerScanner.SERVER_REMOVE, host_port)
 
@@ -169,7 +169,7 @@ class ServerListPanel(Panel.Panel):
         Whe the button create game is clicked
         :return: None
         """
-        self.ui.change_panel(ServerGameConfigurationPanel.ServerGameConfigurationPanel, create_game=True)
+        self.ui.change_panel(ServerGameConfigurationPanel.ServerGameConfigurationPanel, is_server=True)
 
     def manual_connexion_button_command(self):
         """
@@ -206,7 +206,7 @@ class ServerListPanel(Panel.Panel):
 
         self.ui.client = Client(host, port)
         if self.ui.client.connect():
-            self.ui.change_panel(ServerGameConfigurationPanel.ServerGameConfigurationPanel, create_game=False)
+            self.ui.change_panel(ServerGameConfigurationPanel.ServerGameConfigurationPanel, is_server=False)
         else:
             self.ui.client = None
             tkinter.messagebox.showerror(

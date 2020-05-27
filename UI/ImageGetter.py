@@ -97,6 +97,16 @@ class ImageGetter:
             )
         except FileNotFoundError:
             print("The file door_exit_icon was not found")
+            
+        try:
+            self.syn_icon = ImageTk.PhotoImage(
+                self.create_image(DirectoryManager.get_path((DirectoryManager.UI_RES_DIRECTORY, "syn_icon.png"),
+                                                            add_current_directory=True),
+                                  ICON_SIZE,
+                                  ICON_SIZE)
+            )
+        except FileNotFoundError:
+            print("The file syn_icon was not found")
 
         self.numbers_list = {}
         number_width = None
