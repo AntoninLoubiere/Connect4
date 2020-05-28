@@ -444,6 +444,7 @@ class GamePanel(Panel.Panel):
         Draw the win line
         :return: None
         """
+
         if self.all_win_tokens_are_fall():
 
             if self.game.winner != TokenState.TokenState.Blank:

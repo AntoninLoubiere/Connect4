@@ -10,8 +10,10 @@ MESSAGE_NEW_TOKEN = "new-token"
 MESSAGE_BACK_MENU = "back-to-main-menu"
 MESSAGE_RESTART_GAME = "restart"
 MESSAGE_SYN = "syn"
+SYN_GRID = "G"
+SYN_WIN = "W"
 
-LINE_SEPARATOR = '\x02'
+SUB_SEPARATOR = '\x02'
 
 
 class ServerGamePanel(GamePanel.GamePanel):
@@ -103,14 +105,29 @@ class ServerGamePanel(GamePanel.GamePanel):
         Synchronise the client
         :return: None
         """
+        Server.log("Synchronise client", "GamePanel")
         if self.is_server:
+            self.game.score[0] = 5
+
             grid_state = ''
             for line in self.game.grid:
                 for e in line:
                     grid_state += str(e.value)
-                grid_state += LINE_SEPARATOR
+                grid_state += SUB_SEPARATOR
             self.ui.server.send_message_to_all(Server.encode_message(PARAMETER_SEPARATOR.join((
-                MESSAGE_SYN, str(self.game.current_turn.value), grid_state))))
+                MESSAGE_SYN, SYN_GRID, str(self.game.current_turn.value), grid_state))))
+
+            if self.game.is_win():
+                self.ui.server.send_message_to_all(Server.encode_message(PARAMETER_SEPARATOR.join((
+                    MESSAGE_SYN,
+                    SYN_WIN, str(self.game.winner.value),
+                    SUB_SEPARATOR.join(
+                        (str(self.game.score[0]), str(self.game.score[1]))),
+                    SUB_SEPARATOR.join((
+                        ''.join(str(self.game.win_tokens_coord[0])),
+                        ''.join(str(self.game.win_tokens_coord[1]))
+                    ))
+                    ))))
         else:
             self.ui.client.send_message(Server.encode_message(MESSAGE_SYN))
 
@@ -292,18 +309,44 @@ class ServerGamePanel(GamePanel.GamePanel):
         elif message[0] == MESSAGE_RESTART_GAME:
             self.button_restart_command()
 
-        elif message[0] == MESSAGE_SYN and len(message) == 3:
-            current_token = TokenState.TokenState(int(message[1]))
-            if self.game.current_turn != current_token:
-                self.game.current_turn = current_token
-                self.update_turn_label()
+        elif message[0] == MESSAGE_SYN and 3 < len(message) < 6:
+            if message[1] == SYN_GRID:
+                try:
+                    current_token = TokenState.TokenState(int(message[2]))
+                    if self.game.current_turn != current_token:
+                        self.game.current_turn = current_token
+                        self.update_turn_label()
+                except ValueError:
+                    pass
 
-            for x, line in enumerate(message[2].split(LINE_SEPARATOR)):
-                for y, e in enumerate(line):
-                    token = TokenState.TokenState(int(e))
-                    if self.game.grid[x][y] != token:
-                        self.game.grid[x][y] = token
-                        self.update_image(x, y)
+                split = message[3].split(SUB_SEPARATOR)
+                if len(split) == self.game.grid_width and len(split[0]) == self.game.grid_height:
+                    for x, line in enumerate(split):
+                        for y, e in enumerate(line):
+                            token = TokenState.TokenState(int(e))
+                            if self.game.grid[x][y] != token:
+                                self.game.grid[x][y] = token
+                                self.update_image(x, y)
+            else:
+                try:
+                    self.game.winner = TokenState.TokenState(int(message[2]))
+                except ValueError:
+                    pass
+
+                scores = message[3].split(SUB_SEPARATOR)
+                if len(scores) == 2:
+                    scores[0], scores[1] = int(scores[0]), int(scores[1])
+                    self.game.score = scores
+
+                token_coord = message[4].split(SUB_SEPARATOR)  # xy|xy
+                if len(token_coord) == 2 and len(token_coord[0]) == 2:
+                    for i, c in enumerate(token_coord):
+                        for j, xy in enumerate(c):
+                            self.game.win_tokens_coord[i][j] = xy
+
+                    self.game.win_tokens_coord = token_coord
+
+                self.update_win()
 
     def client_on_connection_function(self):
         """

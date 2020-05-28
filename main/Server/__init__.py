@@ -1,6 +1,7 @@
 import queue
 import select
 import socket
+import sys
 import threading
 import time
 
@@ -100,7 +101,10 @@ class Server(threading.Thread):
                     if message:
                         messages = self.decode_message(message)
                         for msg in messages:
-                            self.on_message_function(msg)
+                            try:
+                                self.on_message_function(msg)
+                            except Exception as e:
+                                self.error("Error: " + str(e), "Server")
                     else:
                         self.disconnect(s)
                         break
@@ -236,7 +240,7 @@ class Server(threading.Thread):
         :param thread_name: the name of the thread
         :return: None
         """
-        print("[ERROR / " + thread_name + " / " + Server.get_time() + "]: " + msg)
+        sys.stderr.write("[ERROR / " + thread_name + " / " + Server.get_time() + "]: " + msg)
 
     @staticmethod
     def get_time():

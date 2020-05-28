@@ -93,7 +93,10 @@ class Client(threading.Thread):
                 if message:
                     messages = Server.Server.decode_message(message)
                     for msg in messages:
-                        self.on_message_function(msg)
+                        try:
+                            self.on_message_function(msg)
+                        except Exception as e:
+                            self.error("Error: " + str(e), "Client")
                 else:
                     self.close_connection()
                     break
