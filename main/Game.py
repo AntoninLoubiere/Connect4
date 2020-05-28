@@ -64,7 +64,6 @@ class Game(object):
         """
         if self.is_win():
             return [False, [-1, -1]]
-        print(x,y)
         if self.grid[x][y] == TokenState.Blank and (y == self.grid_height - 1 or self.grid[x][y + 1] !=
                                                     TokenState.Blank):
             #  add token

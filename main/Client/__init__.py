@@ -93,7 +93,6 @@ class Client(threading.Thread):
                 if message:
                     messages = Server.Server.decode_message(message)
                     for msg in messages:
-                        print(msg)
                         self.on_message_function(msg)
                 else:
                     self.close_connection()

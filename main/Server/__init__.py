@@ -100,7 +100,6 @@ class Server(threading.Thread):
                     if message:
                         messages = self.decode_message(message)
                         for msg in messages:
-                            print(msg)
                             self.on_message_function(msg)
                     else:
                         self.disconnect(s)
