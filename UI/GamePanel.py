@@ -240,12 +240,9 @@ class GamePanel(Panel.Panel):
         if len(self.token_animation_list) > 0:
             token_animation_to_remove = list(self.token_animation_list)
 
-            print(token_animation_to_remove)
-
             i = 0
 
             while i > len(token_animation_to_remove):
-                print(token_animation_to_remove[i])
                 animation_to_add = TokenFallAnimation.TokenFallAnimation(
                     token_animation_to_remove[i].final_x, token_animation_to_remove[i].final_y,
                     token_animation_to_remove[i].player, self)
@@ -253,7 +250,6 @@ class GamePanel(Panel.Panel):
                 animation_to_add.set_current_height(token_animation_to_remove[i].current_height)
 
                 self.add_token_animation(animation_to_add)
-                print(animation_to_add)
 
                 self.remove_token_animation(token_animation_to_remove[i])
 
@@ -448,6 +444,7 @@ class GamePanel(Panel.Panel):
         Draw the win line
         :return: None
         """
+
         if self.all_win_tokens_are_fall():
 
             if self.game.winner != TokenState.TokenState.Blank:
