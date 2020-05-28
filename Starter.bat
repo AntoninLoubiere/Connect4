@@ -1,2 +1,1 @@
-source venv/bin/activate.bat
-python Connect4.py
+winVenv\Scripts\python Connect4.py
