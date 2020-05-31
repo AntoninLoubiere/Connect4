@@ -1,7 +1,0 @@
-#!/home/antonin/PycharmProjects/Connect4/venv/bin/python
-
-from domainr import Domain
-
-
-if __name__ == '__main__':
-    Domain().main()

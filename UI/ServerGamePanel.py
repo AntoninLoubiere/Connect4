@@ -107,8 +107,6 @@ class ServerGamePanel(GamePanel.GamePanel):
         """
         Server.log("Synchronise client", "GamePanel")
         if self.is_server:
-            self.game.score[0] = 5
-
             grid_state = ''
             for line in self.game.grid:
                 for e in line:
