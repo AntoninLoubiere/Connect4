@@ -134,6 +134,8 @@ class GamePanel(Panel.Panel):
         When the panel is destroy, force the AI turn to stop
         :return: None
         """
+        self.ai_progress_bar_show = False
+
         if isinstance(self.players[TokenState.TokenState.Player_1], AIPlayer.AIPlayer) and \
                 self.players[TokenState.TokenState.Player_1].get_thinking():
             self.players[TokenState.TokenState.Player_1].stop_turn()
@@ -143,8 +145,6 @@ class GamePanel(Panel.Panel):
             self.players[TokenState.TokenState.Player_2].stop_turn()
 
         self.remove_all_token_animation()
-
-        self.ai_progress_bar_show = False
 
         super().destroy()
 
@@ -701,8 +701,9 @@ class GamePanel(Panel.Panel):
         Show the ai progress bar
         :return: None
         """
-        self.ai_progress_bar_show = False
-        self.ai_progress_bar.place_forget()
+        if self.ai_progress_bar_show:
+            self.ai_progress_bar_show = False
+            self.ai_progress_bar.place_forget()
 
     def update_ai_progress_bar(self):
         """

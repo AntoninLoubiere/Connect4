@@ -1,7 +1,7 @@
-import copy
-import random
-
 import math
+import random
+import threading
+import time
 
 from main import Player
 from main.TokenState import TokenState
@@ -81,6 +81,8 @@ class AIPlayer(Player.Player):
         :return: the column to do
         """
         self.thinking = True
+        t = threading.Thread(target=self.update_progress)
+        t.start()
         self.progress = 0
 
         score = -math.inf
@@ -97,21 +99,21 @@ class AIPlayer(Player.Player):
                 column_check += 1
 
                 y_coord_new_token = self.get_coord_add_token_grid(self.game.grid, column)
-                current_grid = copy.deepcopy(self.game.grid)
-                current_grid[column][y_coord_new_token] = self.player_enum
+                self.game.grid[column][y_coord_new_token] = self.player_enum
 
                 align = [
-                    self.get_alignment_two_side(current_grid, column, y_coord_new_token, 0, 1),
-                    self.get_alignment_two_side(current_grid, column, y_coord_new_token, 1, 0),
-                    self.get_alignment_two_side(current_grid, column, y_coord_new_token, 1, 1),
-                    self.get_alignment_two_side(current_grid, column, y_coord_new_token, 1, -1)
+                    self.get_alignment_two_side(self.game.grid, column, y_coord_new_token, 0, 1),
+                    self.get_alignment_two_side(self.game.grid, column, y_coord_new_token, 1, 0),
+                    self.get_alignment_two_side(self.game.grid, column, y_coord_new_token, 1, 1),
+                    self.get_alignment_two_side(self.game.grid, column, y_coord_new_token, 1, -1)
                 ]  # list of all alignment of the new token
 
                 if align[0][0] >= 4 or align[1][0] >= 4 or align[2][0] >= 4 or align[3][0] >= 4:
                     column_max_score_possibility = [column]
+                    self.game.grid[column][y_coord_new_token] = TokenState.Blank  # remove changes
                     break
 
-                current_score = self.get_turn_min_max(current_grid, self.min_max_deep,
+                current_score = self.get_turn_min_max(self.game.grid, self.min_max_deep,
                                                       (TokenState.Player_1, TokenState.Player_2)[
                                                           self.player_enum == TokenState.Player_1],
                                                       +math.inf, -math.inf, self.progress)
@@ -125,8 +127,10 @@ class AIPlayer(Player.Player):
                 elif current_score == score:
                     column_max_score_possibility.append(column)
 
+                self.game.grid[column][y_coord_new_token] = TokenState.Blank  # remove changes
+
                 self.progress = (self.game.grid_width - self.number_column_fill) ** self.min_max_deep * column_check
-                self.send_progress()
+                # self.send_progress()
 
             else:
                 if not self.list_column_fill[column]:
@@ -135,7 +139,7 @@ class AIPlayer(Player.Player):
 
                     self.progress_max = (self.game.grid_width - self.number_column_fill) ** (self.min_max_deep + 1)
                     self.progress = (self.game.grid_width - self.number_column_fill) ** self.min_max_deep * (column + 1)
-                    self.send_progress()
+                    # self.send_progress()
 
         self.thinking = False
         self.force_stop = False
@@ -146,9 +150,6 @@ class AIPlayer(Player.Player):
             return 0
         else:
             column_choose = random.choice(column_max_score_possibility)
-            y_coord_new_token = self.get_coord_add_token_grid(self.game.grid, column_choose)
-            current_grid = copy.deepcopy(self.game.grid)
-            current_grid[column_choose][y_coord_new_token] = self.player_enum
 
             return column_choose
 
@@ -182,49 +183,53 @@ class AIPlayer(Player.Player):
                 column_check += 1
 
                 y_coord_new_token = self.get_coord_add_token_grid(grid, column)
-                current_grid = copy.deepcopy(grid)
-                current_grid[column][y_coord_new_token] = player_turn
+                grid[column][y_coord_new_token] = player_turn
 
                 align = [
-                    self.get_alignment_two_side(current_grid, column, y_coord_new_token, 0, 1),
-                    self.get_alignment_two_side(current_grid, column, y_coord_new_token, 1, 0),
-                    self.get_alignment_two_side(current_grid, column, y_coord_new_token, 1, 1),
-                    self.get_alignment_two_side(current_grid, column, y_coord_new_token, 1, -1)
+                    self.get_alignment_two_side(grid, column, y_coord_new_token, 0, 1),
+                    self.get_alignment_two_side(grid, column, y_coord_new_token, 1, 0),
+                    self.get_alignment_two_side(grid, column, y_coord_new_token, 1, 1),
+                    self.get_alignment_two_side(grid, column, y_coord_new_token, 1, -1)
                 ]  # list of all alignment of the new token
 
                 # print(align)
 
                 if player_turn == self.player_enum:  # his turn
                     if align[0][0] >= 4 or align[1][0] >= 4 or align[2][0] >= 4 or align[3][0] >= 4:
+                        grid[column][y_coord_new_token] = TokenState.Blank  # revoke changes
                         return 1000000000000000000 - (self.min_max_deep - deep)
 
                     elif deep > 1:
                         current_score = self.get_turn_min_max(
-                            current_grid, deep - 1,
+                            grid, deep - 1,
                             (TokenState.Player_1, TokenState.Player_2)[player_turn == TokenState.Player_1], alpha,
                             beta, current_progress)
 
                     else:
-                        current_score = self.get_evaluation(current_grid)
+                        current_score = self.get_evaluation(grid)
+
+                    grid[column][y_coord_new_token] = TokenState.Blank  # revoke changes
 
                     score = max(current_score, score)
-
                     if alpha <= score:  # alpha cut
                         return score
                     beta = max(beta, score)
 
                 else:
                     if align[0][0] >= 4 or align[1][0] >= 4 or align[2][0] >= 4 or align[3][0] >= 4:
+                        grid[column][y_coord_new_token] = TokenState.Blank  # revoke changes
                         return -1000000000000000000 + (self.min_max_deep - deep)
 
                     elif deep > 1:
                         current_score = self.get_turn_min_max(
-                            current_grid, deep - 1,
+                            grid, deep - 1,
                             (TokenState.Player_1, TokenState.Player_2)[player_turn == TokenState.Player_1], alpha,
                             beta, current_progress)
 
                     else:
-                        current_score = self.get_evaluation(current_grid)
+                        current_score = self.get_evaluation(grid)
+
+                    grid[column][y_coord_new_token] = TokenState.Blank  # revoke changes
 
                     score = min(current_score, score)
                     if beta >= score:  # beta cut
@@ -233,7 +238,7 @@ class AIPlayer(Player.Player):
 
             self.progress = (self.game.grid_width - self.number_column_fill) ** (deep - 1) \
                 * column_check + progress_start
-            self.send_progress()
+            # self.send_progress()
 
         return score
 
@@ -403,3 +408,12 @@ class AIPlayer(Player.Player):
         :return: None
         """
         self.on_progress(self.progress, self.progress_max)
+
+    def update_progress(self):
+        """
+        Update the progress
+        :return:
+        """
+        while self.thinking:
+            self.on_progress(self.progress, self.progress_max)
+            time.sleep(0.05)
